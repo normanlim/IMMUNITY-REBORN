@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 2000831195757602737}
   - component: {fileID: 3213454045328082137}
   m_Layer: 0
-  m_Name: RangedProjectile
-  m_TagString: RangedType
+  m_Name: MagicProjectile
+  m_TagString: MagicType
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4e894d3ad90ff264689934f993cd8ec7, type: 2}
+  - {fileID: 2100000, guid: 1089f8e90ea313949a3286b096fbe96f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
