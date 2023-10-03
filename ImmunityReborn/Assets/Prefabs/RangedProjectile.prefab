@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 4302446151316664340}
   - component: {fileID: 2000831195757602737}
   - component: {fileID: 3213454045328082137}
-  - component: {fileID: -2709922607966668853}
   m_Layer: 0
   m_Name: RangedProjectile
   m_TagString: RangedType
@@ -134,16 +133,3 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &-2709922607966668853
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9107452835817429376}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f03b8e1f96d965e468d6b0fd24b7f361, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timer: 3
