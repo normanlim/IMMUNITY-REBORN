@@ -18,9 +18,14 @@ public class PlayerDefaultState : PlayerBaseState
 
     public override void Tick(float deltaTime)
     {
-        Vector3 movement = CalculateMovement();
+        if (stateMachine.InputReader.IsAttacking) // player pressed attack
+        {
+            stateMachine.SwitchState(new PlayerAttackingState(stateMachine, 0));
+            return;
+        }
 
-        stateMachine.CharacterController.Move(deltaTime * stateMachine.DefaultMovementSpeed * movement); // moves player
+        Vector3 movement = CalculateMovement();
+        Move(movement * stateMachine.DefaultMovementSpeed, deltaTime);
 
         if (stateMachine.InputReader.MovementValue == Vector2.zero) // if player is not moving
         {
@@ -35,27 +40,5 @@ public class PlayerDefaultState : PlayerBaseState
 
     public override void Exit()
     {
-    }
-
-    private Vector3 CalculateMovement()
-    {
-        Vector3 forward = stateMachine.MainCameraTransform.forward;
-        forward.y = 0.0f; // movement only uses x and z values
-        forward.Normalize(); // makes sure magnitude is 1
-
-        Vector3 right = stateMachine.MainCameraTransform.right;
-        right.y = 0.0f;
-        right.Normalize();
-
-        return forward * stateMachine.InputReader.MovementValue.y 
-            + right * stateMachine.InputReader.MovementValue.x; // calculates movement relative to camera
-    }
-
-    private void FaceMovementDirection(Vector3 movement, float deltaTime)
-    {
-        stateMachine.transform.rotation = Quaternion.Lerp(
-            stateMachine.transform.rotation,
-            Quaternion.LookRotation(movement),
-            deltaTime * stateMachine.RotationDamping);
     }
 }
