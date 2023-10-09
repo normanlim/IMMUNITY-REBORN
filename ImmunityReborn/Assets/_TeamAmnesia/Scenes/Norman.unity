@@ -480,7 +480,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   energyMeterText: {fileID: 389082314}
-  shieldMeter: {fileID: 1858535891}
+  energyMeter: {fileID: 1858535891}
   regenSpeed: 10
   meleeShield: {fileID: 1288921251}
   rangedShield: {fileID: 845160334}
@@ -552,8 +552,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294910208
-  m_fontColor: {r: 0, g: 0.12823725, b: 1, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
