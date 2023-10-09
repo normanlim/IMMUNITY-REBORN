@@ -5,6 +5,9 @@ public class ShieldController : MonoBehaviour
     public GameObject meleeShield;
     public GameObject rangedShield;
     public GameObject magicShield;
+    public int meleeAttacksBlocked = 0;
+    public int rangedAttacksBlocked = 0;
+    public int magicAttacksBlocked = 0;
 
     void Update()
     {
