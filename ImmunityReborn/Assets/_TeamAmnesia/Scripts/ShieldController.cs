@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ShieldController : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class ShieldController : MonoBehaviour
         public float rechargeDelay = 5.0f;
         public float gaugeRemaining = 100;
         public float rechargeTimer = 0.0f;
+        public Slider gaugeSlider;
     }
     public Shield meleeShield;
     public Shield rangedShield;
@@ -27,6 +29,11 @@ public class ShieldController : MonoBehaviour
         RechargeShield(meleeShield);
         RechargeShield(rangedShield);
         RechargeShield(magicShield);
+
+        // Update UI elements with gauge values
+        UpdateGaugeUI(meleeShield);
+        UpdateGaugeUI(rangedShield);
+        UpdateGaugeUI(magicShield);
     }
 
     private void RechargeShield(Shield shield)
@@ -64,5 +71,13 @@ public class ShieldController : MonoBehaviour
         }
     }
 
-
+    private void UpdateGaugeUI(Shield shield)
+    {
+        // Ensure the gaugeSlider reference is not null
+        if (shield.gaugeSlider != null)
+        {
+            // Update the slider value based on the associated shield's gaugeRemaining
+            shield.gaugeSlider.value = shield.gaugeRemaining / 100f;
+        }
+    }
 }
