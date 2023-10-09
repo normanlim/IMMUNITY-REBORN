@@ -1,30 +1,28 @@
-using UnityEngine;
+
 using System;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerCollisions : MonoBehaviour
 {
-    public float health;
+    public int health;
     private string[] attackTypeTags = { "MeleeType", "RangedType", "MagicType" };
+    public Slider healthSlider;
+
     // Start is called before the first frame update
     void Start()
     {
-        health = 100f;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        health = 100;
+        healthSlider.value = health;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        bool isMatchFound = Array.Exists(attackTypeTags, tag => tag == other.tag);
-        Debug.Log(isMatchFound);
-        if (isMatchFound)
+        if (Array.Exists(attackTypeTags, tag => tag == other.tag))
         {
             health--;
             Destroy(other.gameObject);
+            healthSlider.value = health;
         }
     }
 }
