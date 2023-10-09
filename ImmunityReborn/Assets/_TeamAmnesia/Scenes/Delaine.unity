@@ -418,6 +418,7 @@ GameObject:
   - component: {fileID: 213514281}
   - component: {fileID: 213514286}
   - component: {fileID: 213514287}
+  - component: {fileID: 213514288}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -538,8 +539,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1641552120}
-  - {fileID: 845160335}
   - {fileID: 1288921252}
+  - {fileID: 845160335}
   - {fileID: 2054731405}
   m_Father: {fileID: 0}
   m_RootOrder: 3
@@ -576,6 +577,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 0
   healthSlider: {fileID: 1008657133}
+--- !u!114 &213514288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 213514280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f9d92415c54f804fa58eba1e8433da2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numBlocksRequired: 50
+  numFragmentsRequired: 50
+  remainingBlocksRequired: 0
+  remainingFragmentsRequired: 0
+  meleeShield: {fileID: 1288921251}
+  rangedShield: {fileID: 845160334}
+  magicShield: {fileID: 2054731404}
 --- !u!1 &265546691
 GameObject:
   m_ObjectHideFlags: 0
