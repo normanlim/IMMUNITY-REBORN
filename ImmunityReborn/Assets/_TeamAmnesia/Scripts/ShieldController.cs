@@ -6,11 +6,11 @@ using UnityEngine.UI;
 public class ShieldController : MonoBehaviour
 {
     [SerializeField] TMP_Text energyMeterText;
-    [SerializeField] Image shieldMeter;
+    [SerializeField] Image energyMeter;
     [SerializeField] float regenSpeed;
 
-    private float currentShieldValue;
-    private float regenShieldTimer;
+    private float currentEnergyValue;
+    private float energyRegenDelay;
 
     public GameObject meleeShield;
     public GameObject rangedShield;
@@ -18,19 +18,19 @@ public class ShieldController : MonoBehaviour
 
     private void Start()
     {
-        currentShieldValue = 100;
+        currentEnergyValue = 100;
         regenSpeed = 10;
-        regenShieldTimer = 3;
+        energyRegenDelay = 3;
     }
 
     private void RegenShield()
     {
-        if ( currentShieldValue < 100 )
+        if ( currentEnergyValue < 100 )
         {
-            currentShieldValue += regenSpeed * Time.deltaTime;
+            currentEnergyValue += regenSpeed * Time.deltaTime;
             energyMeterText.color = Color.cyan;
-            energyMeterText.text = ( (int)currentShieldValue).ToString() + "%";
-            shieldMeter.fillAmount = currentShieldValue / 100;
+            energyMeterText.text = ( (int)currentEnergyValue).ToString() + "%";
+            energyMeter.fillAmount = currentEnergyValue / 100;
         }
         else
         {
@@ -40,20 +40,20 @@ public class ShieldController : MonoBehaviour
 
     void Update()
     {
-        if ( currentShieldValue > 0 )
+        if ( currentEnergyValue > 0 )
         {
             // Energy Meter UI Code
             if ( Input.GetMouseButton( 0 ) || Input.GetMouseButton( 1 ) )
             {
                 CancelInvoke( "RegenShield" );
-                currentShieldValue -= regenSpeed * Time.deltaTime;
+                currentEnergyValue -= regenSpeed * Time.deltaTime;
                 energyMeterText.color = Color.magenta;
-                energyMeterText.text = ( (int)currentShieldValue).ToString() + "%";
-                shieldMeter.fillAmount = currentShieldValue / 100;
+                energyMeterText.text = ( (int)currentEnergyValue).ToString() + "%";
+                energyMeter.fillAmount = currentEnergyValue / 100;
             }
             else
             {
-                Invoke( "RegenShield", regenShieldTimer );
+                Invoke( "RegenShield", energyRegenDelay );
             }
 
             // Check if only the left mouse button is down
@@ -72,7 +72,7 @@ public class ShieldController : MonoBehaviour
             meleeShield.SetActive( false );
 
             // Begin Delayed Shield Regen (only thing they can do) 
-            Invoke( "RegenShield", regenShieldTimer );
+            Invoke( "RegenShield", energyRegenDelay );
             energyMeterText.text = "";
         }
 
