@@ -518,19 +518,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meleeShield:
     shieldObject: {fileID: 1288921251}
-    rechargeDelay: 1
+    rechargeDelay: 5
     gaugeRemaining: 100
     rechargeTimer: 0
     gaugeSlider: {fileID: 561456262}
   rangedShield:
     shieldObject: {fileID: 845160334}
-    rechargeDelay: 1
+    rechargeDelay: 5
     gaugeRemaining: 100
     rechargeTimer: 0
     gaugeSlider: {fileID: 2114984027}
   magicShield:
     shieldObject: {fileID: 2054731404}
-    rechargeDelay: 1
+    rechargeDelay: 5
     gaugeRemaining: 100
     rechargeTimer: 0
     gaugeSlider: {fileID: 730614403}

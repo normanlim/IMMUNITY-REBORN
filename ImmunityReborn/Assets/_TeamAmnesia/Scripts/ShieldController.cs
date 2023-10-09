@@ -7,9 +7,11 @@ public class ShieldController : MonoBehaviour
     public class Shield
     {
         public GameObject shieldObject;
+        public float gaugeRemaining = 100f;
         public float rechargeDelay = 5.0f;
-        public float gaugeRemaining = 100;
         public float rechargeTimer = 0.0f;
+        public float rechargeRate = 20f;
+        public float consumeRate = 20f;
         public Slider gaugeSlider;
     }
     public Shield meleeShield;
@@ -45,7 +47,7 @@ public class ShieldController : MonoBehaviour
                 // Recharge the gauge only when the rechargeTimer reaches 0
                 if (shield.gaugeRemaining < 100)
                 {
-                    shield.gaugeRemaining += Time.deltaTime * 10;
+                    shield.gaugeRemaining += Time.deltaTime * shield.rechargeRate;
                     // Cap the gauge at 100 if it exceeds
                     shield.gaugeRemaining = Mathf.Clamp(shield.gaugeRemaining, 0, 100);
                 }
@@ -64,7 +66,7 @@ public class ShieldController : MonoBehaviour
             // Decrease the gauge when the shield is active
             if (shield.gaugeRemaining > 0)
             {
-                shield.gaugeRemaining -= Time.deltaTime * 10;
+                shield.gaugeRemaining -= Time.deltaTime * shield.consumeRate;
                 // Ensure the gauge doesn't go below 0
                 shield.gaugeRemaining = Mathf.Clamp(shield.gaugeRemaining, 0, 100);
             }
