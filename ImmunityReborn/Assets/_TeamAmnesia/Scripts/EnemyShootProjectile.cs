@@ -11,7 +11,7 @@ public class EnemyShootProjectile : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        InvokeRepeating("ShootAtPlayer", 1f, 2f);
+        InvokeRepeating("ShootAtPlayer", 1f, 3f);
     }
 
     private void ShootAtPlayer()
@@ -19,6 +19,6 @@ public class EnemyShootProjectile : MonoBehaviour
         Vector3 playerDirection = player.transform.position - transform.position;
         GameObject projectile = Instantiate(projectilePrefab, transform.position, transform.rotation);
         projectile.GetComponent<Rigidbody>().velocity = playerDirection;
-        Destroy(projectile, 3f);
+        Destroy(projectile, 6f);
     }
 }
