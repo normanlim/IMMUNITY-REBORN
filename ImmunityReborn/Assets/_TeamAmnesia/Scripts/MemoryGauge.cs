@@ -1,9 +1,10 @@
+using System;
 using UnityEngine;
 
 public class MemoryGauge : MonoBehaviour
 {
-    public int numBlocksRequired = 50;
-    public int numFragmentsRequired = 50;
+    public int numBlocksRequired = 20;
+    public int numFragmentsRequired = 20;
     public int remainingBlocksRequired;
     public int remainingFragmentsRequired;
     public GameObject meleeShield;
@@ -23,6 +24,27 @@ public class MemoryGauge : MonoBehaviour
             - meleeShield.GetComponent<ShieldCollisions>().numAttacksBlocked
             - rangedShield.GetComponent<ShieldCollisions>().numAttacksBlocked
             - magicShield.GetComponent<ShieldCollisions>().numAttacksBlocked);
+        if (remainingBlocksRequired <= 0 && remainingFragmentsRequired <= 0)
+        {
+            UnlockMemoryAttack();
+            // @TODO maybe destroy script to avoid running it after this point?
+        }
 
+    }
+
+    private void UnlockMemoryAttack()
+    {
+        Debug.Log("Memory Attack unlocked!");
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        // Check if the player entered the trigger zone
+        if (other.tag == "MemoryFragment")
+        {
+            // Respawn the MemoryFragment at a random position within the respawn plane
+            other.gameObject.GetComponent<MemoryFragment>().RespawnWithinPlaneBounds();
+            remainingFragmentsRequired = Mathf.Max(0, remainingFragmentsRequired - 1);
+        }
     }
 }
