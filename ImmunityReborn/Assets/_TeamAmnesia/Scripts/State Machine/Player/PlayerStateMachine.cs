@@ -14,10 +14,16 @@ public class PlayerStateMachine : StateMachine
     public Animator Animator { get; private set; }
 
     [field: SerializeField]
+    public ForceReceiver ForceReceiver { get; private set; }
+
+    [field: SerializeField]
     public float DefaultMovementSpeed { get; private set; }
 
     [field: SerializeField]
     public float RotationDamping { get; private set; }
+
+    [field: SerializeField]
+    public Attack[] Attacks { get; private set; }
 
     public Transform MainCameraTransform { get; private set; }
 
