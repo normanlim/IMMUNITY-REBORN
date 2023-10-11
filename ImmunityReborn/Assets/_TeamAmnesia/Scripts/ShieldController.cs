@@ -57,19 +57,19 @@ public class ShieldController : MonoBehaviour
             }
 
             // Check if only the left mouse button is down
-            magicShield.SetActive( Input.GetMouseButton( 0 ) && !Input.GetMouseButton( 1 ) );
+            meleeShield.SetActive( Input.GetMouseButton( 0 ) && !Input.GetMouseButton( 1 ) );
             // Check if only the right mouse button is down
             rangedShield.SetActive( !Input.GetMouseButton( 0 ) && Input.GetMouseButton( 1 ) );
             // Check if both mouse buttons are down
-            meleeShield.SetActive( Input.GetMouseButton( 0 ) && Input.GetMouseButton( 1 ) );
+            magicShield.SetActive( Input.GetMouseButton( 0 ) && Input.GetMouseButton( 1 ) );
 
         }
         else
         {
             // All shields should be disabled once drained of resources
-            magicShield.SetActive( false );
+            magicShield.SetActive(false);
             rangedShield.SetActive(false);
-            meleeShield.SetActive( false );
+            meleeShield.SetActive(false);
 
             // Begin Delayed Shield Regen (only thing they can do) 
             Invoke( "RegenShield", energyRegenDelay );
