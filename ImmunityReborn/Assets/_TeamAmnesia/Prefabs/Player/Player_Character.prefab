@@ -787,6 +787,7 @@ GameObject:
   - component: {fileID: 7729690610095241843}
   - component: {fileID: 758157621598800330}
   - component: {fileID: 4267787728830661894}
+  - component: {fileID: 2666880875704537241}
   m_Layer: 0
   m_Name: Player_Character
   m_TagString: Player
@@ -832,8 +833,12 @@ MonoBehaviour:
   <InputReader>k__BackingField: {fileID: 7729690610095241843}
   <CharacterController>k__BackingField: {fileID: 4267787728830661894}
   <Animator>k__BackingField: {fileID: 758157621598800330}
+  <ForceReceiver>k__BackingField: {fileID: 2666880875704537241}
   <DefaultMovementSpeed>k__BackingField: 5
   <RotationDamping>k__BackingField: 10
+  <Attacks>k__BackingField:
+  - <AnimationName>k__BackingField: Sword And Shield Casting
+    <TransitionDuration>k__BackingField: 0.1
 --- !u!114 &7729690610095241843
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -893,6 +898,19 @@ CharacterController:
   m_SkinWidth: 0.03
   m_MinMoveDistance: 0
   m_Center: {x: 0, y: 0.9, z: 0}
+--- !u!114 &2666880875704537241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4386675438606070744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c08b0860b8a2074c8faad27bedec0de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterController: {fileID: 4267787728830661894}
 --- !u!1 &4456267561637876174
 GameObject:
   m_ObjectHideFlags: 0
