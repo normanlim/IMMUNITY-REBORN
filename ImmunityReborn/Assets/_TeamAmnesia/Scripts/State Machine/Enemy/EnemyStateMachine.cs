@@ -21,6 +21,12 @@ public class EnemyStateMachine : StateMachine
     public WeaponDamager WeaponDamager { get; private set; }
 
     [field: SerializeField]
+    public Health Health { get; private set; }
+
+    [field: SerializeField]
+    public Ragdoll Ragdoll { get; private set; }
+
+    [field: SerializeField]
     public float MovementSpeed { get; private set; }
 
     [field: SerializeField]
@@ -42,6 +48,21 @@ public class EnemyStateMachine : StateMachine
         NavMeshAgent.updateRotation = false;
 
         SwitchState(new EnemyIdleState(this));
+    }
+
+    private void OnEnable()
+    {
+        Health.OnDie += HandleDie;
+    }
+
+    private void OnDisable()
+    {
+        Health.OnDie -= HandleDie;
+    }
+
+    private void HandleDie()
+    {
+        SwitchState(new EnemyDeadState(this));
     }
 
     private void OnDrawGizmosSelected()

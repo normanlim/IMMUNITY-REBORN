@@ -8,6 +8,8 @@ TagManager:
   - MagicType
   - MeleeType
   - MemoryFragment
+  - Ragdoll
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -15,11 +17,11 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Player Attacks
+  - Enemy
+  - Enemy Attacks
+  - Ragdoll
   - 
   - 
   - 

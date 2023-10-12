@@ -592,7 +592,7 @@ GameObject:
   - component: {fileID: 2586947531747848741}
   - component: {fileID: 7915402665488511576}
   - component: {fileID: 8365400189937155547}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WeaponLogic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -676,7 +676,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e9968acf4098db4681b257a4e735a75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myCollider: {fileID: 4267787728830661894}
 --- !u!1 &3056904910873967948
 GameObject:
   m_ObjectHideFlags: 0

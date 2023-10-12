@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class WeaponDamager : MonoBehaviour
 {
-    [SerializeField, Tooltip("The collider of the character performing the attackData")]
-    private Collider myCollider;
-
     private int damage;
 
     private List<Collider> alreadyCollidedWith = new List<Collider>();
@@ -18,8 +15,6 @@ public class WeaponDamager : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other == myCollider) { return; }
-
         if (alreadyCollidedWith.Contains(other))
         {
             return;
