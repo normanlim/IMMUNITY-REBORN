@@ -17,13 +17,16 @@ public class PlayerStateMachine : StateMachine
     public ForceReceiver ForceReceiver { get; private set; }
 
     [field: SerializeField]
+    public WeaponDamager WeaponDamager { get; private set; }
+
+    [field: SerializeField]
     public float DefaultMovementSpeed { get; private set; }
 
     [field: SerializeField]
     public float RotationDamping { get; private set; }
 
     [field: SerializeField]
-    public Attack[] Attacks { get; private set; }
+    public AttackData[] Attacks { get; private set; }
 
     public Transform MainCameraTransform { get; private set; }
 

@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class PlayerDefaultState : PlayerBaseState
 {
-    private readonly int BlendTreeSpeedParam = Animator.StringToHash("Speed");
+    private readonly int LocomotionStateName = Animator.StringToHash("Locomotion");
+    private readonly int AnimatorSpeedParam = Animator.StringToHash("Speed");
 
     private const float AnimatorDampTime = 0.1f;
+    private const float CrossFadeDuration = 0.1f;
 
     public PlayerDefaultState(PlayerStateMachine stateMachine) : base(stateMachine)
     {
@@ -14,6 +16,7 @@ public class PlayerDefaultState : PlayerBaseState
 
     public override void Enter()
     {
+        stateMachine.Animator.CrossFadeInFixedTime(LocomotionStateName, CrossFadeDuration);
     }
 
     public override void Tick(float deltaTime)
@@ -29,11 +32,11 @@ public class PlayerDefaultState : PlayerBaseState
 
         if (stateMachine.InputReader.MovementValue == Vector2.zero) // if player is not moving
         {
-            stateMachine.Animator.SetFloat(BlendTreeSpeedParam, 0.0f, AnimatorDampTime, deltaTime); // sets blend tree param to 0
+            stateMachine.Animator.SetFloat(AnimatorSpeedParam, 0.0f, AnimatorDampTime, deltaTime); // updates blend tree state
         }
         else // if player is moving
         {
-            stateMachine.Animator.SetFloat(BlendTreeSpeedParam, 1.0f, AnimatorDampTime, deltaTime); // sets blend tree param to 1
+            stateMachine.Animator.SetFloat(AnimatorSpeedParam, 1.0f, AnimatorDampTime, deltaTime);
             FaceMovementDirection(movement, deltaTime);
         }
     }
