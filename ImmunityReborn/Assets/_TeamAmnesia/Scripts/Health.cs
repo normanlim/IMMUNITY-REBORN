@@ -19,11 +19,11 @@ public class Health : MonoBehaviour
 
     public void DealDamage(int damage)
     {
-        if (health == 0) { return; }
+        if (health == 0) { return; } // avoid further calculations if already dead
 
         health = Mathf.Max(health - damage, 0); // makes sure health is never negative
 
-        if (health == 0)
+        if (health == 0) // logic after health is updated
         {
             OnDie?.Invoke();
         }

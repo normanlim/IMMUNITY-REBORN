@@ -6,22 +6,22 @@ public class WeaponDamager : MonoBehaviour
 {
     private int damage;
 
-    private List<Collider> alreadyCollidedWith = new List<Collider>();
+    private List<Collider> collidedWith = new List<Collider>();
 
     private void OnEnable()
     {
-        alreadyCollidedWith.Clear();
+        collidedWith.Clear();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (alreadyCollidedWith.Contains(other))
+        if (collidedWith.Contains(other))
         {
             return;
         }
         else
         {
-            alreadyCollidedWith.Add(other);
+            collidedWith.Add(other);
         }
 
         if (other.TryGetComponent(out Health health))
