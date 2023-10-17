@@ -19,13 +19,10 @@ public class PlayerAttackingState : PlayerBaseState
 
     public override void Tick(float deltaTime)
     {
+        FaceCameraDirection(deltaTime);
+
         Vector3 movement = CalculateMovement();
         Move(movement * stateMachine.DefaultMovementSpeed, deltaTime);
-
-        if (stateMachine.InputReader.MovementValue != Vector2.zero)
-        {
-            FaceMovementDirection(movement, deltaTime);
-        }
 
         stateMachine.SwitchState(new PlayerDefaultState(stateMachine));
     }
