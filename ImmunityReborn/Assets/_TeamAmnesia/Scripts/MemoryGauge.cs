@@ -54,6 +54,8 @@ public class MemoryGauge : MonoBehaviour
 
     private void UpdateMemoryGaugeSlider()
     {
-        memoryGaugeSlider.value = (float) (numBlocksRequired - remainingBlocksRequired + numFragmentsRequired - remainingFragmentsRequired) * 100 / (numBlocksRequired + numFragmentsRequired);
+        memoryGaugeSlider.value = (float) ( numBlocksRequired - remainingBlocksRequired 
+                                            + numFragmentsRequired - remainingFragmentsRequired) * 100 / 
+                                            ( numBlocksRequired + numFragmentsRequired );
     }
 }
