@@ -20,6 +20,12 @@ public class PlayerStateMachine : StateMachine
     public WeaponDamager WeaponDamager { get; private set; }
 
     [field: SerializeField]
+    public Health Health { get; private set; }
+
+    [field: SerializeField]
+    public Ragdoll Ragdoll { get; private set; }
+
+    [field: SerializeField]
     public float DefaultMovementSpeed { get; private set; }
 
     [field: SerializeField]
@@ -38,5 +44,27 @@ public class PlayerStateMachine : StateMachine
         MainCameraTransform = Camera.main.transform;
 
         SwitchState(new PlayerDefaultState(this));
+    }
+
+    private void OnEnable()
+    {
+        Health.OnTakeDamage += HandleTakeDamage;
+        Health.OnDie += HandleDie;
+    }
+
+    private void OnDisable()
+    {
+        Health.OnTakeDamage -= HandleTakeDamage;
+        Health.OnDie -= HandleDie;
+    }
+
+    private void HandleTakeDamage()
+    {
+        SwitchState(new PlayerImpactState(this));
+    }
+
+    private void HandleDie()
+    {
+        SwitchState(new PlayerDeadState(this));
     }
 }
