@@ -12,16 +12,16 @@ public abstract class State
     /// Gets the currently playing animation's duration played no matter how long the animation is.
     /// </summary>
     /// <returns>0.0f to 1.0f where 1.0f represents 100% of animation played</returns>
-    protected float GetPlayingAnimationTimeNormalized(Animator animator)
+    protected float GetPlayingAnimationTimeNormalized(Animator animator, int layerIndex)
     {
-        AnimatorStateInfo currentInfo = animator.GetCurrentAnimatorStateInfo(0);
-        AnimatorStateInfo nextInfo = animator.GetNextAnimatorStateInfo(0);
+        AnimatorStateInfo currentInfo = animator.GetCurrentAnimatorStateInfo(layerIndex);
+        AnimatorStateInfo nextInfo = animator.GetNextAnimatorStateInfo(layerIndex);
 
-        if (animator.IsInTransition(0) && nextInfo.IsTag("Attack"))
+        if (animator.IsInTransition(layerIndex) && nextInfo.IsTag("Attack"))
         {
             return nextInfo.normalizedTime;
         }
-        else if (!animator.IsInTransition(0) && currentInfo.IsTag("Attack"))
+        else if (!animator.IsInTransition(layerIndex) && currentInfo.IsTag("Attack"))
         {
             return currentInfo.normalizedTime;
         }

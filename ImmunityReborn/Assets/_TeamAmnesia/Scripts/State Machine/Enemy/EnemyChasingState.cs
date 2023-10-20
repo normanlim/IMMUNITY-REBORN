@@ -5,10 +5,8 @@ using UnityEngine;
 public class EnemyChasingState : EnemyBaseState
 {
     private readonly int LocomotionStateName = Animator.StringToHash("Locomotion");
-    private readonly int AnimatorSpeedParam = Animator.StringToHash("Speed");
-
+    
     private const float CrossFadeDuration = 0.1f;
-    private const float AnimatorDampTime = 0.1f;
 
     public EnemyChasingState(EnemyStateMachine stateMachine) : base(stateMachine)
     {
@@ -16,7 +14,7 @@ public class EnemyChasingState : EnemyBaseState
 
     public override void Enter()
     {
-        stateMachine.Animator.CrossFadeInFixedTime(LocomotionStateName, CrossFadeDuration);
+        stateMachine.Animator.CrossFadeInFixedTime(LocomotionStateName, CrossFadeDuration, -1);
     }
 
     public override void Tick(float deltaTime)
@@ -36,21 +34,12 @@ public class EnemyChasingState : EnemyBaseState
 
         FacePlayer();
 
-        stateMachine.Animator.SetFloat(AnimatorSpeedParam, 1.0f, AnimatorDampTime, deltaTime);
+        UpdateAnimator(deltaTime);
     }
 
     public override void Exit()
     {
         stateMachine.NavMeshAgent.ResetPath();
         stateMachine.NavMeshAgent.velocity = Vector3.zero;
-    }
-
-    private void MoveToPlayer(float deltaTime)
-    {
-        stateMachine.NavMeshAgent.destination = stateMachine.Player.transform.position;
-
-        Move(stateMachine.NavMeshAgent.desiredVelocity.normalized * stateMachine.MovementSpeed, deltaTime);
-
-        stateMachine.NavMeshAgent.velocity = stateMachine.CharacterController.velocity; // needed to sync velocities
     }
 }
