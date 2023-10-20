@@ -18,11 +18,13 @@ public class PlayerCollisions : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (Array.Exists(attackTypeTags, tag => tag == other.tag))
-        {
-            health--;
-            Destroy(other.gameObject);
-            healthSlider.value = health;
-        }
+        // Removed temporarily in case will be used. Health logic moved
+        //if (Array.Exists(attackTypeTags, tag => tag == other.tag))
+        //{
+        //    Debug.Log( "NTest2" );
+        //    health--;
+        //    Destroy(other.gameObject);
+        //    healthSlider.value = health;
+        //}
     }
 }

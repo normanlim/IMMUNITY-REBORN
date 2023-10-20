@@ -3,8 +3,8 @@ using UnityEngine;
 public class CannonBallController : MonoBehaviour
 {
     public Vector3 targetPosition; 
-    public float animationDuration; 
-    public ParticleSystem particleSystem; 
+    public float animationDuration;
+    public ParticleSystem ps;
 
     private float elapsedTime = 0f;
     private Vector3 initialPosition;
@@ -13,6 +13,7 @@ public class CannonBallController : MonoBehaviour
     private void Start()
     {
         initialPosition = transform.position;
+        GetComponent<MeshRenderer>().enabled = false;
     }
 
     private void Update()
@@ -37,7 +38,8 @@ public class CannonBallController : MonoBehaviour
     {
         if (!animationRunning)
         {
-            particleSystem.Play();
+            GetComponent<MeshRenderer>().enabled = true;
+            ps.Play();
 
             transform.position = initialPosition;
             elapsedTime = 0f;
