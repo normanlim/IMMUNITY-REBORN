@@ -7,6 +7,11 @@ public class WeaponHandler : MonoBehaviour
     [SerializeField]
     private GameObject weaponLogic;
 
+    private void Start()
+    {
+        DisableWeapon();
+    }
+
     public void EnableWeapon()
     {
         weaponLogic.SetActive(true);
