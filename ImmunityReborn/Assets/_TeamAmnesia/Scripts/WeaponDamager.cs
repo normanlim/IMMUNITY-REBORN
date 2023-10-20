@@ -5,6 +5,7 @@ using UnityEngine;
 public class WeaponDamager : MonoBehaviour
 {
     private int damage;
+    private float knockback;
 
     private List<Collider> collidedWith = new List<Collider>();
 
@@ -28,10 +29,17 @@ public class WeaponDamager : MonoBehaviour
         {
             health.DealDamage(damage);
         }
+
+        if (other.TryGetComponent(out ForceReceiver forceReceiver))
+        {
+            Vector3 direction = (other.transform.position - transform.position).normalized;
+            forceReceiver.AddForce(direction * knockback);
+        }
     }
 
-    public void SetDamage(int damage)
+    public void SetDamage(int damage, float knockback)
     {
         this.damage = damage;
+        this.knockback = knockback;
     }
 }

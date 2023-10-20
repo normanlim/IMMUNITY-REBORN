@@ -38,6 +38,9 @@ public class EnemyStateMachine : StateMachine
     [field: SerializeField]
     public int AttackDamage { get; private set; }
 
+    [field: SerializeField]
+    public float AttackKnockback { get; private set; }
+
     public GameObject Player { get; private set; }
 
     private void Start()
@@ -52,12 +55,19 @@ public class EnemyStateMachine : StateMachine
 
     private void OnEnable()
     {
+        Health.OnTakeDamage += HandleTakeDamage;
         Health.OnDie += HandleDie;
     }
 
     private void OnDisable()
     {
+        Health.OnTakeDamage -= HandleTakeDamage;
         Health.OnDie -= HandleDie;
+    }
+
+    private void HandleTakeDamage()
+    {
+        SwitchState(new EnemyImpactState(this));
     }
 
     private void HandleDie()
