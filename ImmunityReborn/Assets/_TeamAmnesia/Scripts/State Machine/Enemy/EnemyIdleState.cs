@@ -5,10 +5,8 @@ using UnityEngine;
 public class EnemyIdleState : EnemyBaseState
 {
     private readonly int LocomotionStateName = Animator.StringToHash("Locomotion");
-    private readonly int AnimatorSpeedParam = Animator.StringToHash("Speed");
 
     private const float CrossFadeDuration = 0.1f;
-    private const float AnimatorDampTime = 0.1f;
 
     public EnemyIdleState(EnemyStateMachine stateMachine) : base(stateMachine)
     {
@@ -30,8 +28,6 @@ public class EnemyIdleState : EnemyBaseState
         }
 
         FacePlayer();
-
-        stateMachine.Animator.SetFloat(AnimatorSpeedParam, 0.0f, AnimatorDampTime, deltaTime); // updates blend tree state
     }
 
     public override void Exit()

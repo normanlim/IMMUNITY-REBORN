@@ -6,6 +6,9 @@ public abstract class EnemyBaseState : State
 {
     protected EnemyStateMachine stateMachine;
 
+    private readonly int AnimatorSpeedParam = Animator.StringToHash("Speed");
+    private const float AnimatorDampTime = 0.1f;
+
     public EnemyBaseState(EnemyStateMachine stateMachine)
     {
         this.stateMachine = stateMachine;
@@ -19,6 +22,15 @@ public abstract class EnemyBaseState : State
     protected void Move(float deltaTime)
     {
         Move(Vector3.zero, deltaTime);
+    }
+
+    protected void MoveToPlayer(float deltaTime)
+    {
+        stateMachine.NavMeshAgent.destination = stateMachine.Player.transform.position;
+
+        Move(stateMachine.NavMeshAgent.desiredVelocity.normalized * stateMachine.MovementSpeed, deltaTime);
+
+        stateMachine.NavMeshAgent.velocity = stateMachine.CharacterController.velocity; // needed to sync velocities
     }
 
     protected void FacePlayer()
@@ -45,5 +57,17 @@ public abstract class EnemyBaseState : State
             stateMachine.transform.position).sqrMagnitude;
 
         return distanceToPlayerSqr <= stateMachine.AttackRange * stateMachine.AttackRange;
+    }
+
+    protected void UpdateAnimator(float deltaTime)
+    {
+        if (stateMachine.NavMeshAgent.velocity != Vector3.zero)
+        {
+            stateMachine.Animator.SetFloat(AnimatorSpeedParam, 1.0f, AnimatorDampTime, deltaTime);
+        }
+        else
+        {
+            stateMachine.Animator.SetFloat(AnimatorSpeedParam, 0.0f, AnimatorDampTime, deltaTime);
+        }
     }
 }
