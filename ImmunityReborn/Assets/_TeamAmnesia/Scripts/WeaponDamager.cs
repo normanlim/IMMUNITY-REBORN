@@ -9,6 +9,9 @@ public class WeaponDamager : MonoBehaviour
 
     private List<Collider> collidedWith = new List<Collider>();
 
+    [field: SerializeField]
+    public Collider CharacterCollider { get; private set; }
+
     private void OnEnable()
     {
         collidedWith.Clear();
@@ -27,7 +30,7 @@ public class WeaponDamager : MonoBehaviour
 
         if (other.TryGetComponent(out Health health))
         {
-            health.DealDamage(damage);
+            health.DealDamage(damage, DamageType.Melee);
         }
 
         if (other.TryGetComponent(out ForceReceiver forceReceiver))
