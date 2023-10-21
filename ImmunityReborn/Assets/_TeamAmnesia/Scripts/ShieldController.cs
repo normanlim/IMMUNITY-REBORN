@@ -12,6 +12,7 @@ public class ShieldController : MonoBehaviour
 
     private float currentEnergyValue;
     private float energyRegenDelay;
+    private PlayerStateMachine playerStateMachine;
 
     public GameObject meleeShield;
     public GameObject rangedShield;
@@ -23,6 +24,8 @@ public class ShieldController : MonoBehaviour
         depleteSpeed = 15;
         regenSpeed = 10;
         energyRegenDelay = 3;
+
+        playerStateMachine = GetComponent<PlayerStateMachine>();
     }
 
     private void RegenShield()
@@ -60,13 +63,7 @@ public class ShieldController : MonoBehaviour
                 Invoke( "RegenShield", energyRegenDelay );
             }
 
-            // Check if only the left mouse button is down
-            meleeShield.SetActive( Input.GetMouseButton( 0 ) && !Input.GetMouseButton( 1 ) );
-            // Check if only the right mouse button is down
-            rangedShield.SetActive( !Input.GetMouseButton( 0 ) && Input.GetMouseButton( 1 ) );
-            // Check if both mouse buttons are down
-            magicShield.SetActive( Input.GetMouseButton( 0 ) && Input.GetMouseButton( 1 ) );
-
+            CheckShieldInputs();
         }
         else
         {
@@ -80,6 +77,45 @@ public class ShieldController : MonoBehaviour
             energyMeterText.text = "";
         }
 
+    }
+
+    private void CheckShieldInputs()
+    {
+        if (Input.GetMouseButton(0) && !Input.GetMouseButton(1))
+        {
+            // Check if only the left mouse button is down
+            meleeShield.SetActive(true);
+            playerStateMachine.Health.IsMeleeImmune = true;
+        }
+        else
+        {
+            meleeShield.SetActive(false);
+            playerStateMachine.Health.IsMeleeImmune = false;
+        }
+
+        if (!Input.GetMouseButton(0) && Input.GetMouseButton(1))
+        {
+            // Check if only the right mouse button is down
+            rangedShield.SetActive(true);
+            playerStateMachine.Health.IsRangedImmune = true;
+        }
+        else
+        {
+            rangedShield.SetActive(false);
+            playerStateMachine.Health.IsRangedImmune = false;
+        }
+
+        if (Input.GetMouseButton(0) && Input.GetMouseButton(1))
+        {
+            // Check if both mouse buttons are down
+            magicShield.SetActive(true);
+            playerStateMachine.Health.IsMagicImmune = true;
+        }
+        else
+        {
+            magicShield.SetActive(false);
+            playerStateMachine.Health.IsMagicImmune = false;
+        }
     }
 
 }

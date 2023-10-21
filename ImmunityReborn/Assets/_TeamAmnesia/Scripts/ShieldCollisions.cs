@@ -5,6 +5,9 @@ public class ShieldCollisions : MonoBehaviour
     public string typeTag;
     public PlayerStateMachine playerStateMachine;
 
+    [field: SerializeField]
+    public float ShieldKnockback { get; private set; }
+
     private void OnTriggerEnter(Collider other)
     {
         // Notes for future implementation: 
@@ -16,6 +19,21 @@ public class ShieldCollisions : MonoBehaviour
             Destroy(other.gameObject);
             playerStateMachine.MemoryGauge.EarnMemoryGauge( 10 );
         }
-            
+        
+        if (other.gameObject.TryGetComponent(out WeaponDamager weaponDamager))
+        {
+            GameObject attacker = weaponDamager.CharacterCollider.gameObject;
+
+            if (attacker.TryGetComponent(out Health health))
+            {
+                health.DealDamage(0);
+            }
+
+            if (attacker.TryGetComponent(out ForceReceiver forceReceiver))
+            {
+                Vector3 direction = (other.transform.position - transform.position).normalized;
+                forceReceiver.AddForce(direction * ShieldKnockback);
+            }
+        }
     }
 }

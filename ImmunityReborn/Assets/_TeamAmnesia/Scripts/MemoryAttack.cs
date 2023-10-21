@@ -19,8 +19,7 @@ public class MemoryAttack : MonoBehaviour
     public GameObject memoryAtk;
     public float shootForce, upwardForce;
 
-    // Recoil (on player) 
-    public Rigidbody playerRb;
+    // Recoil (on player)
     public float recoilForce;
 
     // Memory attack stuff
