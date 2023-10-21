@@ -29,10 +29,10 @@ public class EnemyStateMachine : StateMachine
     [field: SerializeField]
     public float MovementSpeed { get; private set; }
 
-    [field: SerializeField]
+    [field: SerializeField, Tooltip("Start chasing if target is within this range")]
     public float ChaseRange { get; private set; }
 
-    [field: SerializeField]
+    [field: SerializeField, Tooltip("Perform attack if target is within this range")]
     public float AttackRange { get; private set; }
 
     [field: SerializeField]
@@ -43,10 +43,16 @@ public class EnemyStateMachine : StateMachine
 
     public GameObject Player { get; private set; }
 
-    private void Start()
+    public Health PlayerHealth { get; private set; }
+
+    private void Awake()
     {
         Player = GameObject.FindGameObjectWithTag("Player");
+        PlayerHealth = Player.GetComponent<Health>();
+    }
 
+    private void Start()
+    {
         NavMeshAgent.updatePosition = false; // for manual control
         NavMeshAgent.updateRotation = false;
 
@@ -57,12 +63,16 @@ public class EnemyStateMachine : StateMachine
     {
         Health.OnTakeDamage += HandleTakeDamage;
         Health.OnDie += HandleDie;
+
+        PlayerHealth.OnDie += HandlePlayerDie;
     }
 
     private void OnDisable()
     {
         Health.OnTakeDamage -= HandleTakeDamage;
         Health.OnDie -= HandleDie;
+
+        PlayerHealth.OnDie -= HandlePlayerDie;
     }
 
     private void HandleTakeDamage()
@@ -73,6 +83,11 @@ public class EnemyStateMachine : StateMachine
     private void HandleDie()
     {
         SwitchState(new EnemyDeadState(this));
+    }
+
+    private void HandlePlayerDie()
+    {
+        SwitchState(new EnemyIdleState(this));
     }
 
     private void OnDrawGizmosSelected()

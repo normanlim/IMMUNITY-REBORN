@@ -34,6 +34,7 @@ public abstract class EnemyBaseState : State
         }
 
         stateMachine.NavMeshAgent.velocity = stateMachine.CharacterController.velocity; // needed to sync velocities
+        stateMachine.NavMeshAgent.nextPosition = stateMachine.CharacterController.transform.position; // fixes bug where enemies float apart when colliding with each other
     }
 
     protected void FacePlayer()
@@ -48,6 +49,8 @@ public abstract class EnemyBaseState : State
 
     protected bool IsInChaseRange()
     {
+        if (stateMachine.PlayerHealth.CurrentHealth == 0) { return false; }
+
         float distanceToPlayerSqr = (stateMachine.Player.transform.position -
             stateMachine.transform.position).sqrMagnitude; // more performant than Vector3.magnitude which uses sqrt
 
@@ -56,6 +59,8 @@ public abstract class EnemyBaseState : State
 
     protected bool IsInAttackRange()
     {
+        if (stateMachine.PlayerHealth.CurrentHealth == 0) { return false; }
+
         float distanceToPlayerSqr = (stateMachine.Player.transform.position -
             stateMachine.transform.position).sqrMagnitude;
 
