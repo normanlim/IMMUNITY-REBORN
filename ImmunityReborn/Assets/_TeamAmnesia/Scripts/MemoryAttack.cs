@@ -56,8 +56,9 @@ public class MemoryAttack : MonoBehaviour
             shooting = Input.GetKeyDown( KeyCode.Alpha1 ); 
         }
 
-        if ( readyToShoot && shooting )
+        if ( readyToShoot && shooting && StateMachine.MemoryGauge.currentMeterVal >= 50 )
         {
+            StateMachine.MemoryGauge.SpendMemoryGauge( 50 );
             LaunchMemoryAttack();
         }
     }
@@ -88,6 +89,8 @@ public class MemoryAttack : MonoBehaviour
 
         // Add forces to MemoryAtk (pew pew)
         currentMemoryAtk.GetComponent<Rigidbody>().AddForce( atkDirection.normalized * shootForce, ForceMode.Impulse );
+        currentMemoryAtk.GetComponent<WeaponDamager>().SetDamage( 100, 1 );
+
         Destroy( currentMemoryAtk, 3f );
 
         //Instantiate muzzle flash, if you have one

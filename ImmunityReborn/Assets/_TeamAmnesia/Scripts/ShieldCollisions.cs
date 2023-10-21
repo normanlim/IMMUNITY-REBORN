@@ -3,7 +3,7 @@ using UnityEngine;
 public class ShieldCollisions : MonoBehaviour
 {
     public string typeTag;
-    public int numAttacksBlocked = 0;
+    public PlayerStateMachine playerStateMachine;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -14,7 +14,7 @@ public class ShieldCollisions : MonoBehaviour
         if (other.gameObject.tag == typeTag)
         {
             Destroy(other.gameObject);
-            numAttacksBlocked++;
+            playerStateMachine.MemoryGauge.EarnMemoryGauge( 10 );
         }
             
     }

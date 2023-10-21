@@ -8,6 +8,7 @@ public class ShieldController : MonoBehaviour
     [SerializeField] TMP_Text energyMeterText;
     [SerializeField] Image energyMeter;
     [SerializeField] float regenSpeed;
+    [SerializeField] float depleteSpeed;
 
     private float currentEnergyValue;
     private float energyRegenDelay;
@@ -19,6 +20,7 @@ public class ShieldController : MonoBehaviour
     private void Start()
     {
         currentEnergyValue = 100;
+        depleteSpeed = 15;
         regenSpeed = 10;
         energyRegenDelay = 3;
     }
@@ -46,7 +48,9 @@ public class ShieldController : MonoBehaviour
             if ( Input.GetMouseButton( 0 ) || Input.GetMouseButton( 1 ) )
             {
                 CancelInvoke( "RegenShield" );
-                currentEnergyValue -= regenSpeed * Time.deltaTime;
+                currentEnergyValue -= depleteSpeed * Time.deltaTime; // How fast to drain energy gauge
+
+                // Update info on remaining energy
                 energyMeterText.color = Color.magenta;
                 energyMeterText.text = ( (int)currentEnergyValue).ToString() + "%";
                 energyMeter.fillAmount = currentEnergyValue / 100;
