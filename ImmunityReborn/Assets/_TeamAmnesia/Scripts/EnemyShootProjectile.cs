@@ -20,5 +20,6 @@ public class EnemyShootProjectile : MonoBehaviour
         GameObject projectile = Instantiate(projectilePrefab, transform.position, transform.rotation);
         projectile.GetComponent<Rigidbody>().velocity = playerDirection;
         Destroy(projectile, 9f);
+        Debug.Log("hi");
     }
 }
