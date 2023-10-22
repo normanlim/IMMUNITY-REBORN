@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class MemoryAttack : MonoBehaviour
 {
@@ -14,7 +15,7 @@ public class MemoryAttack : MonoBehaviour
     public PlayerStateMachine StateMachine;
     public GameObject muzzleFlash;
     [SerializeField]
-    private string animationName;
+    private string animationName = "Sword And Shield Casting";
 
     // Projectile + Projectile force
     public GameObject memoryAtk;
@@ -52,13 +53,13 @@ public class MemoryAttack : MonoBehaviour
         else 
         {
             // GetKeyDown means it only records the input once, even if key is being held down.
-            shooting = Input.GetKeyDown( KeyCode.Q ); 
+            shooting = Input.GetKeyDown( KeyCode.Q );
         }
 
         if ( readyToShoot && shooting && StateMachine.MemoryGauge.currentMeterVal >= 50 )
         {
             //LaunchMemoryAttack();
-            StateMachine.Animator.Play(animationName); // LaunchMemoryAttack() called via animation event
+            StateMachine.Animator.Play( animationName ); // LaunchMemoryAttack() called via animation event
         }
     }
 
