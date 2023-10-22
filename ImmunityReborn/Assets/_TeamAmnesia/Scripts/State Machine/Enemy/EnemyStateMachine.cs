@@ -45,10 +45,13 @@ public class EnemyStateMachine : StateMachine
 
     public Health PlayerHealth { get; private set; }
 
+    public EnemySpawnManager EnemySpawnManager { get; private set; }
+
     private void Awake()
     {
         Player = GameObject.FindGameObjectWithTag("Player");
         PlayerHealth = Player.GetComponent<Health>();
+        EnemySpawnManager = GameObject.Find("EnemySpawnManager").GetComponent<EnemySpawnManager>();
     }
 
     private void Start()
@@ -82,6 +85,7 @@ public class EnemyStateMachine : StateMachine
 
     private void HandleDie()
     {
+        EnemySpawnManager.enemiesKilled++;
         SwitchState(new EnemyDeadState(this));
     }
 

@@ -4,13 +4,22 @@ using UnityEngine;
 
 public class EnemySpawnManager : MonoBehaviour
 {
-    public GameObject player;
-    public List<Vector3> MeleeSpawnLocations;
-    public List<Vector3> RangedSpawnLocations;
-    public List<Vector3> MagicSpawnLocations;
-    public GameObject meleeEnemyPrefab;
-    public GameObject rangedEnemyPrefab;
-    public GameObject magicEnemyPrefab;
+    [SerializeField] GameObject player;
+    public List<SpawnData> MeleeSpawnLocations;
+    public List<SpawnData> RangedSpawnLocations;
+    public List<SpawnData> MagicSpawnLocations;
+    [SerializeField] GameObject meleeEnemyPrefab;
+    [SerializeField] GameObject rangedEnemyPrefab;
+    [SerializeField] GameObject magicEnemyPrefab;
+    // May want to keep track by type to spawn specific bosses
+    public int enemiesKilled = 0;
+
+    [System.Serializable]
+    public class SpawnData
+    {
+        public Vector3 position;
+        public Vector3 rotation;
+    }
 
     void Start()
     {
@@ -19,11 +28,16 @@ public class EnemySpawnManager : MonoBehaviour
         SpawnEnemies(magicEnemyPrefab, MagicSpawnLocations);
     }
 
-    void SpawnEnemies(GameObject enemyPrefab, List<Vector3> spawnLocations)
+    void SpawnEnemies(GameObject enemyPrefab, List<SpawnData> spawnLocations)
     {
-        foreach (Vector3 location in spawnLocations)
+        foreach (SpawnData spawnData in spawnLocations)
         {
-            GameObject enemy = Instantiate(enemyPrefab, location, Quaternion.identity);
+            // Get the position and rotation from the SpawnData
+            Vector3 position = spawnData.position;
+            // Convert Vector3 rotation to Quaternion
+            Quaternion rotationEulerAngles = Quaternion.Euler(spawnData.rotation);
+
+            GameObject enemy = Instantiate(enemyPrefab, position, rotationEulerAngles);
             Transform launchOrigin = enemy.transform.Find("ProjectileLaunchOrigin");
             if (launchOrigin != null)
             {
