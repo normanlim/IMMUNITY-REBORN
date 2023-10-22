@@ -10,6 +10,9 @@ public class WeaponDamager : MonoBehaviour
     private List<Collider> collidedWith = new List<Collider>();
 
     [field: SerializeField]
+    public DamageType DamageType { get; private set; }
+
+    [field: SerializeField]
     public Collider CharacterCollider { get; private set; }
 
     private void OnEnable()
