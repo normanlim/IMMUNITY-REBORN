@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class MemoryAttack : MonoBehaviour
 {
     // Aiming stuff
-    public Transform hitSphere;
     Ray ray;
     RaycastHit hitInfo;
     public LayerMask layerMask;
@@ -14,6 +14,8 @@ public class MemoryAttack : MonoBehaviour
     public Transform attackPoint;
     public PlayerStateMachine StateMachine;
     public GameObject muzzleFlash;
+    [SerializeField]
+    private string animationName = "Sword And Shield Casting";
 
     // Projectile + Projectile force
     public GameObject memoryAtk;
@@ -33,7 +35,6 @@ public class MemoryAttack : MonoBehaviour
     {
         readyToShoot = true;
         allowButtonHold = false; // For future other memory attacks if we can hold down the button to channel a beam or sth;
-        hitSphere.gameObject.SetActive( false );
     }
 
     // Update is called once per frame
@@ -47,23 +48,24 @@ public class MemoryAttack : MonoBehaviour
         if ( allowButtonHold )
         {
             // GetKey means the record the whole time the input being held down
-            shooting = Input.GetKey( KeyCode.Alpha1 );
+            shooting = Input.GetKey( KeyCode.Q );
         }
         else 
         {
             // GetKeyDown means it only records the input once, even if key is being held down.
-            shooting = Input.GetKeyDown( KeyCode.Alpha1 ); 
+            shooting = Input.GetKeyDown( KeyCode.Q );
         }
 
         if ( readyToShoot && shooting && StateMachine.MemoryGauge.currentMeterVal >= 50 )
         {
-            StateMachine.MemoryGauge.SpendMemoryGauge( 50 );
-            LaunchMemoryAttack();
+            //LaunchMemoryAttack();
+            StateMachine.Animator.Play( animationName ); // LaunchMemoryAttack() called via animation event
         }
     }
 
     void LaunchMemoryAttack()
     {
+        StateMachine.MemoryGauge.SpendMemoryGauge(50);
         readyToShoot = false;
 
         // set up the ray to start shooting from the camera 
