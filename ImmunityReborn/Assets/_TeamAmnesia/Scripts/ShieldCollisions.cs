@@ -20,7 +20,8 @@ public class ShieldCollisions : MonoBehaviour
             playerStateMachine.MemoryGauge.EarnMemoryGauge( 10 );
         }
         
-        if (other.gameObject.TryGetComponent(out WeaponDamager weaponDamager))
+        if (typeTag == "MeleeType" && other.gameObject.TryGetComponent(out WeaponDamager weaponDamager)
+            && weaponDamager.DamageType == DamageType.Melee)
         {
             GameObject attacker = weaponDamager.CharacterCollider.gameObject;
 
