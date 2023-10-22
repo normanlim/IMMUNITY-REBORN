@@ -54,13 +54,13 @@ public class InputReader : MonoBehaviour, Controls.IPlayerActions
     // TODO: may be better to invoke an event like jump and dodge
     public void OnAttack(InputAction.CallbackContext context)
     {
-        if (context.performed)
-        {
-            IsAttacking = true;
-        }
-        else if (context.canceled)
-        {
-            IsAttacking = false;
-        }
+        //if (context.performed)
+        //{
+        //    IsAttacking = true;
+        //}
+        //else if (context.canceled)
+        //{
+        //    IsAttacking = false;
+        //}
     }
 }
