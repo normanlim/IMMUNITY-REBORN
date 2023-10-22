@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Health : MonoBehaviour
 {
@@ -48,6 +49,17 @@ public class Health : MonoBehaviour
         if ( currentHealth == 0 ) // logic after health is updated
         {
             OnDie?.Invoke();
-        }
+
+            // player death
+            if (gameObject.CompareTag("Player"))
+            {
+                Invoke("ReturnToMenu", 4f);
+            }
+    }
+    }
+
+    void ReturnToMenu()
+    {
+        SceneManager.LoadScene("MenuScreen");
     }
 }
