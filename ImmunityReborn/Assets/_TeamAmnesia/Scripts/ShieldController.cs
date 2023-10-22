@@ -21,7 +21,7 @@ public class ShieldController : MonoBehaviour
     private void Start()
     {
         currentEnergyValue = 100;
-        depleteSpeed = 15;
+        depleteSpeed = 5;
         regenSpeed = 10;
         energyRegenDelay = 3;
 
