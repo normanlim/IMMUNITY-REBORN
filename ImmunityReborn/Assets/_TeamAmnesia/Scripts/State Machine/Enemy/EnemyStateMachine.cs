@@ -85,7 +85,12 @@ public class EnemyStateMachine : StateMachine
 
     private void HandleDie()
     {
-        EnemySpawnManager.enemiesKilled++;
+        // Check if the MinibossDeath component exists on this GameObject
+        MinibossDeath minibossDeathComponent = GetComponent<MinibossDeath>();
+        if (minibossDeathComponent != null)
+            minibossDeathComponent.initNextStage(EnemySpawnManager);
+        else // A regular enemy, increment the kill counter
+            EnemySpawnManager.enemiesKilled++;
         SwitchState(new EnemyDeadState(this));
     }
 

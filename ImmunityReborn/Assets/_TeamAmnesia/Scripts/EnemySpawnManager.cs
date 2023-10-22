@@ -8,11 +8,16 @@ public class EnemySpawnManager : MonoBehaviour
     public List<SpawnData> MeleeSpawnLocations;
     public List<SpawnData> RangedSpawnLocations;
     public List<SpawnData> MagicSpawnLocations;
+    public SpawnData bossSpawnLocation;
     [SerializeField] GameObject meleeEnemyPrefab;
     [SerializeField] GameObject rangedEnemyPrefab;
     [SerializeField] GameObject magicEnemyPrefab;
-    // May want to keep track by type to spawn specific bosses
+    [SerializeField] List<GameObject> minibossPrefabs;
+    [SerializeField] GameObject finalBossPrefab;
+    public int bossSpawnThreshold = 4;
     public int enemiesKilled = 0;
+    private int minibossesKilled = 0;
+    private GameObject activeBoss = null;
 
     [System.Serializable]
     public class SpawnData
@@ -21,20 +26,21 @@ public class EnemySpawnManager : MonoBehaviour
         public Vector3 rotation;
     }
 
-    void Start()
+    void Update()
     {
         SpawnEnemies(meleeEnemyPrefab, MeleeSpawnLocations);
         SpawnEnemies(rangedEnemyPrefab, RangedSpawnLocations);
         SpawnEnemies(magicEnemyPrefab, MagicSpawnLocations);
+        SpawnNextMiniboss();
+        SpawnBoss();
+
     }
 
     void SpawnEnemies(GameObject enemyPrefab, List<SpawnData> spawnLocations)
     {
         foreach (SpawnData spawnData in spawnLocations)
         {
-            // Get the position and rotation from the SpawnData
             Vector3 position = spawnData.position;
-            // Convert Vector3 rotation to Quaternion
             Quaternion rotationEulerAngles = Quaternion.Euler(spawnData.rotation);
 
             GameObject enemy = Instantiate(enemyPrefab, position, rotationEulerAngles);
@@ -50,5 +56,52 @@ public class EnemySpawnManager : MonoBehaviour
                 }
             }
         }
+        // Clear the locations, all enemies spawned
+        spawnLocations.Clear();
+
+    }
+
+    // Call this method to increase the minibossesKilled count
+    public void MinibossKilled()
+    {
+        minibossesKilled++;
+        // Reset enemies killed counter for next miniboss
+        enemiesKilled = 0;
+        // Set the active miniboss to null when a miniboss is defeated
+        activeBoss = null;
+    }
+
+    void SpawnBoss()
+    {
+        // Check for final boss spawn when all minibosses are defeated
+        if (activeBoss == null && minibossesKilled >= minibossPrefabs.Count)
+        {
+            activeBoss = Instantiate(finalBossPrefab, bossSpawnLocation.position, Quaternion.Euler(bossSpawnLocation.rotation));
+        }
+    }
+
+    // Call this method to spawn the next miniboss
+    public void SpawnNextMiniboss()
+    {
+        // Only spawn a new miniboss if there's no active miniboss
+        if (enemiesKilled >= bossSpawnThreshold && activeBoss == null && minibossesKilled < minibossPrefabs.Count)
+        {
+            activeBoss = Instantiate(minibossPrefabs[minibossesKilled], bossSpawnLocation.position, Quaternion.Euler(bossSpawnLocation.rotation));
+        }
+    }
+
+    public void AddMeleeEnemies(List<SpawnData> spawnDatas)
+    {
+        MeleeSpawnLocations.AddRange(spawnDatas);
+    }
+
+    public void AddRangedEnemies(List<SpawnData> spawnDatas)
+    {
+        RangedSpawnLocations.AddRange(spawnDatas);
+    }
+
+    public void AddMagicEnemies(List<SpawnData> spawnDatas)
+    {
+        MagicSpawnLocations.AddRange(spawnDatas);
     }
 }

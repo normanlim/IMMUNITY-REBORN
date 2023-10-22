@@ -19,6 +19,7 @@ public class WeaponDamager : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log(other);
         if (collidedWith.Contains(other))
         {
             return;
