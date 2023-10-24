@@ -29,10 +29,10 @@ public class EnemyStateMachine : StateMachine
     [field: SerializeField]
     public float MovementSpeed { get; private set; }
 
-    [field: SerializeField, Tooltip("Start chasing if target is within this range")]
+    [field: SerializeField]
     public float ChaseRange { get; private set; }
 
-    [field: SerializeField, Tooltip("Perform attack if target is within this range")]
+    [field: SerializeField]
     public float AttackRange { get; private set; }
 
     [field: SerializeField]
@@ -56,6 +56,8 @@ public class EnemyStateMachine : StateMachine
 
     private void Start()
     {
+        Player = GameObject.FindGameObjectWithTag("Player");
+
         NavMeshAgent.updatePosition = false; // for manual control
         NavMeshAgent.updateRotation = false;
 
@@ -66,16 +68,12 @@ public class EnemyStateMachine : StateMachine
     {
         Health.OnTakeDamage += HandleTakeDamage;
         Health.OnDie += HandleDie;
-
-        PlayerHealth.OnDie += HandlePlayerDie;
     }
 
     private void OnDisable()
     {
         Health.OnTakeDamage -= HandleTakeDamage;
         Health.OnDie -= HandleDie;
-
-        PlayerHealth.OnDie -= HandlePlayerDie;
     }
 
     private void HandleTakeDamage()
@@ -92,11 +90,6 @@ public class EnemyStateMachine : StateMachine
         else // A regular enemy, increment the kill counter
             EnemySpawnManager.enemiesKilled++;
         SwitchState(new EnemyDeadState(this));
-    }
-
-    private void HandlePlayerDie()
-    {
-        SwitchState(new EnemyIdleState(this));
     }
 
     private void OnDrawGizmosSelected()

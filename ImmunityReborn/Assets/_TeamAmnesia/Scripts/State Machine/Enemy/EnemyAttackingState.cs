@@ -35,9 +35,6 @@ public class EnemyAttackingState : EnemyBaseState
 
     public override void Exit()
     {
-        stateMachine.NavMeshAgent.ResetPath();
-        stateMachine.NavMeshAgent.velocity = Vector3.zero;
-
         stateMachine.Animator.CrossFade(DefaultEmptyStateName, TransitionDuration, 1); // without this, gets stuck at end of attack animation
     }
 }
