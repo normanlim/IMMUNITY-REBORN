@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerStateMachine : StateMachine
 {
@@ -69,5 +70,15 @@ public class PlayerStateMachine : StateMachine
     private void HandleDie()
     {
         SwitchState(new PlayerDeadState(this));
+        Invoke( "ResetCurrentScene", 5.0f );
+    }
+
+    private void ResetCurrentScene()
+    {
+        // Get the name of the current scene
+        string currentSceneName = SceneManager.GetActiveScene().name;
+
+        // Load the current scene again to reset it
+        SceneManager.LoadScene( currentSceneName );
     }
 }
