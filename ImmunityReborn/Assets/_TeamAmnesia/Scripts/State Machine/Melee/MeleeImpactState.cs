@@ -10,7 +10,7 @@ public class MeleeImpactState : MeleeBaseState
 
     private float duration = 1.0f;
 
-    public MeleeImpactState(EnemyStateMachine stateMachine) : base(stateMachine)
+    public MeleeImpactState(MeleeStateMachine stateMachine) : base(stateMachine)
     {
     }
 

@@ -9,7 +9,7 @@ public class MeleeAttackingState : MeleeBaseState
 
     private const float TransitionDuration = 0.1f;
 
-    public MeleeAttackingState(EnemyStateMachine stateMachine) : base(stateMachine)
+    public MeleeAttackingState(MeleeStateMachine stateMachine) : base(stateMachine)
     {
     }
 

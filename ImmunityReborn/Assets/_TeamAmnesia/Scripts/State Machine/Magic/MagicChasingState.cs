@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MagicChasingState : MagicBaseState
 {
-    public MagicChasingState(EnemyStateMachine stateMachine) : base(stateMachine)
+    public MagicChasingState(MagicStateMachine stateMachine) : base(stateMachine)
     {
     }
 

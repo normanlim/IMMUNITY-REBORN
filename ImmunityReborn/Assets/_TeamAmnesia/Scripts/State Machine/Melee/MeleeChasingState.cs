@@ -8,7 +8,7 @@ public class MeleeChasingState : MeleeBaseState
     
     private const float CrossFadeDuration = 0.1f;
 
-    public MeleeChasingState(EnemyStateMachine stateMachine) : base(stateMachine)
+    public MeleeChasingState(MeleeStateMachine stateMachine) : base(stateMachine)
     {
     }
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RangedIdleState : RangedBaseState
 {
-    public RangedIdleState(EnemyStateMachine stateMachine) : base(stateMachine)
+    public RangedIdleState(RangedStateMachine stateMachine) : base(stateMachine)
     {
     }
 

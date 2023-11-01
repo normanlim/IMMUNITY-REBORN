@@ -4,12 +4,12 @@ using UnityEngine;
 
 public abstract class MeleeBaseState : State
 {
-    protected EnemyStateMachine stateMachine;
+    protected MeleeStateMachine stateMachine;
 
     private readonly int AnimatorSpeedParam = Animator.StringToHash("Speed");
     private const float AnimatorDampTime = 0.1f;
 
-    public MeleeBaseState(EnemyStateMachine stateMachine)
+    public MeleeBaseState(MeleeStateMachine stateMachine)
     {
         this.stateMachine = stateMachine;
     }

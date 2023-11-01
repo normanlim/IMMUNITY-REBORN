@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyStateMachine : StateMachine
+public class MeleeStateMachine : StateMachine
 {
     [field: SerializeField]
     public Animator Animator { get; private set; }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MagicDeadState : MagicBaseState
 {
-    public MagicDeadState(EnemyStateMachine stateMachine) : base(stateMachine)
+    public MagicDeadState(MagicStateMachine stateMachine) : base(stateMachine)
     {
     }
 

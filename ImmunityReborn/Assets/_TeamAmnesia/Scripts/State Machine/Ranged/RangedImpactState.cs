@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RangedImpactState : RangedBaseState
 {
-    public RangedImpactState(EnemyStateMachine stateMachine) : base(stateMachine)
+    public RangedImpactState(RangedStateMachine stateMachine) : base(stateMachine)
     {
     }
 

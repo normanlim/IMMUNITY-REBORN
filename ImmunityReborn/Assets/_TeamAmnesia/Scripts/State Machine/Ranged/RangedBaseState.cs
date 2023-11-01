@@ -4,9 +4,9 @@ using UnityEngine;
 
 public abstract class RangedBaseState : State
 {
-    protected EnemyStateMachine stateMachine;
+    protected RangedStateMachine stateMachine;
 
-    public RangedBaseState(EnemyStateMachine stateMachine)
+    public RangedBaseState(RangedStateMachine stateMachine)
     {
         this.stateMachine = stateMachine;
     }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MeleeDeadState : MeleeBaseState
 {
-    public MeleeDeadState(EnemyStateMachine stateMachine) : base(stateMachine)
+    public MeleeDeadState(MeleeStateMachine stateMachine) : base(stateMachine)
     {
     }
 
