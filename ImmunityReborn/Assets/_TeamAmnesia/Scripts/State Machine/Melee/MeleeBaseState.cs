@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class EnemyBaseState : State
+public abstract class MeleeBaseState : State
 {
     protected EnemyStateMachine stateMachine;
 
     private readonly int AnimatorSpeedParam = Animator.StringToHash("Speed");
     private const float AnimatorDampTime = 0.1f;
 
-    public EnemyBaseState(EnemyStateMachine stateMachine)
+    public MeleeBaseState(EnemyStateMachine stateMachine)
     {
         this.stateMachine = stateMachine;
     }

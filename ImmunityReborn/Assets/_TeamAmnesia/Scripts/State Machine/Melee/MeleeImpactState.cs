@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyImpactState : EnemyBaseState
+public class MeleeImpactState : MeleeBaseState
 {
     private readonly int ImpactStateName = Animator.StringToHash("GetHitSwordShield");
 
@@ -10,7 +10,7 @@ public class EnemyImpactState : EnemyBaseState
 
     private float duration = 1.0f;
 
-    public EnemyImpactState(EnemyStateMachine stateMachine) : base(stateMachine)
+    public MeleeImpactState(EnemyStateMachine stateMachine) : base(stateMachine)
     {
     }
 
@@ -28,7 +28,7 @@ public class EnemyImpactState : EnemyBaseState
 
         if (duration <= 0.0f)
         {
-            stateMachine.SwitchState(new EnemyIdleState(stateMachine));
+            stateMachine.SwitchState(new MeleeIdleState(stateMachine));
         }
 
         UpdateAnimator(deltaTime);

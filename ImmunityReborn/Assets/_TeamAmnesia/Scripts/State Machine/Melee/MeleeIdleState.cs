@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyIdleState : EnemyBaseState
+public class MeleeIdleState : MeleeBaseState
 {
     private readonly int LocomotionStateName = Animator.StringToHash("Locomotion");
 
     private const float CrossFadeDuration = 0.1f;
 
-    public EnemyIdleState(EnemyStateMachine stateMachine) : base(stateMachine)
+    public MeleeIdleState(EnemyStateMachine stateMachine) : base(stateMachine)
     {
     }
 
@@ -21,7 +21,7 @@ public class EnemyIdleState : EnemyBaseState
     {
         if (IsInChaseRange())
         {
-            stateMachine.SwitchState(new EnemyChasingState(stateMachine));
+            stateMachine.SwitchState(new MeleeChasingState(stateMachine));
             return;
         }
 
