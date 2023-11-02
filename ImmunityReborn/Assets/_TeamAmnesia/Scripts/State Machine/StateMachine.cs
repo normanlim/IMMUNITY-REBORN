@@ -1,20 +1,54 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class StateMachine : MonoBehaviour
 {
-    private State currentState;
+    public event Action<State> OnStateChange;
 
-    public void SwitchState(State newState)
+    private Coroutine switchStateCoroutine;
+
+    public State CurrentState { get; private set; }
+
+    public bool IsCurrentStateInterruptible
     {
-        currentState?.Exit();
-        currentState = newState;
-        currentState?.Enter();
+        get
+        {
+            if (CurrentState is MeleeImpactState) { return false; }
+            return true;
+        }
+    }
+
+    public void SwitchState(State newState, float delay = 0.0f)
+    {
+        if (switchStateCoroutine != null)
+        {
+            StopCoroutine(switchStateCoroutine);
+        }
+
+        if (delay > 0.0f)
+        {
+            switchStateCoroutine = StartCoroutine(SwitchStateCoroutine(newState, delay));
+        }
+        else
+        {
+            CurrentState?.Exit();
+            CurrentState = newState;
+            CurrentState?.Enter();
+            OnStateChange?.Invoke(CurrentState);
+        }
+    }
+
+    private IEnumerator SwitchStateCoroutine(State newState, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        SwitchState(newState);
     }
 
     private void Update()
     {
-        currentState?.Tick(Time.deltaTime);
+        CurrentState?.Tick(Time.deltaTime);
     }
 }

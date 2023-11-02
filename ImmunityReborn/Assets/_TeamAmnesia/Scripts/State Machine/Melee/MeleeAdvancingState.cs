@@ -2,28 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MeleeIdleState : MeleeBaseState
+public class MeleeAdvancingState : MeleeBaseState
 {
     private readonly int LocomotionStateName = Animator.StringToHash("Locomotion");
 
     private const float CrossFadeDuration = 0.1f;
 
-    public MeleeIdleState(MeleeStateMachine stateMachine) : base(stateMachine)
+    public MeleeAdvancingState(MeleeStateMachine stateMachine) : base(stateMachine)
     {
     }
 
     public override void Enter()
     {
-        stateMachine.Animator.CrossFadeInFixedTime(LocomotionStateName, CrossFadeDuration);
+        stateMachine.Animator.CrossFadeInFixedTime(LocomotionStateName, CrossFadeDuration, -1);
     }
 
     public override void Tick(float deltaTime)
     {
-        if (IsInChaseRange())
+        if (IsInAttackRange())
         {
-            stateMachine.SwitchState(new MeleeChasingState(stateMachine));
+            stateMachine.SwitchState(new MeleeAttackingState(stateMachine));
             return;
         }
+
+        MoveToPlayer(deltaTime);
 
         FacePlayer(deltaTime);
 

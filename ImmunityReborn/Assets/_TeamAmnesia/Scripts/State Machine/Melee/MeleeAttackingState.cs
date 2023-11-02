@@ -23,13 +23,13 @@ public class MeleeAttackingState : MeleeBaseState
     {
         MoveToPlayer(deltaTime);
 
-        FacePlayer();
+        FacePlayer(deltaTime);
 
-        UpdateAnimator(deltaTime);
+        UpdateLocomotionAnimator(deltaTime);
 
         if (GetPlayingAnimationTimeNormalized(stateMachine.Animator, 1) >= 1.0f)
         {
-            stateMachine.SwitchState(new MeleeChasingState(stateMachine));
+            stateMachine.SwitchState(new MeleeRetreatingState(stateMachine));
         }
     }
 

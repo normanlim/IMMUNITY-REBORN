@@ -10,7 +10,7 @@ public abstract class PlayerBaseState : State
     private readonly int AnimatorInputYParam = Animator.StringToHash("InputY");
 
     private const float AnimatorDampTime = 0.1f;
-    private const float TurnSpeed = 15;
+    private const float TurnSpeed = 15.0f;
 
     public PlayerBaseState(PlayerStateMachine stateMachine)
     {

@@ -23,6 +23,8 @@ public class MeleeImpactState : MeleeBaseState
     {
         Move(deltaTime); // applies ForceReceiver's movement
 
+        UpdateLocomotionAnimator(deltaTime);
+
         // Enemy will stay in this state until countdown is finished
         duration -= deltaTime;
 
@@ -30,8 +32,6 @@ public class MeleeImpactState : MeleeBaseState
         {
             stateMachine.SwitchState(new MeleeIdleState(stateMachine));
         }
-
-        UpdateAnimator(deltaTime);
     }
 
     public override void Exit()

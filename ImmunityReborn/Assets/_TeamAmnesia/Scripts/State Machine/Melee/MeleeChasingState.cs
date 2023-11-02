@@ -19,22 +19,17 @@ public class MeleeChasingState : MeleeBaseState
 
     public override void Tick(float deltaTime)
     {
-        if (!IsInChaseRange())
+        if (IsInAttackRange())
         {
-            stateMachine.SwitchState(new MeleeIdleState(stateMachine));
-            return;
-        }
-        else if (IsInAttackRange())
-        {
-            stateMachine.SwitchState(new MeleeAttackingState(stateMachine));
+            stateMachine.SwitchState(new MeleeCirculatingState(stateMachine));
             return;
         }
 
         MoveToPlayer(deltaTime);
 
-        FacePlayer();
+        FacePlayer(deltaTime);
 
-        UpdateAnimator(deltaTime);
+        UpdateLocomotionAnimator(deltaTime);
     }
 
     public override void Exit()
