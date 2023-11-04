@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAttackingState : EnemyBaseState
+public class MeleeAttackingState : MeleeBaseState
 {
     private readonly int AnimatorAttackStateName = Animator.StringToHash("Attack2SwordShield");
     private readonly int DefaultEmptyStateName = Animator.StringToHash("Default Empty");
 
     private const float TransitionDuration = 0.1f;
 
-    public EnemyAttackingState(EnemyStateMachine stateMachine) : base(stateMachine)
+    public MeleeAttackingState(MeleeStateMachine stateMachine) : base(stateMachine)
     {
     }
 
@@ -23,13 +23,13 @@ public class EnemyAttackingState : EnemyBaseState
     {
         MoveToPlayer(deltaTime);
 
-        FacePlayer();
+        FacePlayer(deltaTime);
 
-        UpdateAnimator(deltaTime);
+        UpdateLocomotionAnimator(deltaTime);
 
         if (GetPlayingAnimationTimeNormalized(stateMachine.Animator, 1) >= 1.0f)
         {
-            stateMachine.SwitchState(new EnemyChasingState(stateMachine));
+            stateMachine.SwitchState(new MeleeRetreatingState(stateMachine));
         }
     }
 

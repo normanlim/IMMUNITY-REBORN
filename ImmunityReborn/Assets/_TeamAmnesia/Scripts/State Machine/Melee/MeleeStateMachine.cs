@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyStateMachine : StateMachine
+public class MeleeStateMachine : StateMachine
 {
     [field: SerializeField]
     public Animator Animator { get; private set; }
@@ -59,7 +59,7 @@ public class EnemyStateMachine : StateMachine
         NavMeshAgent.updatePosition = false; // for manual control
         NavMeshAgent.updateRotation = false;
 
-        SwitchState(new EnemyIdleState(this));
+        SwitchState(new MeleeIdleState(this));
     }
 
     private void OnEnable()
@@ -80,7 +80,7 @@ public class EnemyStateMachine : StateMachine
 
     private void HandleTakeDamage()
     {
-        SwitchState(new EnemyImpactState(this));
+        SwitchState(new MeleeImpactState(this));
     }
 
     private void HandleDie()
@@ -91,12 +91,12 @@ public class EnemyStateMachine : StateMachine
             minibossDeathComponent.initNextStage(EnemySpawnManager);
         else // A regular enemy, increment the kill counter
             EnemySpawnManager.enemiesKilled++;
-        SwitchState(new EnemyDeadState(this));
+        SwitchState(new MeleeDeadState(this));
     }
 
     private void HandlePlayerDie()
     {
-        SwitchState(new EnemyIdleState(this));
+        SwitchState(new MeleeIdleState(this));
     }
 
     private void OnDrawGizmosSelected()

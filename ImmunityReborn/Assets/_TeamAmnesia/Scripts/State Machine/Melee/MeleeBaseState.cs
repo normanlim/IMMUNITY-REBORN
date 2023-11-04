@@ -2,14 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class EnemyBaseState : State
+public abstract class MeleeBaseState : State
 {
-    protected EnemyStateMachine stateMachine;
+    protected MeleeStateMachine stateMachine;
 
     private readonly int AnimatorSpeedParam = Animator.StringToHash("Speed");
+    private readonly int AnimatorMoveXParam = Animator.StringToHash("MoveX");
+    private readonly int AnimatorMoveYParam = Animator.StringToHash("MoveY");
     private const float AnimatorDampTime = 0.1f;
+    private const float TurnSpeed = 15.0f;
 
-    public EnemyBaseState(EnemyStateMachine stateMachine)
+    public MeleeBaseState(MeleeStateMachine stateMachine)
     {
         this.stateMachine = stateMachine;
     }
@@ -37,14 +40,15 @@ public abstract class EnemyBaseState : State
         stateMachine.NavMeshAgent.nextPosition = stateMachine.CharacterController.transform.position; // fixes bug where enemies float apart when colliding with each other
     }
 
-    protected void FacePlayer()
+    protected void FacePlayer(float deltaTime)
     {
         if (stateMachine.Player == null) { return; }
 
         Vector3 lookPos = stateMachine.Player.transform.position - stateMachine.transform.position;
         lookPos.y = 0.0f;
 
-        stateMachine.transform.rotation = Quaternion.LookRotation(lookPos);
+        stateMachine.transform.rotation = Quaternion.Slerp(
+            stateMachine.transform.rotation, Quaternion.LookRotation(lookPos), TurnSpeed * deltaTime);
     }
 
     protected bool IsInChaseRange()
@@ -67,7 +71,7 @@ public abstract class EnemyBaseState : State
         return distanceToPlayerSqr <= stateMachine.AttackRange * stateMachine.AttackRange;
     }
 
-    protected void UpdateAnimator(float deltaTime)
+    protected void UpdateLocomotionAnimator(float deltaTime)
     {
         if (stateMachine.NavMeshAgent.velocity != Vector3.zero)
         {
@@ -76,6 +80,29 @@ public abstract class EnemyBaseState : State
         else
         {
             stateMachine.Animator.SetFloat(AnimatorSpeedParam, 0.0f, AnimatorDampTime, deltaTime);
+        }
+    }
+
+    protected void UpdateCirculatingAnimator(float deltaTime)
+    {
+        if (Mathf.Approximately(stateMachine.NavMeshAgent.velocity.y, 0.0f))
+        {
+            stateMachine.Animator.SetFloat(AnimatorMoveYParam, 0.0f, AnimatorDampTime, deltaTime);
+        }
+        else
+        {
+            float value = stateMachine.NavMeshAgent.velocity.y > 0.0f ? 1.0f : -1.0f;
+            stateMachine.Animator.SetFloat(AnimatorMoveYParam, value, AnimatorDampTime, deltaTime);
+        }
+
+        if (Mathf.Approximately(stateMachine.NavMeshAgent.velocity.x, 0.0f))
+        {
+            stateMachine.Animator.SetFloat(AnimatorMoveXParam, 0.0f, AnimatorDampTime, deltaTime);
+        }
+        else
+        {
+            float value = stateMachine.NavMeshAgent.velocity.x > 0.0f ? 1.0f : -1.0f;
+            stateMachine.Animator.SetFloat(AnimatorMoveXParam, value, AnimatorDampTime, deltaTime);
         }
     }
 }
