@@ -1,11 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class WeaponDamager : MonoBehaviour
 {
-    private int damage;
-    private float knockback;
+    public int damage;
+    public float knockback;
 
     private List<Collider> collidedWith = new List<Collider>();
 
@@ -13,7 +12,7 @@ public class WeaponDamager : MonoBehaviour
     public DamageType DamageType { get; private set; }
 
     [field: SerializeField]
-    public Collider CharacterCollider { get; private set; }
+    public Collider CharacterCollider;
 
     private void OnEnable()
     {
@@ -22,6 +21,7 @@ public class WeaponDamager : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log(other.gameObject);
         if (collidedWith.Contains(other))
         {
             return;
@@ -33,7 +33,7 @@ public class WeaponDamager : MonoBehaviour
 
         if (other.TryGetComponent(out Health health))
         {
-            health.DealDamage(damage, DamageType.Melee);
+            health.DealDamage(damage, DamageType);
         }
 
         if (other.TryGetComponent(out ForceReceiver forceReceiver))
