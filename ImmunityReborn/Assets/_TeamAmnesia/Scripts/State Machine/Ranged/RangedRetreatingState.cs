@@ -5,8 +5,8 @@ using UnityEngine;
 public class RangedRetreatingState : RangedBaseState
 {
     private readonly int CirculatingStateName = Animator.StringToHash("Circulating");
-
-    private const float RetreatingSpeed = 1.1f;
+    private readonly int DrawArrowStateName = Animator.StringToHash("DrawArrow");
+    private readonly int EmptyDefaultStateName = Animator.StringToHash("Empty Default");
     private const float CrossFadeDuration = 0.1f;
     private const float MinDuration = 1.5f;
     private const float MaxDuration = 2.0f;
@@ -21,7 +21,8 @@ public class RangedRetreatingState : RangedBaseState
     {
         duration = Random.Range(MinDuration, MaxDuration);
 
-        stateMachine.Animator.CrossFadeInFixedTime(CirculatingStateName, CrossFadeDuration, -1);
+        stateMachine.Animator.CrossFadeInFixedTime(CirculatingStateName, CrossFadeDuration, 0);
+        stateMachine.Animator.CrossFadeInFixedTime(DrawArrowStateName, CrossFadeDuration, 1);
     }
 
     public override void Tick(float deltaTime)
@@ -32,9 +33,9 @@ public class RangedRetreatingState : RangedBaseState
         {
             Vector3 direction = -stateMachine.transform.forward;
 
-            stateMachine.NavMeshAgent.destination = stateMachine.transform.position + direction * RetreatingSpeed;
+            stateMachine.NavMeshAgent.destination = stateMachine.transform.position + direction * stateMachine.MovementSpeed;
 
-            Move(stateMachine.NavMeshAgent.desiredVelocity.normalized * RetreatingSpeed, deltaTime);
+            Move(stateMachine.NavMeshAgent.desiredVelocity.normalized * stateMachine.MovementSpeed, deltaTime);
         }
 
         UpdateCirculatingAnimator(deltaTime);
@@ -49,5 +50,6 @@ public class RangedRetreatingState : RangedBaseState
 
     public override void Exit()
     {
+        stateMachine.Animator.CrossFade(EmptyDefaultStateName, CrossFadeDuration, 1);
     }
 }

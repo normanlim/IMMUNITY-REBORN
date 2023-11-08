@@ -1,12 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RangedCirculatingState : RangedBaseState
 {
     private readonly int CirculatingStateName = Animator.StringToHash("Circulating");
 
-    private const float CirculatingSpeed = 1.1f;
     private const float CrossFadeDuration = 0.1f;
     private float duration;
     private bool isClockwise;
@@ -20,7 +17,7 @@ public class RangedCirculatingState : RangedBaseState
         isClockwise = RandomBoolean();
         // Circle for 3 seconds every time, @TODO to parameterize this
         duration = 3f;
-        stateMachine.Animator.CrossFadeInFixedTime(CirculatingStateName, CrossFadeDuration, -1);
+        stateMachine.Animator.CrossFadeInFixedTime(CirculatingStateName, CrossFadeDuration, 0);
     }
 
     public override void Tick(float deltaTime)
@@ -45,9 +42,9 @@ public class RangedCirculatingState : RangedBaseState
         {
             Vector3 direction = isClockwise ? -stateMachine.transform.right : stateMachine.transform.right;
 
-            stateMachine.NavMeshAgent.destination = stateMachine.transform.position + direction * CirculatingSpeed;
-
-            Move(stateMachine.NavMeshAgent.desiredVelocity.normalized * CirculatingSpeed, deltaTime);
+            // CirculatingSpeed = MovementSpeed / 2
+            stateMachine.NavMeshAgent.destination = stateMachine.transform.position + direction * stateMachine.MovementSpeed / 2;
+            Move(stateMachine.NavMeshAgent.desiredVelocity.normalized * stateMachine.MovementSpeed / 2, deltaTime);
         }
 
         stateMachine.NavMeshAgent.velocity = stateMachine.CharacterController.velocity;
