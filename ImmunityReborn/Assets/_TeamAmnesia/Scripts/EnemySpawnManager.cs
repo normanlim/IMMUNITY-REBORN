@@ -48,7 +48,7 @@ public class EnemySpawnManager : MonoBehaviour
             if (launchOrigin != null)
             {
                 // Assuming that the shoot projectile script is attached to the ProjectileLaunchOrigin
-                EnemyShootProjectile shootProjectileScript = launchOrigin.GetComponent<EnemyShootProjectile>();
+                FireArrow shootProjectileScript = launchOrigin.GetComponent<FireArrow>();
                 if (shootProjectileScript != null)
                 {
                     // Set the player reference in the script
