@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class ShieldCollisions : MonoBehaviour
 {
-    public string typeTag;
+    public string typeTag; // Will let us know what shield got triggered
     public PlayerStateMachine playerStateMachine;
 
     [field: SerializeField]
     public float ShieldKnockback { get; private set; }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter( Collider other )
     {
         // Notes for future implementation: 
         // Debug shows that this trigger gets called once on click (hits the player I guess)
@@ -16,7 +16,6 @@ public class ShieldCollisions : MonoBehaviour
 
         if ( other.gameObject.tag == typeTag ) // Ranged projectile block code here
         {
-            Destroy(other.gameObject);
             Destroy( other.gameObject );
             playerStateMachine.MemoryGauge.EarnMemoryGauge( 10 );
         }
