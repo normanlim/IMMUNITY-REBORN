@@ -56,7 +56,7 @@ public class MemoryAttack : MonoBehaviour
             shooting = Input.GetKeyDown( KeyCode.Q );
         }
 
-        if ( readyToShoot && shooting && StateMachine.MemoryGauge.currentMeterVal >= 50 )
+        if ( readyToShoot && shooting && StateMachine.MemoryGauge.CurrentMemoryMeterValue >= 50 )
         {
             //LaunchMemoryAttack();
             StateMachine.Animator.Play( animationName ); // LaunchMemoryAttack() called via animation event
