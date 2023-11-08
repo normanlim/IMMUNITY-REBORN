@@ -10,14 +10,14 @@ public class FireArrow : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        InvokeRepeating("FireArrowAtPlayer", 1f, 3f);
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
-    private void FireArrowAtPlayer()
+    public void FireArrowAtPlayer(int AttackDamage, float Knockback)
     {
         // Calculate the direction from the enemy to the player
         Vector3 relativeDistance = player.transform.position - transform.position;
-        Vector3 relativeVelocity = player.GetComponent<CharacterController>().velocity - GetComponentInParent<Rigidbody>().velocity;
+        Vector3 relativeVelocity = player.GetComponent<CharacterController>().velocity - GetComponentInParent<CharacterController>().velocity;
 
         float deltaTime = AimAhead(relativeDistance, relativeVelocity, speed);
 
@@ -25,6 +25,8 @@ public class FireArrow : MonoBehaviour
             Vector3 aimPoint = player.transform.position + player.GetComponent<CharacterController>().velocity * deltaTime;
             // Create a projectile at the enemy's position and make it move towards the predicted player position
             GameObject arrowObject = Instantiate(rangedArrowPrefab, transform.position + Vector3.up * 1.0f, transform.rotation);
+            WeaponDamager arrowWeaponDamager = arrowObject.GetComponent<WeaponDamager>();
+            arrowWeaponDamager.SetDamage(AttackDamage, Knockback);
             Rigidbody arrowRigidbody = arrowObject.GetComponent<Rigidbody>();
             if (arrowRigidbody != null)
             {

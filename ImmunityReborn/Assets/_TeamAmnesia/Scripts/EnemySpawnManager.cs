@@ -43,18 +43,7 @@ public class EnemySpawnManager : MonoBehaviour
             Vector3 position = spawnData.position;
             Quaternion rotationEulerAngles = Quaternion.Euler(spawnData.rotation);
 
-            GameObject enemy = Instantiate(enemyPrefab, position, rotationEulerAngles);
-            Transform launchOrigin = enemy.transform.Find("ProjectileLaunchOrigin");
-            if (launchOrigin != null)
-            {
-                // Assuming that the shoot projectile script is attached to the ProjectileLaunchOrigin
-                FireArrow shootProjectileScript = launchOrigin.GetComponent<FireArrow>();
-                if (shootProjectileScript != null)
-                {
-                    // Set the player reference in the script
-                    shootProjectileScript.player = player;
-                }
-            }
+            Instantiate(enemyPrefab, position, rotationEulerAngles);
         }
         // Clear the locations, all enemies spawned
         spawnLocations.Clear();

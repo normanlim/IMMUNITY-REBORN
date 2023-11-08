@@ -18,7 +18,7 @@ public class RangedStateMachine : StateMachine
     public NavMeshAgent NavMeshAgent { get; private set; }
 
     [field: SerializeField]
-    public WeaponDamager WeaponDamager { get; private set; }
+    public FireArrow FireArrow { get; private set;  }
 
     [field: SerializeField]
     public Health Health { get; private set; }

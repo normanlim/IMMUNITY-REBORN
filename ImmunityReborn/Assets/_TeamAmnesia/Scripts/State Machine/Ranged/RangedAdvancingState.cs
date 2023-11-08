@@ -2,28 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RangedIdleState : RangedBaseState
+public class RangedAdvancingState : RangedBaseState
 {
     private readonly int LocomotionStateName = Animator.StringToHash("Locomotion");
 
     private const float CrossFadeDuration = 0.1f;
 
-    public RangedIdleState(RangedStateMachine stateMachine) : base(stateMachine)
+    public RangedAdvancingState(RangedStateMachine stateMachine) : base(stateMachine)
     {
     }
 
     public override void Enter()
     {
-        stateMachine.Animator.CrossFadeInFixedTime(LocomotionStateName, CrossFadeDuration);
+        stateMachine.Animator.CrossFadeInFixedTime(LocomotionStateName, CrossFadeDuration, -1);
     }
 
     public override void Tick(float deltaTime)
     {
-        if (IsInChaseRange())
+        if (IsInAttackRange())
         {
-            stateMachine.SwitchState(new RangedChasingState(stateMachine));
+            stateMachine.SwitchState(new RangedAttackingState(stateMachine));
             return;
         }
+
+        MoveToPlayer(deltaTime);
 
         FacePlayer(deltaTime);
 
