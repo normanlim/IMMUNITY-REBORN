@@ -1,30 +1,32 @@
 using UnityEngine;
 
-public class FireArrow : MonoBehaviour
+public class Arrow : MonoBehaviour
 {
     public GameObject rangedArrowPrefab;
     public float speed = 25f;
-    public GameObject player;
-    [SerializeField] float delayToShoot;
-    
+    private GameObject player;
+    private GameObject arrowObject;
     // Start is called before the first frame update
     void Start()
     {
-        InvokeRepeating("FireArrowAtPlayer", 1f, 3f);
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
-    private void FireArrowAtPlayer()
+    public void FireAtPlayer(int AttackDamage, float Knockback)
     {
         // Calculate the direction from the enemy to the player
         Vector3 relativeDistance = player.transform.position - transform.position;
-        Vector3 relativeVelocity = player.GetComponent<CharacterController>().velocity - GetComponentInParent<Rigidbody>().velocity;
+        Vector3 relativeVelocity = player.GetComponent<CharacterController>().velocity - GetComponentInParent<CharacterController>().velocity;
 
         float deltaTime = AimAhead(relativeDistance, relativeVelocity, speed);
 
-        if (deltaTime > 0f) {
+        if (deltaTime > 0f)
+        {
             Vector3 aimPoint = player.transform.position + player.GetComponent<CharacterController>().velocity * deltaTime;
             // Create a projectile at the enemy's position and make it move towards the predicted player position
-            GameObject arrowObject = Instantiate(rangedArrowPrefab, transform.position + Vector3.up * 1.0f, transform.rotation);
+            arrowObject = Instantiate(rangedArrowPrefab, transform.position + Vector3.up * 1.0f, transform.rotation);
+            WeaponDamager arrowWeaponDamager = arrowObject.GetComponent<WeaponDamager>();
+            arrowWeaponDamager.SetDamage(AttackDamage, Knockback);
             Rigidbody arrowRigidbody = arrowObject.GetComponent<Rigidbody>();
             if (arrowRigidbody != null)
             {
@@ -37,7 +39,7 @@ public class FireArrow : MonoBehaviour
                 // Apply the rotation to the arrow prefab
                 arrowObject.transform.rotation = rotationToAimPoint;
 
-                // Set the velocity of the projectile to hit the aimPoint after t = delayToShoot
+                // Set the velocity of the projectile to hit the aimPoint
                 // @TODO ADD DELAY BEFORE SHOOTING
                 arrowRigidbody.velocity = directionToAimPoint.normalized * speed;
 
