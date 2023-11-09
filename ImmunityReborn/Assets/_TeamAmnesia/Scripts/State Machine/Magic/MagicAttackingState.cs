@@ -14,6 +14,11 @@ public class MagicAttackingState : MagicBaseState
 
     public override void Tick(float deltaTime)
     {
+        //Debug.Log( "In attacking state" );
+
+        MoveToPlayer( deltaTime );
+
+        FacePlayer( deltaTime );
     }
 
     public override void Exit()

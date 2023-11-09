@@ -14,6 +14,18 @@ public class MagicChasingState : MagicBaseState
 
     public override void Tick(float deltaTime)
     {
+        if ( IsInAttackRange() )
+        {
+            Debug.Log( "In range - atking player" );
+            stateMachine.SwitchState( new MagicAttackingState( stateMachine ) );
+            return;
+        }
+
+        MoveToPlayer( deltaTime );
+
+        FacePlayer( deltaTime );
+
+        //UpdateLocomotionAnimator( deltaTime );
     }
 
     public override void Exit()
