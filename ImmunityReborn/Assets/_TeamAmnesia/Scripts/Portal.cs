@@ -1,34 +1,41 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 
 public class Portal : MonoBehaviour
 {
-    private static GameObject teleportFrom;
+    // offset for when player exits portal
+    private const float OffsetFromPortal = 1.5f;
 
     [SerializeField]
     private GameObject teleportTo;
 
-    private void OnTriggerEnter(Collider other)
+    [SerializeField, Tooltip("Match player facing direction with portal facing direction")]
+    private bool faceForwards = true;
+
+    private CinemachineFreeLook freeLookCamera;
+
+    private void Start()
     {
-        if (other.CompareTag("Player") && teleportFrom == null)
-        {
-            teleportFrom = gameObject;
-
-            if (teleportTo == teleportFrom)
-            {
-                return;
-            }
-
-            other.gameObject.transform.position = teleportTo.transform.position;
-        }
+        freeLookCamera = Camera.main.GetComponent<CinemachineBrain>()
+            .ActiveVirtualCamera
+            .VirtualCameraGameObject
+            .GetComponent<CinemachineFreeLook>();
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && gameObject != teleportFrom)
+        if (other.CompareTag("Player"))
         {
-            teleportFrom = null;
+            Vector3 offset = teleportTo.transform.forward * OffsetFromPortal;
+
+            other.gameObject.transform.position = teleportTo.transform.position + offset;
+
+            if (faceForwards)
+            {
+                freeLookCamera.m_XAxis.Value = teleportTo.transform.eulerAngles.y;
+            }
         }
     }
 }
