@@ -45,13 +45,10 @@ public class RangedStateMachine : StateMachine
 
     public Health PlayerHealth { get; private set; }
 
-    public EnemySpawnManager EnemySpawnManager { get; private set; }
-
     private void Awake()
     {
         Player = GameObject.FindGameObjectWithTag("Player");
         PlayerHealth = Player.GetComponent<Health>();
-        EnemySpawnManager = GameObject.Find("EnemySpawnManager").GetComponent<EnemySpawnManager>();
     }
 
     private void Start()
@@ -85,12 +82,6 @@ public class RangedStateMachine : StateMachine
 
     private void HandleDie()
     {
-        // Check if the MinibossDeath component exists on this GameObject
-        MinibossDeath minibossDeathComponent = GetComponent<MinibossDeath>();
-        if (minibossDeathComponent != null)
-            minibossDeathComponent.initNextStage(EnemySpawnManager);
-        else // A regular enemy, increment the kill counter
-            EnemySpawnManager.enemiesKilled++;
         SwitchState(new RangedDeadState(this));
     }
 
