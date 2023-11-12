@@ -71,17 +71,17 @@ public abstract class MagicBaseState : State
         return distanceToPlayerSqr <= stateMachine.AttackRange * stateMachine.AttackRange;
     }
 
-    //protected void UpdateLocomotionAnimator( float deltaTime )
-    //{
-    //    if ( stateMachine.NavMeshAgent.velocity != Vector3.zero )
-    //    {
-    //        stateMachine.Animator.SetFloat( AnimatorSpeedParam, 1.0f, AnimatorDampTime, deltaTime );
-    //    }
-    //    else
-    //    {
-    //        stateMachine.Animator.SetFloat( AnimatorSpeedParam, 0.0f, AnimatorDampTime, deltaTime );
-    //    }
-    //}
+    protected void UpdateLocomotionAnimator( float deltaTime )
+    {
+        if ( stateMachine.NavMeshAgent.velocity != Vector3.zero )
+        {
+            stateMachine.Animator.SetFloat( AnimatorSpeedParam, 1.0f, AnimatorDampTime, deltaTime );
+        }
+        else
+        {
+            stateMachine.Animator.SetFloat( AnimatorSpeedParam, 0.0f, AnimatorDampTime, deltaTime );
+        }
+    }
 
     //protected void UpdateCirculatingAnimator( float deltaTime )
     //{
@@ -105,4 +105,5 @@ public abstract class MagicBaseState : State
     //        stateMachine.Animator.SetFloat( AnimatorMoveXParam, value, AnimatorDampTime, deltaTime );
     //    }
     //}
+
 }

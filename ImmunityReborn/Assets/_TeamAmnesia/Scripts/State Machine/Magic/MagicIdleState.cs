@@ -4,12 +4,17 @@ using UnityEngine;
 
 public class MagicIdleState : MagicBaseState
 {
+
+    private readonly int IdleStateAnimation = Animator.StringToHash( "idle" );
+    private const float CrossFadeDuration = 0.1f;
+
     public MagicIdleState(MagicStateMachine stateMachine) : base(stateMachine)
     {
     }
 
     public override void Enter()
     {
+        stateMachine.Animator.CrossFadeInFixedTime( IdleStateAnimation, CrossFadeDuration );
     }
 
     public override void Tick(float deltaTime)
@@ -24,7 +29,7 @@ public class MagicIdleState : MagicBaseState
 
         FacePlayer( deltaTime );
 
-        //UpdateLocomotionAnimator( deltaTime );
+        UpdateLocomotionAnimator( deltaTime );
     }
 
     public override void Exit()
