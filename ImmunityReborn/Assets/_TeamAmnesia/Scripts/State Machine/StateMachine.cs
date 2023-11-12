@@ -15,7 +15,7 @@ public abstract class StateMachine : MonoBehaviour
     {
         get
         {
-            if (CurrentState is MeleeImpactState) { return false; }
+            if (CurrentState is MeleeImpactState || CurrentState is RangedImpactState) { return false; }
             return true;
         }
     }
