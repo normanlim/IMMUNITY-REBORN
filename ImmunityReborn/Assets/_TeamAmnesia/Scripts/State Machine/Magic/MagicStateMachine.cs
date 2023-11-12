@@ -18,6 +18,9 @@ public class MagicStateMachine : StateMachine
     public NavMeshAgent NavMeshAgent { get; private set; }
 
     [field: SerializeField]
+    public WeaponDamager WeaponDamager { get; private set; }
+
+    [field: SerializeField]
     public DOTPuddle DOTPuddle { get; private set; }
 
     [field: SerializeField]
