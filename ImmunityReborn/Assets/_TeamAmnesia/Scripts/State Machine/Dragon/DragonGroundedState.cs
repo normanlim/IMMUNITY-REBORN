@@ -32,7 +32,7 @@ public class DragonGroundedState : DragonBaseState
 
         if (currentQueryDelay <= 0.0f)
         {
-            if (RandomPointAroundPlayer(5.0f, out targetPos))
+            if (stateMachine.NavMeshSampler.RandomPointAroundPosition(stateMachine.Player.transform.position, 5.0f, out targetPos))
             {
                 currentQueryDelay = PositionQueryDelay;
             }

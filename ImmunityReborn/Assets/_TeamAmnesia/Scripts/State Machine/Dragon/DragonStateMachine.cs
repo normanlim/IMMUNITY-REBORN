@@ -18,6 +18,9 @@ public class DragonStateMachine : StateMachine
     public NavMeshAgent NavMeshAgent { get; private set; }
 
     [field: SerializeField]
+    public NavMeshSampler NavMeshSampler { get; private set; }
+
+    [field: SerializeField]
     public WeaponDamager WeaponDamager { get; private set; }
 
     [field: SerializeField]

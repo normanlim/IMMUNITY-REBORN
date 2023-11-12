@@ -175,22 +175,6 @@ public abstract class DragonBaseState : State
         }
     }
 
-    protected bool RandomPointAroundPlayer(float range, out Vector3 result)
-    {
-        for (int i = 0; i < 10; i++)
-        {
-            Vector3 randomPoint = stateMachine.Player.transform.position + Random.insideUnitSphere * range;
-            NavMeshHit hit;
-            if (NavMesh.SamplePosition(randomPoint, out hit, 1.0f, NavMesh.AllAreas))
-            {
-                result = hit.position;
-                return true;
-            }
-        }
-        result = Vector3.zero;
-        return false;
-    }
-
     protected int RollDie(int min, int max)
     {
         return Random.Range(min, max);
