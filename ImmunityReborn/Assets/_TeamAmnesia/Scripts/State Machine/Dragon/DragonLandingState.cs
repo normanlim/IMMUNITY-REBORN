@@ -8,6 +8,7 @@ public class DragonLandingState : DragonBaseState
     private readonly int EmptyDefaultStateName = Animator.StringToHash("Empty Default");
 
     private const float TransitionDuration = 0.1f;
+    private bool isFeetOnGround;
 
     public DragonLandingState(DragonStateMachine stateMachine) : base(stateMachine)
     {
@@ -26,6 +27,11 @@ public class DragonLandingState : DragonBaseState
 
         LandOnPlayer(deltaTime);
 
+        if (!isFeetOnGround && GetPlayingAnimationTimeNormalized(stateMachine.Animator, 0) >= 0.8f)
+        {
+            isFeetOnGround = true;
+        }
+
         if (GetPlayingAnimationTimeNormalized(stateMachine.Animator, 0) >= 1.0f)
         {
             stateMachine.SwitchState(new DragonGroundedState(stateMachine));
@@ -42,13 +48,20 @@ public class DragonLandingState : DragonBaseState
 
     protected void LandOnPlayer(float deltaTime)
     {
-        Vector3 playerXZPos = new(stateMachine.Player.transform.position.x, 0.0f, stateMachine.Player.transform.position.z);
-        Vector3 dragonXZPos = new(stateMachine.transform.position.x, 0.0f, stateMachine.transform.position.z);
-        Vector3 offsetXZ = (playerXZPos - dragonXZPos).normalized * (GroundedDistanceToPlayer / 2);
-        Vector3 targetPosition = playerXZPos - offsetXZ;
+        if (isFeetOnGround)
+        {
+            Move(deltaTime);
+        }
+        else
+        {
+            Vector3 playerXZPos = new(stateMachine.Player.transform.position.x, 0.0f, stateMachine.Player.transform.position.z);
+            Vector3 dragonXZPos = new(stateMachine.transform.position.x, 0.0f, stateMachine.transform.position.z);
+            Vector3 offsetXZ = (playerXZPos - dragonXZPos).normalized * (GroundedDistanceToPlayer / 2);
+            Vector3 targetPosition = playerXZPos - offsetXZ;
 
-        stateMachine.NavMeshAgent.destination = targetPosition;
-        Move(stateMachine.NavMeshAgent.desiredVelocity.normalized * stateMachine.FlyingSpeed, deltaTime);
+            stateMachine.NavMeshAgent.destination = targetPosition;
+            Move(stateMachine.NavMeshAgent.desiredVelocity.normalized * stateMachine.FlyingSpeed, deltaTime);
+        }
 
         stateMachine.NavMeshAgent.velocity = stateMachine.CharacterController.velocity;
         stateMachine.NavMeshAgent.nextPosition = stateMachine.CharacterController.transform.position;

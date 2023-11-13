@@ -34,13 +34,15 @@ public class DragonGroundedState : DragonBaseState
         nextAttackTimer -= deltaTime;
         if (nextAttackTimer <= 0.0f)
         {
-            if (RollDie(0, 2) == 0)
+            if (RollDie(0, 2 - stateMachine.AttacksCounter[DragonAttackType.Clawing]) == 0) // after number of clawing attacks, guaranteed to change attack
             {
+                stateMachine.AttacksCounter[DragonAttackType.Clawing] = 0;
                 stateMachine.SwitchState(new DragonFlyingState(stateMachine));
                 return;
             }
             else
             {
+                stateMachine.AttacksCounter[DragonAttackType.Clawing]++;
                 stateMachine.NextAttackType = DragonAttackType.Clawing;
             }
             stateMachine.SwitchState(DragonAttack.CreateNextState(stateMachine));

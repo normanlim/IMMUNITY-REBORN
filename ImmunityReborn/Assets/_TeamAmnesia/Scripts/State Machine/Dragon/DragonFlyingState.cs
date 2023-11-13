@@ -37,12 +37,14 @@ public class DragonFlyingState : DragonBaseState
         nextAttackTimer -= deltaTime;
         if (nextAttackTimer <= 0.0f)
         {
-            if (RollDie(0, 3) == 0)
+            if (RollDie(0, 4 - stateMachine.AttacksCounter[DragonAttackType.Fireball]) == 0) // after number of fireball attacks, guaranteed to change attack
             {
+                stateMachine.AttacksCounter[DragonAttackType.Fireball] = 0;
                 stateMachine.NextAttackType = DragonAttackType.Landing;
             }
             else
             {
+                stateMachine.AttacksCounter[DragonAttackType.Fireball]++;
                 stateMachine.NextAttackType = DragonAttackType.Fireball;
             }
             stateMachine.SwitchState(DragonAttack.CreateNextState(stateMachine));

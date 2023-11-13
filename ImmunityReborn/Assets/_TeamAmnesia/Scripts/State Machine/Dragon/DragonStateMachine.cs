@@ -65,6 +65,12 @@ public class DragonStateMachine : StateMachine
 
     public DragonAttackType NextAttackType { get; set; }
 
+    public Dictionary<DragonAttackType, int> AttacksCounter { get; set; } = new()
+    {
+        { DragonAttackType.Fireball, 0 },
+        { DragonAttackType.Clawing, 0 }
+    };
+
     private void Awake()
     {
         Player = GameObject.FindGameObjectWithTag("Player");

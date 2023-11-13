@@ -9,8 +9,8 @@ public abstract class DragonBaseState : State
     protected DragonStateMachine stateMachine;
     protected const float FlyingMaxYOffset = 2.0f;
     protected const float FlyUpRate = 0.02f;
-    protected const float FlyingMinDistanceToPlayer = 8.0f;
-    protected const float FlyingMaxDistanceToPlayer = 10.0f;
+    protected const float FlyingMinDistanceToPlayer = 6.0f;
+    protected const float FlyingMaxDistanceToPlayer = 8.0f;
     protected const float GroundedDistanceToPlayer = 5.0f;
 
     private readonly int AnimatorMoveXParam = Animator.StringToHash("MoveX");
@@ -57,7 +57,7 @@ public abstract class DragonBaseState : State
         {
             float distanceToPlayerSqr = (stateMachine.Player.transform.position - stateMachine.transform.position).sqrMagnitude;
             Vector3 directionToPlayer = (stateMachine.Player.transform.position - stateMachine.transform.position).normalized;
-            float epsilon = 2.0f;
+            float epsilon = 0.5f;
 
             if (Mathf.Abs(distanceToPlayerSqr - GroundedDistanceToPlayer * GroundedDistanceToPlayer) > epsilon * epsilon)
             {
@@ -76,7 +76,7 @@ public abstract class DragonBaseState : State
         if (stateMachine.NavMeshAgent.isOnNavMesh)
         {
             float distanceToPointSqr = (point - stateMachine.transform.position).sqrMagnitude;
-            float epsilon = 2.0f;
+            float epsilon = 0.5f;
 
             if (Mathf.Abs(distanceToPointSqr) > epsilon * epsilon)
             {
@@ -93,20 +93,23 @@ public abstract class DragonBaseState : State
     {
         if (stateMachine.NavMeshAgent.isOnNavMesh)
         {
-            float distanceToPlayerSqr = (stateMachine.Player.transform.position - stateMachine.transform.position).sqrMagnitude;
-            Vector3 directionToPlayer = (stateMachine.Player.transform.position - stateMachine.transform.position).normalized;
+            // uses horizontal axes to determine distance from player
+            Vector3 playerXZPos = new(stateMachine.Player.transform.position.x, 0.0f, stateMachine.Player.transform.position.z);
+            Vector3 dragonXZPos = new(stateMachine.transform.position.x, 0.0f, stateMachine.transform.position.z);
+            float distanceToPlayerXZSqr = (playerXZPos - dragonXZPos).sqrMagnitude;
+            Vector3 directionToPlayerXZ = (playerXZPos - dragonXZPos).normalized;
 
-            if (distanceToPlayerSqr < FlyingMinDistanceToPlayer * FlyingMinDistanceToPlayer)
+            if (distanceToPlayerXZSqr < FlyingMinDistanceToPlayer * FlyingMinDistanceToPlayer) // if too close to player
             {
-                Vector3 minOffset = directionToPlayer * FlyingMinDistanceToPlayer;
+                Vector3 minOffset = directionToPlayerXZ * FlyingMinDistanceToPlayer;
                 stateMachine.NavMeshAgent.destination = stateMachine.Player.transform.position - minOffset;
-                Move(stateMachine.NavMeshAgent.desiredVelocity.normalized * stateMachine.FlyingSpeed, deltaTime);
+                Move(stateMachine.NavMeshAgent.desiredVelocity.normalized * stateMachine.FlyingSpeed, deltaTime); // move towards 'far enough' position
             }
-            else if (distanceToPlayerSqr > FlyingMaxDistanceToPlayer * FlyingMaxDistanceToPlayer)
+            else if (distanceToPlayerXZSqr > FlyingMaxDistanceToPlayer * FlyingMaxDistanceToPlayer) // if too far from player
             {
-                Vector3 maxOffset = directionToPlayer * FlyingMaxDistanceToPlayer;
+                Vector3 maxOffset = directionToPlayerXZ * FlyingMaxDistanceToPlayer;
                 stateMachine.NavMeshAgent.destination = stateMachine.Player.transform.position - maxOffset;
-                Move(stateMachine.NavMeshAgent.desiredVelocity.normalized * stateMachine.FlyingSpeed, deltaTime);
+                Move(stateMachine.NavMeshAgent.desiredVelocity.normalized * stateMachine.FlyingSpeed, deltaTime); // move towards 'close enough' position
             }
         }
 
