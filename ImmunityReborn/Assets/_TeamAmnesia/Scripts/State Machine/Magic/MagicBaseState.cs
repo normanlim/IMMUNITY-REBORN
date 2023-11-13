@@ -81,27 +81,4 @@ public abstract class MagicBaseState : State
         }
     }
 
-    //protected void UpdateCirculatingAnimator( float deltaTime )
-    //{
-    //    if ( Mathf.Approximately( stateMachine.NavMeshAgent.velocity.y, 0.0f ) )
-    //    {
-    //        stateMachine.Animator.SetFloat( AnimatorMoveYParam, 0.0f, AnimatorDampTime, deltaTime );
-    //    }
-    //    else
-    //    {
-    //        float value = stateMachine.NavMeshAgent.velocity.y > 0.0f ? 1.0f : -1.0f;
-    //        stateMachine.Animator.SetFloat( AnimatorMoveYParam, value, AnimatorDampTime, deltaTime );
-    //    }
-
-    //    if ( Mathf.Approximately( stateMachine.NavMeshAgent.velocity.x, 0.0f ) )
-    //    {
-    //        stateMachine.Animator.SetFloat( AnimatorMoveXParam, 0.0f, AnimatorDampTime, deltaTime );
-    //    }
-    //    else
-    //    {
-    //        float value = stateMachine.NavMeshAgent.velocity.x > 0.0f ? 1.0f : -1.0f;
-    //        stateMachine.Animator.SetFloat( AnimatorMoveXParam, value, AnimatorDampTime, deltaTime );
-    //    }
-    //}
-
 }
