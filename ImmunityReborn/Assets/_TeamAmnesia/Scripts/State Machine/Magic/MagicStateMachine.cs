@@ -88,6 +88,7 @@ public class MagicStateMachine : StateMachine
 
     private void HandleDie()
     {
+        Destroy( gameObject );
         // Check if the MinibossDeath component exists on this GameObject
         MinibossDeath minibossDeathComponent = GetComponent<MinibossDeath>();
         if (minibossDeathComponent != null)

@@ -7,8 +7,6 @@ public abstract class MagicBaseState : State
     protected MagicStateMachine stateMachine;
 
     private readonly int AnimatorSpeedParam = Animator.StringToHash( "Speed" );
-    private readonly int AnimatorMoveXParam = Animator.StringToHash( "MoveX" );
-    private readonly int AnimatorMoveYParam = Animator.StringToHash( "MoveY" );
     private const float AnimatorDampTime = 0.1f;
     private const float TurnSpeed = 15.0f;
 

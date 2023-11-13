@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
 public class MagicAttackingState : MagicBaseState
@@ -14,6 +16,7 @@ public class MagicAttackingState : MagicBaseState
 
     public override void Enter()
     {
+        stateMachine.WeaponDamager.SetDamage( stateMachine.AttackDamage, stateMachine.AttackKnockback );
         stateMachine.Animator.CrossFadeInFixedTime( AttackStateAnimation, CrossFadeDuration );
         stateMachine.DOTPuddle.SpawnPuddleOnFloor();
     }
@@ -22,11 +25,14 @@ public class MagicAttackingState : MagicBaseState
 
     public override void Tick(float deltaTime)
     {
-        //Debug.Log( "In attacking state" );
+        // The end part of the animation is very empty without much particles,
+        // but still does damage since collider is still there. Might be a problem for player
+        if ( GetPlayingAnimationTimeNormalized( stateMachine.Animator, 0 ) >= 1.0f ) // animation is done playing
+        {
 
-        //MoveToPlayer( deltaTime );
+            stateMachine.Health.DealDamage( stateMachine.Health.MaxHealth ); // self destruct all health
+        }
 
-        //FacePlayer( deltaTime );
     }
 
     public override void Exit()

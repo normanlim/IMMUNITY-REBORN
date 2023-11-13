@@ -21,7 +21,6 @@ public class MagicChasingState : MagicBaseState
     {
         if ( IsInAttackRange() )
         {
-            Debug.Log( "In range - atking player" );
             stateMachine.SwitchState( new MagicAttackingState( stateMachine ) );
             return;
         }
