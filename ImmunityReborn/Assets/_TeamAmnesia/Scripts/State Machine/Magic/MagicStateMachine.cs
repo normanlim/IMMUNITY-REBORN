@@ -88,7 +88,8 @@ public class MagicStateMachine : StateMachine
 
     private void HandleDie()
     {
-        Destroy( gameObject );
+        Destroy( gameObject ); // Since bombers explode, we can just get rid of their body without dealing with ragdoll
+
         // Check if the MinibossDeath component exists on this GameObject
         MinibossDeath minibossDeathComponent = GetComponent<MinibossDeath>();
         if (minibossDeathComponent != null)

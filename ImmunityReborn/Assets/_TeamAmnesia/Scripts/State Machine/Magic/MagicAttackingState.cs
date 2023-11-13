@@ -21,8 +21,6 @@ public class MagicAttackingState : MagicBaseState
         stateMachine.DOTPuddle.SpawnPuddleOnFloor();
     }
 
-
-
     public override void Tick(float deltaTime)
     {
         // The end part of the animation is very empty without much particles,

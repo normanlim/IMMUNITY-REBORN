@@ -13,55 +13,33 @@ public class DOTDamager : MonoBehaviour
     [SerializeField] 
     private float PuddleLifetime;
 
-    [SerializeField] 
-    private float PuddleDelay;
-
     private GameObject player;
+
+    private float damagePerSecond = 1.0f;
+    private float accumulatedDamage = 0.0f;
 
     void Start()
     {
         player = GameObject.FindGameObjectWithTag( "Player" );
+        Destroy( gameObject, PuddleLifetime );
     }
 
     void OnTriggerStay( Collider other )
     {
         if ( other.CompareTag( "Player" ) ) // Check if the collider is tagged as "Player"
         {
-            // Apply damage based on the time between frames
-            //playerHealth.TakeDamage( damagePerSecond * Time.deltaTime );
-            //Debug.Log( "BOMBA EXPLODE - ONTRIGGERENTER" );
-            //    if (other.TryGetComponent(out Health health))
-            //    {
-            //        health.DealDamage(damage, DamageType);
-            //    }
+            // Calculate the damage for this frame and accumulate it
+            accumulatedDamage += damagePerSecond * Time.deltaTime;
+
+            if ( accumulatedDamage > 1f && other.TryGetComponent( out Health health ) )
+            {
+                int damageFromDotToApply = Mathf.FloorToInt( accumulatedDamage ); // apply damage in whole integers only
+                health.DealDamage( damageFromDotToApply, DamageType );
+
+                accumulatedDamage -= damageFromDotToApply;
+            }
+
         }
     }
-    //private void OnEnable()
-    //{
-    //    collidedWith.Clear();
-    //}
-
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (collidedWith.Contains(other))
-    //    {
-    //        return;
-    //    }
-    //    else
-    //    {
-    //        collidedWith.Add(other);
-    //    }
-
-    //    if (other.TryGetComponent(out Health health))
-    //    {
-    //        health.DealDamage(damage, DamageType);
-    //    }
-
-    //    if (other.TryGetComponent(out ForceReceiver forceReceiver))
-    //    {
-    //        Vector3 direction = (other.transform.position - transform.position).normalized;
-    //        forceReceiver.AddForce(direction * knockback);
-    //    }
-    //}
 
 }
