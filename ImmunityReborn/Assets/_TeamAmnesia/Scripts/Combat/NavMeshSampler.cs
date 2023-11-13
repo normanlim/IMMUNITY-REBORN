@@ -18,7 +18,7 @@ public class NavMeshSampler : MonoBehaviour
         debugRandomPoints.Clear();
 #endif
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 20; i++)
         {
             Vector3 randomPoint = position + Random.insideUnitSphere * range;
 #if UNITY_EDITOR

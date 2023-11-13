@@ -77,14 +77,16 @@ public class DragonStateMachine : StateMachine
 
     public DragonFlyingAction NextAttackType { get; set; }
 
-    private LayerMask EnvironmentLayer;
+    private LayerMask environmentLayer;
+    private int bomberWalkableArea;
 
     private void Awake()
     {
         Player = GameObject.FindGameObjectWithTag("Player");
         PlayerHealth = Player.GetComponent<Health>();
 
-        EnvironmentLayer = LayerMask.NameToLayer("Environment");
+        environmentLayer = LayerMask.NameToLayer("Environment");
+        bomberWalkableArea = 1 << NavMesh.GetAreaFromName("Bomber Walkable");
 
         // TODO: Remove Debug
         OnStateChange += (state) => { Debug.Log(state); };
@@ -116,7 +118,7 @@ public class DragonStateMachine : StateMachine
 
     public bool RaycastToGround(out RaycastHit hitInfo)
     {
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out RaycastHit hit, 50.0f, 1 << EnvironmentLayer))
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out RaycastHit hit, 50.0f, 1 << environmentLayer))
         {
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down) * hit.distance, Color.yellow);
 
@@ -152,7 +154,7 @@ public class DragonStateMachine : StateMachine
     {
         if (RaycastToGround(out RaycastHit hit))
         {
-            if (NavMeshSampler.RandomPointAroundPosition(hit.point, SummonRadius, out Vector3 result))
+            if (NavMeshSampler.RandomPointAroundPosition(hit.point, SummonRadius, out Vector3 result, bomberWalkableArea))
             {
                 Instantiate(SummonCharacter, result, Quaternion.LookRotation(Player.transform.position));
             }
