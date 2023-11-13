@@ -42,6 +42,19 @@ public abstract class DragonBaseState : State
     {
         if (stateMachine.NavMeshAgent.isOnNavMesh)
         {
+            stateMachine.NavMeshAgent.destination = stateMachine.Player.transform.position;
+
+            Move(stateMachine.NavMeshAgent.desiredVelocity.normalized * stateMachine.GroundedSpeed, deltaTime);
+        }
+
+        stateMachine.NavMeshAgent.velocity = stateMachine.CharacterController.velocity; // needed to sync velocities
+        stateMachine.NavMeshAgent.nextPosition = stateMachine.CharacterController.transform.position; // fixes bug where enemies float apart when colliding with each other
+    }
+
+    protected void MoveToPlayerOffset(float deltaTime)
+    {
+        if (stateMachine.NavMeshAgent.isOnNavMesh)
+        {
             float distanceToPlayerSqr = (stateMachine.Player.transform.position - stateMachine.transform.position).sqrMagnitude;
             Vector3 directionToPlayer = (stateMachine.Player.transform.position - stateMachine.transform.position).normalized;
             float epsilon = 2.0f;
@@ -50,7 +63,7 @@ public abstract class DragonBaseState : State
             {
                 Vector3 offset = directionToPlayer * GroundedDistanceToPlayer;
                 stateMachine.NavMeshAgent.destination = stateMachine.Player.transform.position - offset;
-                Move(stateMachine.NavMeshAgent.desiredVelocity.normalized * stateMachine.MovementSpeed, deltaTime);
+                Move(stateMachine.NavMeshAgent.desiredVelocity.normalized * stateMachine.GroundedSpeed, deltaTime);
             }
         }
 
@@ -68,7 +81,7 @@ public abstract class DragonBaseState : State
             if (Mathf.Abs(distanceToPointSqr) > epsilon * epsilon)
             {
                 stateMachine.NavMeshAgent.destination = point;
-                Move(stateMachine.NavMeshAgent.desiredVelocity.normalized * stateMachine.MovementSpeed, deltaTime);
+                Move(stateMachine.NavMeshAgent.desiredVelocity.normalized * stateMachine.GroundedSpeed, deltaTime);
             }
         }
 
@@ -87,13 +100,13 @@ public abstract class DragonBaseState : State
             {
                 Vector3 minOffset = directionToPlayer * FlyingMinDistanceToPlayer;
                 stateMachine.NavMeshAgent.destination = stateMachine.Player.transform.position - minOffset;
-                Move(stateMachine.NavMeshAgent.desiredVelocity.normalized * stateMachine.MovementSpeed, deltaTime);
+                Move(stateMachine.NavMeshAgent.desiredVelocity.normalized * stateMachine.FlyingSpeed, deltaTime);
             }
             else if (distanceToPlayerSqr > FlyingMaxDistanceToPlayer * FlyingMaxDistanceToPlayer)
             {
                 Vector3 maxOffset = directionToPlayer * FlyingMaxDistanceToPlayer;
                 stateMachine.NavMeshAgent.destination = stateMachine.Player.transform.position - maxOffset;
-                Move(stateMachine.NavMeshAgent.desiredVelocity.normalized * stateMachine.MovementSpeed, deltaTime);
+                Move(stateMachine.NavMeshAgent.desiredVelocity.normalized * stateMachine.FlyingSpeed, deltaTime);
             }
         }
 
@@ -138,6 +151,16 @@ public abstract class DragonBaseState : State
         return distanceToPlayerSqr <= stateMachine.CombatRange * stateMachine.CombatRange;
     }
 
+    protected bool IsInClawAttackRange()
+    {
+        if (stateMachine.PlayerHealth.CurrentHealth == 0) { return false; }
+
+        float distanceToPlayerSqr = (stateMachine.Player.transform.position -
+            stateMachine.transform.position).sqrMagnitude; // more performant than Vector3.magnitude which uses sqrt
+
+        return distanceToPlayerSqr <= stateMachine.ClawAttackRange * stateMachine.ClawAttackRange;
+    }
+
     protected void UpdateGroundedAnimator(float deltaTime)
     {
         if (Mathf.Approximately(stateMachine.NavMeshAgent.velocity.y, 0.0f))
@@ -161,8 +184,8 @@ public abstract class DragonBaseState : State
         }
     }
 
-    protected int RollDie(int min, int max)
+    protected int RollDie(int minInclusive, int maxExclusive)
     {
-        return Random.Range(min, max);
+        return Random.Range(minInclusive, maxExclusive);
     }
 }

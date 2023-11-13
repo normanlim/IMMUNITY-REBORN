@@ -16,7 +16,8 @@ public static class DragonAttack
     private static Dictionary<DragonAttackType, Type> stateType = new()
     {
         { DragonAttackType.Fireball, typeof(DragonFireballState) },
-        { DragonAttackType.Landing, typeof(DragonLandingState) }
+        { DragonAttackType.Landing, typeof(DragonLandingState) },
+        { DragonAttackType.Clawing, typeof(DragonClawingState) }
     };
 
     public static DragonBaseState CreateNextState(DragonStateMachine stateMachine)

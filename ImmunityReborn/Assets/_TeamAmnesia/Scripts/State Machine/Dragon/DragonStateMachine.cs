@@ -33,19 +33,28 @@ public class DragonStateMachine : StateMachine
     public Ragdoll Ragdoll { get; private set; }
 
     [field: SerializeField]
-    public float MovementSpeed { get; private set; }
+    public float FlyingSpeed { get; private set; }
+
+    [field: SerializeField]
+    public float GroundedSpeed { get; private set; }
 
     [field: SerializeField, Tooltip("Engage in combat if player is within this range")]
     public float CombatRange { get; private set; }
 
     [field: SerializeField, Tooltip("Perform attack if target is within this range")]
-    public float AttackRange { get; private set; }
+    public float ClawAttackRange { get; private set; }
 
     [field: SerializeField]
-    public int AttackDamage { get; private set; }
+    public int ClawAttackDamage { get; private set; }
 
     [field: SerializeField]
-    public float AttackKnockback { get; private set; }
+    public float ClawAttackKnockback { get; private set; }
+
+    [field: SerializeField]
+    public int LandingDamage { get; private set; }
+
+    [field: SerializeField]
+    public float LandingKnockback { get; private set; }
 
     [field: SerializeField]
     public float NextAttackDelay { get; private set; }
@@ -91,7 +100,7 @@ public class DragonStateMachine : StateMachine
 
     private void HandleTakeDamage()
     {
-        SwitchState(new DragonImpactState(this));
+        //SwitchState(new DragonImpactState(this));
     }
 
     private void HandleDie()
@@ -106,7 +115,7 @@ public class DragonStateMachine : StateMachine
 
     private void SpitFireball()
     {
-        Arrow.FireAtPlayer(AttackDamage, AttackKnockback);
+        Arrow.FireAtPlayer(LandingDamage, LandingKnockback);
     }
 
     private void OnDrawGizmosSelected()

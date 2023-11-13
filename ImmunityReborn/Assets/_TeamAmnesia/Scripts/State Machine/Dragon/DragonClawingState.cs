@@ -1,0 +1,48 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class DragonClawingState : DragonBaseState
+{
+    private readonly int ClawAttackStateName = Animator.StringToHash("ClawsAttackRightForward");
+
+    private const float TransitionDuration = 0.1f;
+
+    private bool isClawing;
+
+    public DragonClawingState(DragonStateMachine stateMachine) : base(stateMachine)
+    {
+    }
+
+    public override void Enter()
+    {
+        stateMachine.WeaponDamager.SetDamage(stateMachine.ClawAttackDamage, stateMachine.ClawAttackKnockback);
+    }
+
+    public override void Tick(float deltaTime)
+    {
+        FacePlayer(deltaTime);
+
+        MoveToPlayer(deltaTime);
+
+        UpdateGroundedAnimator(deltaTime);
+
+        if (!isClawing && IsInClawAttackRange())
+        {
+            isClawing = true;
+            stateMachine.Animator.CrossFadeInFixedTime(ClawAttackStateName, TransitionDuration, 0);
+        }
+
+        if (GetPlayingAnimationTimeNormalized(stateMachine.Animator, 0) >= 1.0f)
+        {
+            isClawing = false;
+            stateMachine.SwitchState(new DragonGroundedState(stateMachine));
+        }
+    }
+
+    public override void Exit()
+    {
+        stateMachine.NavMeshAgent.ResetPath();
+        stateMachine.NavMeshAgent.velocity = Vector3.zero;
+    }
+}

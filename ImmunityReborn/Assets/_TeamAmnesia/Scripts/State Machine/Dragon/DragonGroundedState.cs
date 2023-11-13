@@ -7,11 +7,9 @@ public class DragonGroundedState : DragonBaseState
     private readonly int GroundedStateName = Animator.StringToHash("Grounded");
 
     private const float TransitionDuration = 0.1f;
-    private const float GroundedStateDuration = 5.0f;
     private const float PositionQueryDelay = 2.0f;
 
-    private float currentQueryTimer = PositionQueryDelay;
-    private float currentGroundedTimer = GroundedStateDuration;
+    private float currentQueryTimer; // query immediately upon entering state
     private Vector3 targetPos;
 
     public DragonGroundedState(DragonStateMachine stateMachine) : base(stateMachine)
@@ -29,6 +27,28 @@ public class DragonGroundedState : DragonBaseState
     {
         FacePlayer(deltaTime);
 
+        MoveAroundRandomly(deltaTime);
+
+        UpdateGroundedAnimator(deltaTime);
+
+        nextAttackTimer -= deltaTime;
+        if (nextAttackTimer <= 0.0f)
+        {
+            if (RollDie(0, 2) == 0)
+            {
+                stateMachine.SwitchState(new DragonFlyingState(stateMachine));
+                return;
+            }
+            else
+            {
+                stateMachine.NextAttackType = DragonAttackType.Clawing;
+            }
+            stateMachine.SwitchState(DragonAttack.CreateNextState(stateMachine));
+        }
+    }
+
+    private void MoveAroundRandomly(float deltaTime)
+    {
         currentQueryTimer -= deltaTime;
         if (currentQueryTimer <= 0.0f)
         {
@@ -45,15 +65,7 @@ public class DragonGroundedState : DragonBaseState
         }
         else
         {
-            MoveToPlayer(deltaTime);
-        }
-
-        UpdateGroundedAnimator(deltaTime);
-
-        currentGroundedTimer -= deltaTime;
-        if (currentGroundedTimer <= 0.0f)
-        {
-            stateMachine.SwitchState(new DragonFlyingState(stateMachine));
+            MoveToPlayerOffset(deltaTime);
         }
     }
 

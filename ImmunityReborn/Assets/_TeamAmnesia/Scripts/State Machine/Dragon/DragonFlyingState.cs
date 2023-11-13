@@ -28,7 +28,7 @@ public class DragonFlyingState : DragonBaseState
         nextAttackTimer -= deltaTime;
         if (nextAttackTimer <= 0.0f)
         {
-            if (RollDie(0, 3) == 0)
+            if (RollDie(0, 6) == 0)
             {
                 stateMachine.NextAttackType = DragonAttackType.Landing;
             }
