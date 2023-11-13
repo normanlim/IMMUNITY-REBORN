@@ -21,6 +21,9 @@ public class MagicStateMachine : StateMachine
     public WeaponDamager WeaponDamager { get; private set; }
 
     [field: SerializeField]
+    public DOTPuddle DOTPuddle { get; private set; }
+
+    [field: SerializeField]
     public Health Health { get; private set; }
 
     [field: SerializeField]
@@ -82,6 +85,8 @@ public class MagicStateMachine : StateMachine
 
     private void HandleDie()
     {
+        Destroy( gameObject ); // Since bombers explode, we can just get rid of their body without dealing with ragdoll
+
         SwitchState(new MagicDeadState(this));
     }
 
