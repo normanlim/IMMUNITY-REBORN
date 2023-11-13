@@ -9,7 +9,7 @@ public abstract class DragonBaseState : State
     protected DragonStateMachine stateMachine;
     protected const float FlyingMaxYOffset = 2.0f;
     protected const float FlyUpRate = 0.02f;
-    protected const float FlyingMinDistanceToPlayer = 7.0f;
+    protected const float FlyingMinDistanceToPlayer = 8.0f;
     protected const float FlyingMaxDistanceToPlayer = 10.0f;
     protected const float GroundedDistanceToPlayer = 5.0f;
 
@@ -25,7 +25,7 @@ public abstract class DragonBaseState : State
     public DragonBaseState(DragonStateMachine stateMachine)
     {
         this.stateMachine = stateMachine;
-        nextAttackTimer = stateMachine.NextAttackDelay;
+        nextAttackTimer = Random.Range(stateMachine.NextAttackDelayRange.x, stateMachine.NextAttackDelayRange.y);
     }
 
     protected void Move(Vector3 movement, float deltaTime)
@@ -110,19 +110,24 @@ public abstract class DragonBaseState : State
             }
         }
 
+        // check distance from ground
         if (Physics.Raycast(stateMachine.transform.position, stateMachine.transform.TransformDirection(Vector3.down), out RaycastHit hitInfo, 50.0f, 1 << EnvironmentLayer))
         {
             Debug.DrawRay(stateMachine.transform.position, stateMachine.transform.TransformDirection(Vector3.down) * hitInfo.distance, Color.yellow);
 
             currentYOffset = hitInfo.distance;
 
-            if (currentYOffset > FlyingMaxYOffset)
+            if (currentYOffset > FlyingMaxYOffset) // if too high up
             {
                 stateMachine.CharacterController.Move(new Vector3(0.0f, -(currentYOffset - FlyingMaxYOffset), 0.0f)); // prevents CharacterController from drifting up
             }
-            else if (currentYOffset < FlyingMaxYOffset)
+            else if (currentYOffset < FlyingMaxYOffset / 2) // if less than halfway up
             {
-                stateMachine.CharacterController.Move(new Vector3(0.0f, FlyUpRate, 0.0f)); // fly up gradually
+                stateMachine.CharacterController.Move(new Vector3(0.0f, FlyUpRate / 4, 0.0f)); // fly up slowly
+            }
+            else if (currentYOffset < FlyingMaxYOffset) // if between halfway up and max offset
+            {
+                stateMachine.CharacterController.Move(new Vector3(0.0f, FlyUpRate, 0.0f)); // fly up normally
             }
         }
         

@@ -57,7 +57,7 @@ public class DragonStateMachine : StateMachine
     public float LandingKnockback { get; private set; }
 
     [field: SerializeField]
-    public float NextAttackDelay { get; private set; }
+    public Vector2 NextAttackDelayRange { get; private set; }
 
     public GameObject Player { get; private set; }
 
