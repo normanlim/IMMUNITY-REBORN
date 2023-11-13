@@ -16,7 +16,7 @@ public class DragonClawingState : DragonBaseState
 
     public override void Enter()
     {
-        stateMachine.WeaponDamager.SetDamage(stateMachine.ClawAttackDamage, stateMachine.ClawAttackKnockback);
+        stateMachine.ClawWeaponDamager.SetDamage(stateMachine.ClawAttackDamage, stateMachine.ClawAttackKnockback);
     }
 
     public override void Tick(float deltaTime)
