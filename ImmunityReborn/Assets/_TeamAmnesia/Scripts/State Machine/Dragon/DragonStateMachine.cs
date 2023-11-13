@@ -21,6 +21,9 @@ public class DragonStateMachine : StateMachine
     public NavMeshSampler NavMeshSampler { get; private set; }
 
     [field: SerializeField]
+    public DragonActions DragonActions { get; private set; }
+
+    [field: SerializeField]
     public WeaponDamager LandingWeaponDamager { get; private set; }
 
     [field: SerializeField]
@@ -60,24 +63,28 @@ public class DragonStateMachine : StateMachine
     public float LandingKnockback { get; private set; }
 
     [field: SerializeField]
+    public float SummonRadius { get; private set; }
+
+    [field: SerializeField]
+    public GameObject SummonCharacter { get; private set; }
+
+    [field: SerializeField]
     public Vector2 NextAttackDelayRange { get; private set; }
 
     public GameObject Player { get; private set; }
 
     public Health PlayerHealth { get; private set; }
 
-    public DragonAttackType NextAttackType { get; set; }
+    public DragonFlyingAction NextAttackType { get; set; }
 
-    public Dictionary<DragonAttackType, int> AttacksCounter { get; set; } = new()
-    {
-        { DragonAttackType.Fireball, 0 },
-        { DragonAttackType.Clawing, 0 }
-    };
+    private LayerMask EnvironmentLayer;
 
     private void Awake()
     {
         Player = GameObject.FindGameObjectWithTag("Player");
         PlayerHealth = Player.GetComponent<Health>();
+
+        EnvironmentLayer = LayerMask.NameToLayer("Environment");
 
         // TODO: Remove Debug
         OnStateChange += (state) => { Debug.Log(state); };
@@ -107,6 +114,20 @@ public class DragonStateMachine : StateMachine
         PlayerHealth.OnDie -= HandlePlayerDie;
     }
 
+    public bool RaycastToGround(out RaycastHit hitInfo)
+    {
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out RaycastHit hit, 50.0f, 1 << EnvironmentLayer))
+        {
+            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down) * hit.distance, Color.yellow);
+
+            hitInfo = hit;
+            return true;
+        }
+
+        hitInfo = new RaycastHit();
+        return false;
+    }
+
     private void HandleTakeDamage()
     {
         //SwitchState(new DragonImpactState(this));
@@ -127,9 +148,23 @@ public class DragonStateMachine : StateMachine
         Arrow.FireAtPlayer(LandingDamage, LandingKnockback);
     }
 
+    private void Summon()
+    {
+        if (RaycastToGround(out RaycastHit hit))
+        {
+            if (NavMeshSampler.RandomPointAroundPosition(hit.point, SummonRadius, out Vector3 result))
+            {
+                Instantiate(SummonCharacter, result, Quaternion.LookRotation(Player.transform.position));
+            }
+        }
+    }
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, CombatRange);
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, SummonRadius);
     }
 }

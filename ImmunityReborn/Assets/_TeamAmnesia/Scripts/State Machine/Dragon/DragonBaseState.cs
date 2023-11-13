@@ -15,7 +15,6 @@ public abstract class DragonBaseState : State
 
     private readonly int AnimatorMoveXParam = Animator.StringToHash("MoveX");
     private readonly int AnimatorMoveYParam = Animator.StringToHash("MoveY");
-    private readonly LayerMask EnvironmentLayer = LayerMask.NameToLayer("Environment");
     private const float AnimatorDampTime = 0.1f;
     private const float TurnSpeed = 15.0f;
 
@@ -113,12 +112,9 @@ public abstract class DragonBaseState : State
             }
         }
 
-        // check distance from ground
-        if (Physics.Raycast(stateMachine.transform.position, stateMachine.transform.TransformDirection(Vector3.down), out RaycastHit hitInfo, 50.0f, 1 << EnvironmentLayer))
+        if (stateMachine.RaycastToGround(out RaycastHit hit))
         {
-            Debug.DrawRay(stateMachine.transform.position, stateMachine.transform.TransformDirection(Vector3.down) * hitInfo.distance, Color.yellow);
-
-            currentYOffset = hitInfo.distance;
+            currentYOffset = hit.distance;
 
             if (currentYOffset > FlyingMaxYOffset) // if too high up
             {
