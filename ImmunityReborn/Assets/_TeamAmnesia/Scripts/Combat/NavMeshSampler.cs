@@ -10,7 +10,7 @@ public class NavMeshSampler : MonoBehaviour
     private List<Vector3> debugRandomPoints = new List<Vector3>();
     private Vector3 debugResult;
 
-    public bool RandomPointAroundPosition(Vector3 position, float range, out Vector3 result)
+    public bool RandomPointAroundPosition(Vector3 position, float range, out Vector3 result, int navMeshArea = NavMesh.AllAreas)
     {
 #if UNITY_EDITOR
         debugPosition = position;
@@ -24,7 +24,38 @@ public class NavMeshSampler : MonoBehaviour
 #if UNITY_EDITOR
             debugRandomPoints.Add(randomPoint);
 #endif
-            if (NavMesh.SamplePosition(randomPoint, out NavMeshHit hit, 1.0f, NavMesh.AllAreas))
+            if (NavMesh.SamplePosition(randomPoint, out NavMeshHit hit, 1.0f, navMeshArea))
+            {
+#if UNITY_EDITOR
+                debugResult = hit.position;
+#endif
+                result = hit.position;
+                return true;
+            }
+        }
+        result = Vector3.zero;
+        return false;
+    }
+
+    public bool RandomPointAroundPosition(Vector3 position, float range, float minDistanceToPosition, out Vector3 result, int navMeshArea = NavMesh.AllAreas)
+    {
+#if UNITY_EDITOR
+        debugPosition = position;
+        debugRadius = range;
+        debugRandomPoints.Clear();
+#endif
+
+        for (int i = 0; i < 20; i++)
+        {
+            Vector3 randomPoint = position + Random.insideUnitSphere * range;
+            if ((position - randomPoint).sqrMagnitude < minDistanceToPosition * minDistanceToPosition)
+            {
+                continue;
+            }
+#if UNITY_EDITOR
+            debugRandomPoints.Add(randomPoint);
+#endif
+            if (NavMesh.SamplePosition(randomPoint, out NavMeshHit hit, 1.0f, navMeshArea))
             {
 #if UNITY_EDITOR
                 debugResult = hit.position;
@@ -45,7 +76,7 @@ public class NavMeshSampler : MonoBehaviour
         {
             Gizmos.DrawSphere(point, 0.1f);
         }
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawSphere(debugResult, 0.1f);
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(debugResult, 0.2f);
     }
 }

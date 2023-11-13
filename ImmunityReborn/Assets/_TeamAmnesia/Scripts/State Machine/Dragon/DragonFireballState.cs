@@ -25,11 +25,6 @@ public class DragonFireballState : DragonBaseState
 
         if (GetPlayingAnimationTimeNormalized(stateMachine.Animator, 0) >= 1.0f)
         {
-            if (RollDie(0, 1) == 0)
-            {
-                stateMachine.SwitchAttack = true;
-            }
-
             stateMachine.SwitchState(new DragonFlyingState(stateMachine));
         }
     }

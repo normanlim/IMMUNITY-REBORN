@@ -48,13 +48,13 @@ public class DragonStateMachine : StateMachine
     public float AttackKnockback { get; private set; }
 
     [field: SerializeField]
-    public float SwitchAttackDelay { get; private set; }
+    public float NextAttackDelay { get; private set; }
 
     public GameObject Player { get; private set; }
 
     public Health PlayerHealth { get; private set; }
 
-    public bool SwitchAttack { get; set; }
+    public DragonAttackType NextAttackType { get; set; }
 
     private void Awake()
     {

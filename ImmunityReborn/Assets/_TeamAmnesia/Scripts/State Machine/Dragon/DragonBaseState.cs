@@ -20,12 +20,12 @@ public abstract class DragonBaseState : State
     private const float TurnSpeed = 15.0f;
 
     protected float currentYOffset = 0.0f;
-    protected float switchAttackTimer;
+    protected float nextAttackTimer;
 
     public DragonBaseState(DragonStateMachine stateMachine)
     {
         this.stateMachine = stateMachine;
-        switchAttackTimer = stateMachine.SwitchAttackDelay;
+        nextAttackTimer = stateMachine.NextAttackDelay;
     }
 
     protected void Move(Vector3 movement, float deltaTime)
@@ -113,20 +113,6 @@ public abstract class DragonBaseState : State
             }
         }
         
-        stateMachine.NavMeshAgent.velocity = stateMachine.CharacterController.velocity;
-        stateMachine.NavMeshAgent.nextPosition = stateMachine.CharacterController.transform.position;
-    }
-
-    protected void LandOnPlayer(float deltaTime)
-    {
-        Vector3 playerXZPos = new(stateMachine.Player.transform.position.x, 0.0f, stateMachine.Player.transform.position.z);
-        Vector3 dragonXZPos = new(stateMachine.transform.position.x, 0.0f, stateMachine.transform.position.z);
-        Vector3 offsetXZ = (playerXZPos - dragonXZPos).normalized * GroundedDistanceToPlayer;
-        Vector3 targetPosition = playerXZPos - offsetXZ;
-
-        stateMachine.NavMeshAgent.destination = targetPosition;
-        Move(stateMachine.NavMeshAgent.desiredVelocity.normalized * stateMachine.MovementSpeed, deltaTime);
-
         stateMachine.NavMeshAgent.velocity = stateMachine.CharacterController.velocity;
         stateMachine.NavMeshAgent.nextPosition = stateMachine.CharacterController.transform.position;
     }

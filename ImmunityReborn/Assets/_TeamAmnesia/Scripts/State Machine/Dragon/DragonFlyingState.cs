@@ -8,8 +8,6 @@ public class DragonFlyingState : DragonBaseState
 
     private const float CrossFadeDuration = 0.1f;
 
-    private float timeUntilFireball = 3.0f;
-
     public DragonFlyingState(DragonStateMachine stateMachine) : base(stateMachine)
     {
     }
@@ -27,23 +25,18 @@ public class DragonFlyingState : DragonBaseState
 
         FlyToPlayer(deltaTime);
 
-        if (stateMachine.SwitchAttack)
+        nextAttackTimer -= deltaTime;
+        if (nextAttackTimer <= 0.0f)
         {
-            switchAttackTimer -= deltaTime;
-
-            if (switchAttackTimer <= 0.0f)
+            if (RollDie(0, 3) == 0)
             {
-                stateMachine.SwitchState(new DragonLandingState(stateMachine));
+                stateMachine.NextAttackType = DragonAttackType.Landing;
             }
-        }
-        else
-        {
-            timeUntilFireball -= deltaTime;
-
-            if (timeUntilFireball <= 0.0f)
+            else
             {
-                stateMachine.SwitchState(new DragonFireballState(stateMachine));
+                stateMachine.NextAttackType = DragonAttackType.Fireball;
             }
+            stateMachine.SwitchState(DragonAttack.CreateNextState(stateMachine));
         }
     }
 

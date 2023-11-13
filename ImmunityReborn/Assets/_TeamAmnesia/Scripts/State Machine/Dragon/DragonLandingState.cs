@@ -16,7 +16,7 @@ public class DragonLandingState : DragonBaseState
     public override void Enter()
     {
         stateMachine.FlyingForceReceiver.IsFlying = false;
-
+        stateMachine.WeaponDamager.SetDamage(stateMachine.AttackDamage, stateMachine.AttackKnockback);
         stateMachine.Animator.CrossFadeInFixedTime(LandingStateName, TransitionDuration, 0);
     }
 
@@ -38,5 +38,19 @@ public class DragonLandingState : DragonBaseState
         stateMachine.NavMeshAgent.velocity = Vector3.zero;
 
         stateMachine.Animator.CrossFade(EmptyDefaultStateName, TransitionDuration, 0);
+    }
+
+    protected void LandOnPlayer(float deltaTime)
+    {
+        Vector3 playerXZPos = new(stateMachine.Player.transform.position.x, 0.0f, stateMachine.Player.transform.position.z);
+        Vector3 dragonXZPos = new(stateMachine.transform.position.x, 0.0f, stateMachine.transform.position.z);
+        Vector3 offsetXZ = (playerXZPos - dragonXZPos).normalized * (GroundedDistanceToPlayer / 2);
+        Vector3 targetPosition = playerXZPos - offsetXZ;
+
+        stateMachine.NavMeshAgent.destination = targetPosition;
+        Move(stateMachine.NavMeshAgent.desiredVelocity.normalized * stateMachine.MovementSpeed, deltaTime);
+
+        stateMachine.NavMeshAgent.velocity = stateMachine.CharacterController.velocity;
+        stateMachine.NavMeshAgent.nextPosition = stateMachine.CharacterController.transform.position;
     }
 }
