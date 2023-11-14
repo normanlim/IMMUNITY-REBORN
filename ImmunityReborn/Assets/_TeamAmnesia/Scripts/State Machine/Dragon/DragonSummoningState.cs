@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class DragonSummoningState : DragonBaseState
 {
-    private readonly int SummonStateName = Animator.StringToHash("FlyStationarySpreadFire");
+    private readonly int FlyingSummonStateName = Animator.StringToHash("FlyStationarySpreadFire");
+    private readonly int GroundedSummonStateName = Animator.StringToHash("SpreadFire");
 
     private const float TransitionDuration = 0.1f;
 
@@ -14,18 +15,32 @@ public class DragonSummoningState : DragonBaseState
 
     public override void Enter()
     {
-        stateMachine.Animator.CrossFadeInFixedTime(SummonStateName, TransitionDuration, 0);
+        if (stateMachine.FlyingForceReceiver.IsFlying)
+        {
+            stateMachine.Animator.CrossFadeInFixedTime(FlyingSummonStateName, TransitionDuration, 0);
+        }
+        else
+        {
+            stateMachine.Animator.CrossFadeInFixedTime(GroundedSummonStateName, TransitionDuration, 0);
+        }
     }
 
     public override void Tick(float deltaTime)
     {
         FacePlayer(deltaTime);
 
-        FlyToPlayer(deltaTime);
+        Move(deltaTime);
 
         if (GetPlayingAnimationTimeNormalized(stateMachine.Animator, 0) >= 1.0f)
         {
-            stateMachine.SwitchState(new DragonFlyingState(stateMachine));
+            if (stateMachine.FlyingForceReceiver.IsFlying)
+            {
+                stateMachine.SwitchState(new DragonFlyingState(stateMachine));
+            }
+            else
+            {
+                stateMachine.SwitchState(new DragonGroundedState(stateMachine));
+            }
         }
     }
 

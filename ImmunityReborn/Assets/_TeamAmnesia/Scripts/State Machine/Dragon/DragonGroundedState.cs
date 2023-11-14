@@ -31,11 +31,7 @@ public class DragonGroundedState : DragonBaseState
 
         UpdateGroundedAnimator(deltaTime);
 
-        nextAttackTimer -= deltaTime;
-        if (nextAttackTimer <= 0.0f)
-        {
-            stateMachine.SwitchState(stateMachine.DragonActions.NextGroundedAttackState(stateMachine));
-        }
+        stateMachine.DragonActions.Tick(stateMachine, false, deltaTime);
     }
 
     private void MoveAroundRandomly(float deltaTime)

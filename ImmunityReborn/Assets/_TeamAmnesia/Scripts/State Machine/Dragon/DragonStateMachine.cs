@@ -68,9 +68,6 @@ public class DragonStateMachine : StateMachine
     [field: SerializeField]
     public GameObject SummonCharacter { get; private set; }
 
-    [field: SerializeField]
-    public Vector2 NextAttackDelayRange { get; private set; }
-
     public GameObject Player { get; private set; }
 
     public Health PlayerHealth { get; private set; }

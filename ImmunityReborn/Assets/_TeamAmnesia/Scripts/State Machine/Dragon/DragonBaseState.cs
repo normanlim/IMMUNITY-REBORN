@@ -19,12 +19,10 @@ public abstract class DragonBaseState : State
     private const float TurnSpeed = 15.0f;
 
     protected float currentYOffset = 0.0f;
-    protected float nextAttackTimer;
 
     public DragonBaseState(DragonStateMachine stateMachine)
     {
         this.stateMachine = stateMachine;
-        nextAttackTimer = Random.Range(stateMachine.NextAttackDelayRange.x, stateMachine.NextAttackDelayRange.y);
     }
 
     protected void Move(Vector3 movement, float deltaTime)

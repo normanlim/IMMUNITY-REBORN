@@ -34,11 +34,7 @@ public class DragonFlyingState : DragonBaseState
 
         FlyToPlayer(deltaTime);
 
-        nextAttackTimer -= deltaTime;
-        if (nextAttackTimer <= 0.0f)
-        {
-            stateMachine.SwitchState(stateMachine.DragonActions.NextFlyingAttackState(stateMachine));
-        }
+        stateMachine.DragonActions.Tick(stateMachine, true, deltaTime);
     }
 
     public override void Exit()
