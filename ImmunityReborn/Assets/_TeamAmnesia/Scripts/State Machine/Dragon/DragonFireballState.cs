@@ -8,6 +8,7 @@ public class DragonFireballState : DragonBaseState
     private readonly int GroundedFireballStateName = Animator.StringToHash("SpitFireBall");
 
     private const float TransitionDuration = 0.1f;
+    private const float MinGroundedDistanceToPerformFireball = 6.0f;
 
     public DragonFireballState(DragonStateMachine stateMachine) : base(stateMachine)
     {
@@ -21,6 +22,15 @@ public class DragonFireballState : DragonBaseState
         }
         else
         {
+            float distanceToPlayerSqr = (stateMachine.Player.transform.position - stateMachine.transform.position).sqrMagnitude;
+
+            if (distanceToPlayerSqr < MinGroundedDistanceToPerformFireball * MinGroundedDistanceToPerformFireball) // if too close skip fireball state
+            {
+                stateMachine.DragonActions.SetTimer(0.0f);
+                stateMachine.SwitchState(new DragonGroundedState(stateMachine));
+                return;
+            }
+
             stateMachine.Animator.CrossFadeInFixedTime(GroundedFireballStateName, TransitionDuration, 0);
         }
 

@@ -44,15 +44,15 @@ public class DragonActions : MonoBehaviour
 
     private static readonly Dictionary<DragonFlyingAction, int> FlyingActionWeights = new()
     {
-        { DragonFlyingAction.Landing, 3 },
-        { DragonFlyingAction.Fireball, 6 },
-        { DragonFlyingAction.Summoning, 3 }
+        { DragonFlyingAction.Landing, 1 },
+        { DragonFlyingAction.Fireball, 4 },
+        { DragonFlyingAction.Summoning, 2 }
     };
 
     private static readonly Dictionary<DragonGroundedAction, int> GroundedActionWeights = new()
     {
-        { DragonGroundedAction.TakingOff, 3 },
-        { DragonGroundedAction.Clawing, 4 },
+        { DragonGroundedAction.TakingOff, 1 },
+        { DragonGroundedAction.Clawing, 2 },
         { DragonGroundedAction.Fireball, 2 },
         { DragonGroundedAction.Summoning, 2 }
     };
@@ -86,6 +86,11 @@ public class DragonActions : MonoBehaviour
             }
             actionDelayTimer = Random.Range(ActionDelayRange.x, ActionDelayRange.y);
         }
+    }
+
+    public void SetTimer(float seconds)
+    {
+        actionDelayTimer = seconds;
     }
 
     public void ResetFlyingActionWeights()
