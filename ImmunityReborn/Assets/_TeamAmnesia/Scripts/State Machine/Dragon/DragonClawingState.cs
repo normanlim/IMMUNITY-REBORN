@@ -23,9 +23,16 @@ public class DragonClawingState : DragonBaseState
     {
         FacePlayer(deltaTime);
 
-        MoveToPlayer(deltaTime);
-
-        UpdateGroundedAnimator(deltaTime);
+        if (!isClawing)
+        {
+            MoveToPlayer(stateMachine.GroundedSpeed * 2, deltaTime);
+            UpdateGroundedAnimator(deltaTime);
+        }
+        else
+        {
+            MoveToPlayer(stateMachine.GroundedSpeed / 2, deltaTime);
+            UpdateGroundedAnimator(deltaTime, 0.8f);
+        }
 
         if (!isClawing && IsInClawAttackRange())
         {

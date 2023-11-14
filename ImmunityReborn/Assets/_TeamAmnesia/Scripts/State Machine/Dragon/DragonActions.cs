@@ -41,7 +41,7 @@ public class DragonActions : MonoBehaviour
     {
         { DragonFlyingAction.Landing, 4 },
         { DragonFlyingAction.Fireball, 6 },
-        { DragonFlyingAction.Summoning, 3 }
+        { DragonFlyingAction.Summoning, 2 }
     };
 
     private static readonly Dictionary<DragonGroundedAction, int> GroundedActionWeights = new()
@@ -49,7 +49,7 @@ public class DragonActions : MonoBehaviour
         { DragonGroundedAction.Flying, 6 },
         { DragonGroundedAction.Clawing, 4 },
         { DragonGroundedAction.Fireball, 2 },
-        { DragonGroundedAction.Summoning, 3 }
+        { DragonGroundedAction.Summoning, 2 }
     };
 
     [field: SerializeField]

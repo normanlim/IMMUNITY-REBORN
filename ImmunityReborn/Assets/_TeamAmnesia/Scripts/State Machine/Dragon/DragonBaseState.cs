@@ -11,7 +11,7 @@ public abstract class DragonBaseState : State
     protected const float FlyUpRate = 0.02f;
     protected const float FlyingMinDistanceToPlayer = 6.0f;
     protected const float FlyingMaxDistanceToPlayer = 8.0f;
-    protected const float GroundedDistanceToPlayer = 5.0f;
+    protected const float GroundedDistanceToPlayer = 7.0f;
 
     private readonly int AnimatorMoveXParam = Animator.StringToHash("MoveX");
     private readonly int AnimatorMoveYParam = Animator.StringToHash("MoveY");
@@ -35,13 +35,13 @@ public abstract class DragonBaseState : State
         Move(Vector3.zero, deltaTime);
     }
 
-    protected void MoveToPlayer(float deltaTime)
+    protected void MoveToPlayer(float speed, float deltaTime)
     {
         if (stateMachine.NavMeshAgent.isOnNavMesh)
         {
             stateMachine.NavMeshAgent.destination = stateMachine.Player.transform.position;
 
-            Move(stateMachine.NavMeshAgent.desiredVelocity.normalized * stateMachine.GroundedSpeed, deltaTime);
+            Move(stateMachine.NavMeshAgent.desiredVelocity.normalized * speed, deltaTime);
         }
 
         stateMachine.NavMeshAgent.velocity = stateMachine.CharacterController.velocity; // needed to sync velocities
@@ -163,7 +163,7 @@ public abstract class DragonBaseState : State
         return distanceToPlayerSqr <= stateMachine.ClawAttackRange * stateMachine.ClawAttackRange;
     }
 
-    protected void UpdateGroundedAnimator(float deltaTime)
+    protected void UpdateGroundedAnimator(float deltaTime, float maxSpeed = 1.0f)
     {
         if (Mathf.Approximately(stateMachine.NavMeshAgent.velocity.y, 0.0f))
         {
@@ -171,7 +171,7 @@ public abstract class DragonBaseState : State
         }
         else
         {
-            float value = stateMachine.NavMeshAgent.velocity.y > 0.0f ? 1.0f : -1.0f;
+            float value = stateMachine.NavMeshAgent.velocity.y > 0.0f ? maxSpeed : -maxSpeed;
             stateMachine.Animator.SetFloat(AnimatorMoveYParam, value, AnimatorDampTime, deltaTime);
         }
 
@@ -181,7 +181,7 @@ public abstract class DragonBaseState : State
         }
         else
         {
-            float value = stateMachine.NavMeshAgent.velocity.x > 0.0f ? 1.0f : -1.0f;
+            float value = stateMachine.NavMeshAgent.velocity.x > 0.0f ? maxSpeed : -maxSpeed;
             stateMachine.Animator.SetFloat(AnimatorMoveXParam, value, AnimatorDampTime, deltaTime);
         }
     }

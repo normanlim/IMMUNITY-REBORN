@@ -8,6 +8,7 @@ public class DragonGroundedState : DragonBaseState
 
     private const float TransitionDuration = 0.1f;
     private const float PositionQueryDelay = 2.0f;
+    private const float MovementRadius = 10.0f;
 
     private float currentQueryTimer; // query immediately upon entering state
     private Vector3 targetPos;
@@ -29,7 +30,7 @@ public class DragonGroundedState : DragonBaseState
 
         MoveAroundRandomly(deltaTime);
 
-        UpdateGroundedAnimator(deltaTime);
+        UpdateGroundedAnimator(deltaTime, 0.8f);
 
         stateMachine.DragonActions.Tick(stateMachine, false, deltaTime);
     }
@@ -40,7 +41,7 @@ public class DragonGroundedState : DragonBaseState
         if (currentQueryTimer <= 0.0f)
         {
             if (stateMachine.NavMeshSampler.RandomPointAroundPosition(
-                stateMachine.Player.transform.position, GroundedDistanceToPlayer * 2, GroundedDistanceToPlayer, out targetPos))
+                stateMachine.SampleAroundPoint.position, MovementRadius, GroundedDistanceToPlayer, out targetPos))
             {
                 currentQueryTimer = PositionQueryDelay;
             }

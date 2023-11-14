@@ -23,6 +23,8 @@ public class DragonSummoningState : DragonBaseState
         {
             stateMachine.Animator.CrossFadeInFixedTime(GroundedSummonStateName, TransitionDuration, 0);
         }
+
+        stateMachine.MeshRenderer.material = stateMachine.Materials[2];
     }
 
     public override void Tick(float deltaTime)
@@ -48,5 +50,7 @@ public class DragonSummoningState : DragonBaseState
     {
         stateMachine.NavMeshAgent.ResetPath();
         stateMachine.NavMeshAgent.velocity = Vector3.zero;
+
+        stateMachine.MeshRenderer.material = stateMachine.Materials[0];
     }
 }

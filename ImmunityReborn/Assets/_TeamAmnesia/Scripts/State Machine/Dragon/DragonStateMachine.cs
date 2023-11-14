@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.InputSystem.HID;
 
 public class DragonStateMachine : StateMachine
 {
@@ -19,6 +20,9 @@ public class DragonStateMachine : StateMachine
 
     [field: SerializeField]
     public NavMeshSampler NavMeshSampler { get; private set; }
+
+    [field: SerializeField]
+    public Transform SampleAroundPoint { get; private set; }
 
     [field: SerializeField]
     public DragonActions DragonActions { get; private set; }
@@ -67,6 +71,12 @@ public class DragonStateMachine : StateMachine
 
     [field: SerializeField]
     public GameObject SummonCharacter { get; private set; }
+
+    [field: SerializeField]
+    public SkinnedMeshRenderer MeshRenderer { get; private set; }
+
+    [field: SerializeField]
+    public Material[] Materials { get; private set; }
 
     public GameObject Player { get; private set; }
 
@@ -149,12 +159,9 @@ public class DragonStateMachine : StateMachine
 
     private void Summon()
     {
-        if (RaycastToGround(out RaycastHit hit))
+        if (NavMeshSampler.RandomPointAroundPosition(SampleAroundPoint.position, SummonRadius, out Vector3 result, bomberWalkableArea))
         {
-            if (NavMeshSampler.RandomPointAroundPosition(hit.point, SummonRadius, out Vector3 result, bomberWalkableArea))
-            {
-                Instantiate(SummonCharacter, result, Quaternion.LookRotation(Player.transform.position));
-            }
+            Instantiate(SummonCharacter, result, Quaternion.LookRotation(Player.transform.position));
         }
     }
 
@@ -164,6 +171,6 @@ public class DragonStateMachine : StateMachine
         Gizmos.DrawWireSphere(transform.position, CombatRange);
 
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, SummonRadius);
+        Gizmos.DrawWireSphere(SampleAroundPoint.position, SummonRadius);
     }
 }
