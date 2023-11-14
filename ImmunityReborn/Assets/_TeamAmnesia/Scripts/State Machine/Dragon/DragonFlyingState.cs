@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class DragonFlyingState : DragonBaseState
 {
-    private readonly int TakeOffStateName = Animator.StringToHash("TakeOffToGlide");
     private readonly int FlyStateName = Animator.StringToHash("FlyStationary");
 
-    private const float CrossFadeDuration = 0.1f;
+    private const float CrossFadeDuration = 0.5f;
 
     public DragonFlyingState(DragonStateMachine stateMachine) : base(stateMachine)
     {
@@ -15,21 +14,11 @@ public class DragonFlyingState : DragonBaseState
 
     public override void Enter()
     {
-        if (!stateMachine.FlyingForceReceiver.IsFlying)
-        {
-            stateMachine.Animator.CrossFadeInFixedTime(TakeOffStateName, CrossFadeDuration, 0);
-        }
-
-        stateMachine.FlyingForceReceiver.IsFlying = true;
+        stateMachine.Animator.CrossFadeInFixedTime(FlyStateName, CrossFadeDuration);
     }
 
     public override void Tick(float deltaTime)
     {
-        if (GetPlayingAnimationTimeNormalized(stateMachine.Animator, 0) >= 0.5f)
-        {
-            stateMachine.Animator.CrossFadeInFixedTime(FlyStateName, 0.5f);
-        }
-
         FacePlayer(deltaTime);
 
         FlyToPlayer(deltaTime);

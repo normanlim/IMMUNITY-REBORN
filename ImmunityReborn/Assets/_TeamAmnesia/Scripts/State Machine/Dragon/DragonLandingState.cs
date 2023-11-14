@@ -16,8 +16,12 @@ public class DragonLandingState : DragonBaseState
 
     public override void Enter()
     {
+        stateMachine.DragonActions.ResetGroundedActionWeights();
+
         stateMachine.FlyingForceReceiver.IsFlying = false;
+
         stateMachine.LandingWeaponDamager.SetDamage(stateMachine.LandingDamage, stateMachine.LandingKnockback);
+
         stateMachine.Animator.CrossFadeInFixedTime(LandingStateName, TransitionDuration, 0);
     }
 

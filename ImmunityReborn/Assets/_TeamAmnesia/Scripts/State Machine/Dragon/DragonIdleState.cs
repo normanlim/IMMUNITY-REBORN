@@ -21,7 +21,7 @@ public class DragonIdleState : DragonBaseState
     {
         if (IsInCombatRange())
         {
-            stateMachine.SwitchState(new DragonFlyingState(stateMachine));
+            stateMachine.SwitchState(new DragonTakingOffState(stateMachine));
             return;
         }
 

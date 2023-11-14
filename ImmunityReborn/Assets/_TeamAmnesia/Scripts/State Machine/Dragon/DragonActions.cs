@@ -14,12 +14,17 @@ public enum DragonFlyingAction
 
 public enum DragonGroundedAction
 {
-    Flying,
+    TakingOff,
     Clawing,
     Fireball,
     Summoning
 }
 
+/// <summary>
+/// Selects a random action to perform and reduces it's weight.
+/// Expect to perform Landing (if flying) or TakingOff (if grounded) eventually.
+/// Weights are reset during these two actions' states;
+/// </summary>
 public class DragonActions : MonoBehaviour
 {
     private static readonly Dictionary<DragonFlyingAction, Type> FlyingStates = new()
@@ -31,7 +36,7 @@ public class DragonActions : MonoBehaviour
 
     private static readonly Dictionary<DragonGroundedAction, Type> GroundedStates = new()
     {
-        { DragonGroundedAction.Flying, typeof(DragonFlyingState) },
+        { DragonGroundedAction.TakingOff, typeof(DragonTakingOffState) },
         { DragonGroundedAction.Clawing, typeof(DragonClawingState) },
         { DragonGroundedAction.Fireball, typeof(DragonFireballState) },
         { DragonGroundedAction.Summoning, typeof(DragonSummoningState) }
@@ -39,14 +44,14 @@ public class DragonActions : MonoBehaviour
 
     private static readonly Dictionary<DragonFlyingAction, int> FlyingActionWeights = new()
     {
-        { DragonFlyingAction.Landing, 4 },
+        { DragonFlyingAction.Landing, 3 },
         { DragonFlyingAction.Fireball, 6 },
-        { DragonFlyingAction.Summoning, 2 }
+        { DragonFlyingAction.Summoning, 3 }
     };
 
     private static readonly Dictionary<DragonGroundedAction, int> GroundedActionWeights = new()
     {
-        { DragonGroundedAction.Flying, 6 },
+        { DragonGroundedAction.TakingOff, 3 },
         { DragonGroundedAction.Clawing, 4 },
         { DragonGroundedAction.Fireball, 2 },
         { DragonGroundedAction.Summoning, 2 }
@@ -83,9 +88,21 @@ public class DragonActions : MonoBehaviour
         }
     }
 
+    public void ResetFlyingActionWeights()
+    {
+        flyingActionWeights = new(FlyingActionWeights);
+    }
+
+    public void ResetGroundedActionWeights()
+    {
+        groundedActionWeights = new(GroundedActionWeights);
+    }
+
     private DragonBaseState NextFlyingAttackState(DragonStateMachine stateMachine)
     {
         DragonFlyingAction nextAttack = PickRandomAction(flyingActionWeights.Keys.ToArray(), flyingActionWeights.Values.ToArray());
+
+        flyingActionWeights[nextAttack]--; // reduce probability of same attack
 
         return (DragonBaseState)Activator.CreateInstance(FlyingStates[nextAttack], new[] { stateMachine });
     }
@@ -93,6 +110,8 @@ public class DragonActions : MonoBehaviour
     private DragonBaseState NextGroundedAttackState(DragonStateMachine stateMachine)
     {
         DragonGroundedAction nextAttack = PickRandomAction(groundedActionWeights.Keys.ToArray(), groundedActionWeights.Values.ToArray());
+
+        groundedActionWeights[nextAttack]--; // reduce probability of same attack
 
         return (DragonBaseState)Activator.CreateInstance(GroundedStates[nextAttack], new[] { stateMachine });
     }
