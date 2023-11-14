@@ -40,6 +40,21 @@ public class PlayerStateMachine : StateMachine
 
     public Transform MainCameraTransform { get; private set; }
 
+    public float shieldActivationTime;
+    public bool isShieldActive;
+
+    public float GetShieldActiveDuration()
+    {
+        if ( isShieldActive )
+        {
+            return Time.time - shieldActivationTime;
+        }
+        else
+        {
+            return 0f;
+        }
+    }
+
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;

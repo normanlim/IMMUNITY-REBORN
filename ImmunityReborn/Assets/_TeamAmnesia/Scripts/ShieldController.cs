@@ -86,11 +86,14 @@ public class ShieldController : MonoBehaviour
             // Check if only the left mouse button is down
             meleeShield.SetActive(true);
             playerStateMachine.Health.IsMeleeImmune = true;
+            playerStateMachine.shieldActivationTime = Time.time;
+            playerStateMachine.isShieldActive = true;
         }
         else
         {
             meleeShield.SetActive(false);
             playerStateMachine.Health.IsMeleeImmune = false;
+            playerStateMachine.isShieldActive = false;
         }
 
         if (!Input.GetMouseButton(0) && Input.GetMouseButton(1))
