@@ -6,8 +6,8 @@ public class TormentedSoulRetreatingState : TormentedSoulBaseState
     private readonly int DrawArrowStateName = Animator.StringToHash("DrawArrow");
     private readonly int EmptyDefaultStateName = Animator.StringToHash("Empty Default");
     private const float CrossFadeDuration = 0.1f;
-    private const float MinDuration = 1.5f;
-    private const float MaxDuration = 2.0f;
+    private const float MinDuration = 1.1f;
+    private const float MaxDuration = 1.6f;
 
     private float duration;
 

@@ -11,10 +11,10 @@ public class ProjectileShooter : MonoBehaviour
     public GameObject projectilePrefab;
     public float speed = 25f;
     public GameObject targetObject;
+    // Target center Y from their base (otherwise it aims directly at the base of the target object)
+    public float targetCenterY = 1f;
 
     private GameObject arrowObject;
-    // Target center Y from their base (otherwise it aims at the base of the target object)
-    private float targetCenterY = 1f;
     private Vector3 aimPoint;
     private float timeToHitTarget = -1f;
     private float lifetimeAfterPredictedHit = 2f;

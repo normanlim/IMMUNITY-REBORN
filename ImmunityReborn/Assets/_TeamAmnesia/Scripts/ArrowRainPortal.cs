@@ -2,42 +2,43 @@ using UnityEngine;
 
 public class ArrowRainPortal : MonoBehaviour
 {
-    [SerializeField] float minRandomRadius = 3f;
-    [SerializeField] float maxRandomRadius = 8f;
+    [SerializeField] float maxRandomRadius = 2.0f;
+    [SerializeField] float minOrbitSpeed = 0.5f;
+    [SerializeField] float maxOrbitSpeed = 2.0f;
+    [SerializeField] float MinLifeTimeDuration = 2.2f;
+    [SerializeField] float MaxLifeTimeDuration = 4.8f;
+    [SerializeField] float MinTrackingDuration = 0.4f;
 
     private ProjectileShooter ProjectileShooter;
     private float duration;
-    private int Damage = 10;
+    private float trackingDuration;
+    private int Damage = 20;
     private float Knockback = 1f;
     private GameObject player;
     private GameObject randomTarget;
-    private const float MinDuration = 2.5f;
-    private const float MaxDuration = 4f;
+    private float orbitOffset;
+    private float radius;
+    private float orbitSpeed;
+    private int orbitDirection;
 
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        duration = Random.Range(MinDuration, MaxDuration);
+        duration = Random.Range(MinLifeTimeDuration, MaxLifeTimeDuration);
         ProjectileShooter = GetComponent<ProjectileShooter>();
 
-        // Calculate a random direction and normalize it
-        Vector3 randomDirection = Random.onUnitSphere;
-        randomDirection.Normalize();
+        // Set a unique orbit offset for each portal
+        orbitOffset = Random.Range(0f, 360f);
 
-        // Calculate a random radius
-        float randomRadius = Random.Range(minRandomRadius, maxRandomRadius);
+        // Set a unique orbit speed for each portal
+        orbitSpeed = Random.Range(minOrbitSpeed, maxOrbitSpeed);
 
-        // Calculate the random position around the player
-        Vector3 randomPosition = player.transform.position + randomDirection * randomRadius;
+        // Randomize the orbit direction (-1 or 1 for clockwise or counterclockwise)
+        orbitDirection = Random.value < 0.5f ? -1 : 1;
 
-        // Instantiate an empty GameObject as the target
-        randomTarget = new GameObject("RandomTarget");
-        randomTarget.transform.position = randomPosition;
-        // Add a Rigidbody for gravity so the portal aims downwards over time
-        Rigidbody targetRB = randomTarget.AddComponent<Rigidbody>();
-        targetRB.useGravity = false;
-        targetRB.velocity = GenerateRandomVector(-0.5f, 0.5f, -0.5f, 0.5f, -0.5f, 0.5f);
-        ProjectileShooter.targetObject = randomTarget;
+        // Set tracking duration, target detaches from player object after this time
+        trackingDuration = Random.Range(MinTrackingDuration, MaxLifeTimeDuration);
+        SpawnRandomTarget();
     }
 
     void Update()
@@ -53,6 +54,15 @@ public class ArrowRainPortal : MonoBehaviour
         {
             ProjectileShooter.TryAimingAtTarget();
         }
+        if (duration < trackingDuration)
+        {
+            // Orbit the randomTarget around the player
+            OrbitAroundPlayer();
+        } else
+        {
+            // Detach randomTarget from its parent, maintaining its world position
+            randomTarget.transform.SetParent(null, true);
+        }
 
         // Rotate the portal to face the player
         if (player != null)
@@ -61,14 +71,25 @@ public class ArrowRainPortal : MonoBehaviour
             directionToPlayer.y = 0f; // Keep the rotation only in the horizontal plane
             transform.rotation = Quaternion.LookRotation(directionToPlayer);
         }
+
     }
 
-    private Vector3 GenerateRandomVector(float minX, float maxX, float minY, float maxY, float minZ, float maxZ)
+    void SpawnRandomTarget()
     {
-        float randomX = Random.Range(minX, maxX);
-        float randomY = Random.Range(minY, maxY);
-        float randomZ = Random.Range(minZ, maxZ);
+        radius = Random.Range(0, maxRandomRadius);
+        // Instantiate an empty GameObject as the target, set its position, and make it a child of the player
+        randomTarget = new GameObject("RandomTarget");
+        randomTarget.transform.position = Random.onUnitSphere * radius + player.transform.position + Vector3.up;
+        randomTarget.transform.parent = player.transform;
+        ProjectileShooter.targetObject = randomTarget;
+        ProjectileShooter.targetCenterY = 0;
+    }
 
-        return new Vector3(randomX, randomY, randomZ);
+    void OrbitAroundPlayer()
+    {
+        // Calculate the new position for the randomTarget in a circular orbit around the player
+        float angle = Time.time * orbitSpeed * orbitDirection + orbitOffset;
+        Vector3 offset = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)) * radius;
+        randomTarget.transform.position = player.transform.position + Vector3.up + offset;
     }
 }

@@ -132,9 +132,9 @@ public class TormentedSoulStateMachine : StateMachine
 
     private Vector3 CalculateSpawnPosition()
     {
-        float yOffsetMin = 6f; // Set your desired value
-        float yOffsetMax = 10f; // Set your desired value
-                                   // Calculate a random distance within the specified range
+        float yOffsetMin = 6f;
+        float yOffsetMax = 10f; 
+        // Calculate a random distance within the specified range
         float distance = Random.Range(minDistance, maxDistance);
 
         // Calculate a random angle around the Y-axis
