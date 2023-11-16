@@ -5,7 +5,7 @@ using UnityEngine;
 public class MeleeAttackingState : MeleeBaseState
 {
     private readonly int AnimatorAttackStateName = Animator.StringToHash("Attack2SwordShield");
-    private readonly int DefaultEmptyStateName = Animator.StringToHash("Default Empty");
+    private readonly int EmptyDefaultStateName = Animator.StringToHash("Empty Default");
 
     private const float TransitionDuration = 0.1f;
 
@@ -38,6 +38,6 @@ public class MeleeAttackingState : MeleeBaseState
         stateMachine.NavMeshAgent.ResetPath();
         stateMachine.NavMeshAgent.velocity = Vector3.zero;
 
-        stateMachine.Animator.CrossFade(DefaultEmptyStateName, TransitionDuration, 1); // without this, gets stuck at end of attack animation
+        stateMachine.Animator.CrossFade(EmptyDefaultStateName, TransitionDuration, 1); // without this, gets stuck at end of attack animation
     }
 }
