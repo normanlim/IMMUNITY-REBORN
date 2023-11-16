@@ -18,7 +18,7 @@ public class RangedStateMachine : StateMachine
     public NavMeshAgent NavMeshAgent { get; private set; }
 
     [field: SerializeField]
-    public Arrow Arrow { get; private set;  }
+    public ProjectileShooter ProjectileShooter { get; private set;  }
 
     [field: SerializeField]
     public Health Health { get; private set; }
@@ -82,6 +82,7 @@ public class RangedStateMachine : StateMachine
 
     private void HandleDie()
     {
+        ProjectileShooter.ShooterDied();
         SwitchState(new RangedDeadState(this));
     }
 

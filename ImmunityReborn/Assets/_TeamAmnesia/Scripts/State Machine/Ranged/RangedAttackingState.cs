@@ -13,7 +13,7 @@ public class RangedAttackingState : RangedBaseState
     public override void Enter()
     {
         stateMachine.Animator.CrossFadeInFixedTime(ShootArrowAnimation, TransitionDuration, 1);
-        stateMachine.Arrow.FireAtPlayer(stateMachine.AttackDamage, stateMachine.AttackKnockback);
+        stateMachine.ProjectileShooter.FireAtTarget(stateMachine.AttackDamage, stateMachine.AttackKnockback);
     }
 
     public override void Tick(float deltaTime)

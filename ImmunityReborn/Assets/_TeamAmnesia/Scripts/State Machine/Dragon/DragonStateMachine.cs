@@ -34,7 +34,7 @@ public class DragonStateMachine : StateMachine
     public WeaponDamager ClawWeaponDamager { get; private set; }
 
     [field: SerializeField]
-    public Arrow Arrow { get; private set; }
+    public ProjectileShooter ProjectileShooter { get; private set; }
 
     [field: SerializeField]
     public Health Health { get; private set; }
@@ -144,6 +144,7 @@ public class DragonStateMachine : StateMachine
 
     private void HandleDie()
     {
+        ProjectileShooter.ShooterDied();
         SwitchState(new DragonDeadState(this));
     }
 
@@ -154,7 +155,8 @@ public class DragonStateMachine : StateMachine
 
     private void SpitFireball()
     {
-        Arrow.FireAtPlayer(LandingDamage, LandingKnockback);
+        ProjectileShooter.TryAimingAtTarget();
+        ProjectileShooter.FireAtTarget(LandingDamage, LandingKnockback);
     }
 
     private void Summon()

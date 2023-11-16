@@ -5,7 +5,8 @@ public class RangedCirculatingState : RangedBaseState
     private readonly int CirculatingStateName = Animator.StringToHash("Circulating");
 
     private const float CrossFadeDuration = 0.1f;
-    private float duration;
+    private const float AimingDuration = 3f;
+    private float CurrentStateDuration;
     private bool isClockwise;
 
     public RangedCirculatingState(RangedStateMachine stateMachine) : base(stateMachine)
@@ -15,8 +16,7 @@ public class RangedCirculatingState : RangedBaseState
     public override void Enter()
     {
         isClockwise = RandomBoolean();
-        // Circle for 3 seconds every time, @TODO to parameterize this
-        duration = 3f;
+        CurrentStateDuration = AimingDuration;
         stateMachine.Animator.CrossFadeInFixedTime(CirculatingStateName, CrossFadeDuration, 0);
     }
 
@@ -25,8 +25,8 @@ public class RangedCirculatingState : RangedBaseState
         FacePlayer(deltaTime);
         MoveAroundPlayer(deltaTime);
         UpdateCirculatingAnimator(deltaTime);
-        duration -= deltaTime;
-        if (duration <= 0.0f)
+        CurrentStateDuration -= deltaTime;
+        if (stateMachine.ProjectileShooter.TryAimingAtTarget() && CurrentStateDuration <= 0.0f)
         {
             stateMachine.SwitchState(new RangedAdvancingState(stateMachine));
         }
