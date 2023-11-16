@@ -5,7 +5,7 @@ public class TormentedSoulCirculatingState : TormentedSoulBaseState
     private readonly int CirculatingStateName = Animator.StringToHash("Circulating");
 
     private const float CrossFadeDuration = 0.1f;
-    private const float AimingDuration = 3f;
+    private const float AimingDuration = 1.5f;
     private float CurrentStateDuration;
     private bool isClockwise;
 
@@ -26,10 +26,17 @@ public class TormentedSoulCirculatingState : TormentedSoulBaseState
         MoveAroundPlayer(deltaTime);
         UpdateCirculatingAnimator(deltaTime);
         CurrentStateDuration -= deltaTime;
-        if (stateMachine.ProjectileShooter.TryAimingAtTarget() && CurrentStateDuration <= 0.0f)
+        if (stateMachine.NormalAttackCount < stateMachine.NumberAttacksBetweenMechs)
         {
-            stateMachine.SwitchState(new TormentedSoulAdvancingState(stateMachine));
+            if (stateMachine.ProjectileShooter.TryAimingAtTarget() && CurrentStateDuration <= 0.0f)
+            {
+                stateMachine.SwitchState(new TormentedSoulAdvancingState(stateMachine));
+            }
+        } else
+        {
+            stateMachine.SwitchState(new TormentedSoulArrowRainState(stateMachine));
         }
+        
     }
 
     public override void Exit()

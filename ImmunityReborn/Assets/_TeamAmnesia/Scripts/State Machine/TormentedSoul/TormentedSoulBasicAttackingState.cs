@@ -1,19 +1,23 @@
 using UnityEngine;
 
-public class TormentedSoulAttackingState : TormentedSoulBaseState
+public class TormentedSoulBasicAttackingState : TormentedSoulBaseState
 {
     private readonly int ShootArrowAnimation = Animator.StringToHash("ShootArrow");
     private readonly int EmptyDefaultStateName = Animator.StringToHash("Empty Default");
     private const float TransitionDuration = 0.1f;
-
-    public TormentedSoulAttackingState(TormentedSoulStateMachine stateMachine) : base(stateMachine)
+    private static readonly Vector3 TripleFireOffset = new Vector3(0, 0, 3);
+    public TormentedSoulBasicAttackingState(TormentedSoulStateMachine stateMachine) : base(stateMachine)
     {
     }
 
     public override void Enter()
     {
         stateMachine.Animator.CrossFadeInFixedTime(ShootArrowAnimation, TransitionDuration, 1);
+        // Triple fire 3 arrows in a cone
         stateMachine.ProjectileShooter.FireAtTarget(stateMachine.AttackDamage, stateMachine.AttackKnockback);
+        stateMachine.ProjectileShooter.FireAtTarget(stateMachine.AttackDamage, stateMachine.AttackKnockback, TripleFireOffset);
+        stateMachine.ProjectileShooter.FireAtTarget(stateMachine.AttackDamage, stateMachine.AttackKnockback, -TripleFireOffset);
+        stateMachine.NormalAttackCount++;
     }
 
     public override void Tick(float deltaTime)

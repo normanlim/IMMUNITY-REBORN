@@ -5,7 +5,7 @@ public class RangedCirculatingState : RangedBaseState
     private readonly int CirculatingStateName = Animator.StringToHash("Circulating");
 
     private const float CrossFadeDuration = 0.1f;
-    private const float AimingDuration = 3f;
+    private const float AimingDuration = 1.5f;
     private float CurrentStateDuration;
     private bool isClockwise;
 

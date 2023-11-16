@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TormentedSoulAdvancingState : TormentedSoulBaseState
@@ -21,8 +19,7 @@ public class TormentedSoulAdvancingState : TormentedSoulBaseState
     {
         if (IsInAttackRange())
         {
-            stateMachine.SwitchState(new TormentedSoulAttackingState(stateMachine));
-            return;
+            stateMachine.SwitchState(new TormentedSoulBasicAttackingState(stateMachine));  
         }
 
         MoveToPlayer(deltaTime);

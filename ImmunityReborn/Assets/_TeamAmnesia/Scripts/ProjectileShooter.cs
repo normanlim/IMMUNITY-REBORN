@@ -1,5 +1,4 @@
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 /* This script includes behavior to aim and shoot a projectile at the player, with an aiming indicator before the shot.
  * For the behavior to work as intended, the following conditions must be fulfilled:
@@ -32,13 +31,24 @@ public class ProjectileShooter : MonoBehaviour
     {
         // Calculate the direction from the projectile origin point to the player; assume transform position is origin point
         Vector3 originPoint = transform.position;
+        // Check if self and the targetObject has a CharacterController or Rigidbody component
+        CharacterController targetCharacterController = targetObject.GetComponent<CharacterController>();
+        Rigidbody targetRigidbody = targetObject.GetComponent<Rigidbody>();
+
+        CharacterController ownCharacterController = GetComponentInParent<CharacterController>();
+        Rigidbody ownRigidbody = GetComponentInParent<Rigidbody>();
+
+        // If either target or self has a CharacterController, get its velocity; otherwise, get the Rigidbody's velocity
+        Vector3 targetVelocity = (targetCharacterController != null) ? targetCharacterController.velocity : (targetRigidbody != null) ? targetRigidbody.velocity : Vector3.zero;
+        Vector3 ownVelocity = (ownCharacterController != null) ? ownCharacterController.velocity : (ownRigidbody != null) ? ownRigidbody.velocity : Vector3.zero;
+
         // The position of the center of the target game object, which is what the projectile is aimed at
         Vector3 targetCenterPoint = targetObject.transform.position + Vector3.up * targetCenterY;
         Vector3 relativeDistance = targetCenterPoint - originPoint;
-        Vector3 relativeVelocity = targetObject.GetComponent<CharacterController>().velocity - GetComponentInParent<CharacterController>().velocity;
+        Vector3 relativeVelocity = targetVelocity - ownVelocity;
         // Aim at the center of the target plus where it will be when the projectile hits based on target's velocity
         timeToHitTarget = AimAhead(relativeDistance, relativeVelocity, speed);
-        aimPoint = targetCenterPoint + targetObject.GetComponent<CharacterController>().velocity * timeToHitTarget;
+        aimPoint = targetCenterPoint + targetVelocity * timeToHitTarget;
         // Note that this indicator "deceives" the target because it's supposedly aimed at the target center point when its true aim point factors in target's velocity 
         aimingIndicator.enabled = true;
         // Set the positions of the aimingIndicator
@@ -48,7 +58,7 @@ public class ProjectileShooter : MonoBehaviour
         return (timeToHitTarget > 0f);
     }
 
-    public void FireAtTarget(int AttackDamage, float Knockback)
+    public void FireAtTarget(int AttackDamage, float Knockback, Vector3 Offset = default)
     {
         if (timeToHitTarget > 0f)
         {
@@ -64,8 +74,8 @@ public class ProjectileShooter : MonoBehaviour
             Rigidbody arrowRigidbody = arrowObject.GetComponent<Rigidbody>();
             if (arrowRigidbody != null)
             {
-                // Calculate the direction to the aimPoint
-                Vector3 directionToAimPoint = aimPoint - originPoint;
+                // Calculate the direction to the aimPoint plus offset
+                Vector3 directionToAimPoint = aimPoint + Offset - originPoint;
 
                 // Calculate the rotation to look at the aimPoint
                 Quaternion rotationToAimPoint = Quaternion.LookRotation(directionToAimPoint);
