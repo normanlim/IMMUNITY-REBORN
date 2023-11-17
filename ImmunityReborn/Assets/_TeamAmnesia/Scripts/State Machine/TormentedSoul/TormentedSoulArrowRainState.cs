@@ -14,8 +14,7 @@ public class TormentedSoulArrowRainState : TormentedSoulBaseState
         stateMachine.transform.Find("ArrowRainAura").gameObject.SetActive(true);
         stateMachine.NormalAttackCount = 0;
         stateMachine.Animator.CrossFadeInFixedTime(SkyAimAnimation, TransitionDuration, 0);
-        // Triple fire 3 arrows in a cone
-        stateMachine.PerformArrowRain();
+        
     }
 
     public override void Tick(float deltaTime)
@@ -29,6 +28,7 @@ public class TormentedSoulArrowRainState : TormentedSoulBaseState
 
     public override void Exit()
     {
+        stateMachine.PerformArrowRain();
         stateMachine.NavMeshAgent.ResetPath();
         stateMachine.NavMeshAgent.velocity = Vector3.zero;
         stateMachine.transform.Find("ArrowRainAura").gameObject.SetActive(false);

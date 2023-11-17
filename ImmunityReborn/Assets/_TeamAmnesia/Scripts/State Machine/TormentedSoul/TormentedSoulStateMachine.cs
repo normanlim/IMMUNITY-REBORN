@@ -128,8 +128,6 @@ public class TormentedSoulStateMachine : StateMachine
         }
     }
 
-    
-
     private Vector3 CalculateSpawnPosition()
     {
         float yOffsetMin = 6f;

@@ -6,8 +6,8 @@ public class TormentedSoulRetreatingState : TormentedSoulBaseState
     private readonly int DrawArrowStateName = Animator.StringToHash("DrawArrow");
     private readonly int EmptyDefaultStateName = Animator.StringToHash("Empty Default");
     private const float CrossFadeDuration = 0.1f;
-    private const float MinDuration = 1.1f;
-    private const float MaxDuration = 1.6f;
+    private const float MinDuration = 1.4f;
+    private const float MaxDuration = 2.1f;
 
     private float duration;
 
@@ -27,7 +27,7 @@ public class TormentedSoulRetreatingState : TormentedSoulBaseState
     {
         FacePlayer(deltaTime);
 
-        if (stateMachine.NavMeshAgent.isOnNavMesh)
+        if (stateMachine.NavMeshAgent.isOnNavMesh && IsInAttackRange())
         {
             Vector3 direction = -stateMachine.transform.forward;
 
