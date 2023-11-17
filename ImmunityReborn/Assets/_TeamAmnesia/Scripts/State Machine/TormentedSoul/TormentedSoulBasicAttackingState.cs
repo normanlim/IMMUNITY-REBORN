@@ -1,19 +1,23 @@
 using UnityEngine;
 
-public class RangedAttackingState : RangedBaseState
+public class TormentedSoulBasicAttackingState : TormentedSoulBaseState
 {
     private readonly int ShootArrowAnimation = Animator.StringToHash("ShootArrow");
     private readonly int EmptyDefaultStateName = Animator.StringToHash("Empty Default");
     private const float TransitionDuration = 0.1f;
-
-    public RangedAttackingState(RangedStateMachine stateMachine) : base(stateMachine)
+    private static readonly Vector3 TripleFireOffset = new Vector3(0, 0, 3);
+    public TormentedSoulBasicAttackingState(TormentedSoulStateMachine stateMachine) : base(stateMachine)
     {
     }
 
     public override void Enter()
     {
         stateMachine.Animator.CrossFadeInFixedTime(ShootArrowAnimation, TransitionDuration, 1);
+        // Triple fire 3 arrows in a cone
         stateMachine.ProjectileShooter.FireAtTarget(stateMachine.AttackDamage, stateMachine.AttackKnockback);
+        stateMachine.ProjectileShooter.FireAtTarget(stateMachine.AttackDamage, stateMachine.AttackKnockback, TripleFireOffset);
+        stateMachine.ProjectileShooter.FireAtTarget(stateMachine.AttackDamage, stateMachine.AttackKnockback, -TripleFireOffset);
+        stateMachine.NormalAttackCount++;
     }
 
     public override void Tick(float deltaTime)
@@ -24,7 +28,7 @@ public class RangedAttackingState : RangedBaseState
 
         if (GetPlayingAnimationTimeNormalized(stateMachine.Animator, 1) >= 1.0f)
         {
-            stateMachine.SwitchState(new RangedRetreatingState(stateMachine));
+            stateMachine.SwitchState(new TormentedSoulRetreatingState(stateMachine));
         }
     }
 
