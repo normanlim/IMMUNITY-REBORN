@@ -1,15 +1,15 @@
 using UnityEngine;
 
-public class RangedCirculatingState : RangedBaseState
+public class TormentedSoulCirculatingState : TormentedSoulBaseState
 {
     private readonly int CirculatingStateName = Animator.StringToHash("Circulating");
 
     private const float CrossFadeDuration = 0.1f;
-    private const float AimingDuration = 0.7f;
+    private const float AimingDuration = 0.5f;
     private float CurrentStateDuration;
     private bool isClockwise;
 
-    public RangedCirculatingState(RangedStateMachine stateMachine) : base(stateMachine)
+    public TormentedSoulCirculatingState(TormentedSoulStateMachine stateMachine) : base(stateMachine)
     {
     }
 
@@ -26,10 +26,17 @@ public class RangedCirculatingState : RangedBaseState
         MoveAroundPlayer(deltaTime);
         UpdateCirculatingAnimator(deltaTime);
         CurrentStateDuration -= deltaTime;
-        if (stateMachine.ProjectileShooter.TryAimingAtTarget() && CurrentStateDuration <= 0.0f)
+        if (stateMachine.NormalAttackCount < stateMachine.NumberAttacksBetweenMechs)
         {
-            stateMachine.SwitchState(new RangedAdvancingState(stateMachine));
+            if (stateMachine.ProjectileShooter.TryAimingAtTarget() && CurrentStateDuration <= 0.0f)
+            {
+                stateMachine.SwitchState(new TormentedSoulAdvancingState(stateMachine));
+            }
+        } else
+        {
+            stateMachine.SwitchState(new TormentedSoulArrowRainState(stateMachine));
         }
+        
     }
 
     public override void Exit()
