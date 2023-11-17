@@ -13,7 +13,6 @@ public class ProjectileShooter : MonoBehaviour
     public GameObject targetObject;
     // Target center Y from their base (otherwise it aims directly at the base of the target object)
     public float targetCenterY = 1f;
-
     private GameObject arrowObject;
     private Vector3 aimPoint;
     private float timeToHitTarget = -1f;
@@ -31,19 +30,11 @@ public class ProjectileShooter : MonoBehaviour
     {
         // Calculate the direction from the projectile origin point to the player; assume transform position is origin point
         Vector3 originPoint = transform.position;
-        // Check if self and the targetObject has a CharacterController or Rigidbody component
-        CharacterController targetCharacterController = targetObject.GetComponent<CharacterController>();
-        Rigidbody targetRigidbody = targetObject.GetComponent<Rigidbody>();
-
-        CharacterController ownCharacterController = GetComponentInParent<CharacterController>();
-        Rigidbody ownRigidbody = GetComponentInParent<Rigidbody>();
-
-        // If either target or self has a CharacterController, get its velocity; otherwise, get the Rigidbody's velocity
-        Vector3 targetVelocity = (targetCharacterController != null) ? targetCharacterController.velocity : (targetRigidbody != null) ? targetRigidbody.velocity : Vector3.zero;
-        Vector3 ownVelocity = (ownCharacterController != null) ? ownCharacterController.velocity : (ownRigidbody != null) ? ownRigidbody.velocity : Vector3.zero;
-
         // The position of the center of the target game object, which is what the projectile is aimed at
         Vector3 targetCenterPoint = targetObject.transform.position + Vector3.up * targetCenterY;
+        // Check if self and the targetObject has a CharacterController or Rigidbody component
+        Vector3 targetVelocity = GetVelocityFromRB(targetObject);
+        Vector3 ownVelocity = GetVelocityFromRB(gameObject);
         Vector3 relativeDistance = targetCenterPoint - originPoint;
         Vector3 relativeVelocity = targetVelocity - ownVelocity;
         // Aim at the center of the target plus where it will be when the projectile hits based on target's velocity
@@ -58,6 +49,9 @@ public class ProjectileShooter : MonoBehaviour
         return (timeToHitTarget > 0f);
     }
 
+    /* Should be invoked as close to TryAimingAtTarget as possible for best accuracy. 
+     * Alternatively, delaying the invocation of this method after invoking TryAimingAtTarget would aim at the last known trajectory of the target. 
+     */
     public void FireAtTarget(int AttackDamage, float Knockback, Vector3 Offset = default)
     {
         if (timeToHitTarget > 0f)
@@ -96,7 +90,7 @@ public class ProjectileShooter : MonoBehaviour
     // vr: relative velocity
     // muzzleV: Speed of the bullet (muzzle velocity)
     // returns: Delta time when the projectile will hit, or -1 if impossible
-    float AimAhead(Vector3 delta, Vector3 vr, float muzzleV)
+    private float AimAhead(Vector3 delta, Vector3 vr, float muzzleV)
     {
         // Quadratic equation coefficients a*t^2 + b*t + c = 0
         float a = Vector3.Dot(vr, vr) - muzzleV * muzzleV;
@@ -116,8 +110,22 @@ public class ProjectileShooter : MonoBehaviour
         }
     }
 
+    // Call this when the shooter dies to clear the aiming indicator. In the future other logic may be added here for proper post-death cleanup.
     public void ShooterDied()
     {
         aimingIndicator.enabled = false;
+    }
+
+    /* Gets the game object's velocity by checking for a CharacterController first, then a Rigidbody.
+     * If successful, extracts the velocity property from the component, otherwise return 0.
+     * */
+    private Vector3 GetVelocityFromRB(GameObject gameObject)
+    {
+        // Check if self and the targetObject has a CharacterController or Rigidbody component
+        CharacterController characterController = gameObject.GetComponent<CharacterController>();
+        Rigidbody rigidbody = gameObject.GetComponent<Rigidbody>();
+        // If either target or self has a CharacterController, get its velocity; otherwise, get the Rigidbody's velocity
+        return (characterController != null) ? characterController.velocity : (rigidbody != null) ? rigidbody.velocity : Vector3.zero;
+
     }
 }
