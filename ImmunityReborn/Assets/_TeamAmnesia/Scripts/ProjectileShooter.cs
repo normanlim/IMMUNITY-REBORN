@@ -64,6 +64,7 @@ public class ProjectileShooter : MonoBehaviour
             arrowObject = Instantiate(projectilePrefab, originPoint, transform.rotation);
             WeaponDamager arrowWeaponDamager = arrowObject.GetComponent<WeaponDamager>();
             arrowWeaponDamager.SetDamage(AttackDamage, Knockback);
+            arrowWeaponDamager.CharacterCollider = TryGetCharacterController(gameObject);
 
             Rigidbody arrowRigidbody = arrowObject.GetComponent<Rigidbody>();
             if (arrowRigidbody != null)
@@ -127,5 +128,22 @@ public class ProjectileShooter : MonoBehaviour
         // If either target or self has a CharacterController, get its velocity; otherwise, get the Rigidbody's velocity
         return (characterController != null) ? characterController.velocity : (rigidbody != null) ? rigidbody.velocity : Vector3.zero;
 
+    }
+
+    private CharacterController TryGetCharacterController(GameObject currentObject)
+    {
+        Transform currentTransform = currentObject.transform;
+        // Check if the current object has a character collider component
+        while (currentTransform != null)
+        {
+            CharacterController characterController = currentTransform.GetComponent<CharacterController>();
+            // Found the ancestor with a character collider
+            if (characterController != null)
+                return characterController;
+            // Move up to the parent transform
+            currentTransform = currentTransform.parent;
+        }
+        // No ancestor with a character collider found
+        return null;
     }
 }

@@ -21,6 +21,8 @@ public class MeleeRetreatingState : MeleeBaseState
     {
         duration = Random.Range(MinDuration, MaxDuration);
 
+        stateMachine.SwitchState(new MeleeCirculatingState(stateMachine), duration);
+
         stateMachine.Animator.CrossFadeInFixedTime(CirculatingStateName, CrossFadeDuration, -1);
     }
 
@@ -38,13 +40,6 @@ public class MeleeRetreatingState : MeleeBaseState
         }
 
         UpdateCirculatingAnimator(deltaTime);
-
-        duration -= deltaTime;
-
-        if (duration <= 0.0f)
-        {
-            stateMachine.SwitchState(new MeleeCirculatingState(stateMachine));
-        }
     }
 
     public override void Exit()

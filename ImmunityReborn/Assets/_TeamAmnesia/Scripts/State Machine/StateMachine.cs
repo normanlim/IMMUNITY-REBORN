@@ -5,7 +5,7 @@ using UnityEngine;
 
 public abstract class StateMachine : MonoBehaviour
 {
-    public event Action<State> OnStateChange;
+    public event Action<State, StateMachine> OnStateChange;
 
     private Coroutine switchStateCoroutine;
 
@@ -15,7 +15,7 @@ public abstract class StateMachine : MonoBehaviour
     {
         get
         {
-            if (CurrentState is MeleeImpactState || CurrentState is RangedImpactState) { return false; }
+            if (CurrentState is MeleeImpactState || CurrentState is MeleeDeadState || CurrentState is RangedImpactState) { return false; }
             return true;
         }
     }
@@ -36,7 +36,7 @@ public abstract class StateMachine : MonoBehaviour
             CurrentState?.Exit();
             CurrentState = newState;
             CurrentState?.Enter();
-            OnStateChange?.Invoke(CurrentState);
+            OnStateChange?.Invoke(CurrentState, this);
         }
     }
 

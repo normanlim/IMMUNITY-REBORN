@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class WeaponDamager : MonoBehaviour
 {
-    public int damage;
-    public float knockback;
+    private int damage;
+    private float knockback;
 
     private List<Collider> collidedWith = new List<Collider>();
 
