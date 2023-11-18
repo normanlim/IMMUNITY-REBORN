@@ -37,61 +37,67 @@ public class EnemySpawnManager : MonoBehaviour
         // Spawn without checking enemies alive if requireAllDead is false, else do the check
         if (nextSpawnData != null && (!nextSpawnData.requireAllDead || enemiesAliveCount <= 0))
         {
-            Vector3 spawnPosition = nextSpawnData.spawnLocation.transform.position;
-
-            for (int i = 0; i < nextSpawnData.count; i++)
-            {
-                Vector3 randomizedPosition = GetRandomizedSpawnPosition(spawnPosition);
-
-                // Ensure the new spawn position is not too close to an existing enemy
-                while (IsPositionTooCloseToExisting(randomizedPosition))
-                {
-                    randomizedPosition = GetRandomizedSpawnPosition(spawnPosition);
-                }
-
-                float delay = i * 1.0f; // Adjust the delay time based on your preference
-                InstantiateEnemy(nextSpawnData.prefab, randomizedPosition);
-            }
+            SpawnEnemies(nextSpawnData);
 
             // Remove the spawn data, all enemies spawned
             SpawnOrder.Remove(nextSpawnData);
         }
     }
 
-    private Vector3 GetRandomizedSpawnPosition(Vector3 basePosition)
+    void SpawnEnemies(SpawnData spawnData)
     {
-        float randomX = Random.Range(-spawnSpread, spawnSpread);
-        float randomZ = Random.Range(-spawnSpread, spawnSpread);
+        int totalCount = spawnData.count;
+        int rows = (int)Mathf.Ceil(Mathf.Sqrt(totalCount));
+        int columns = (int)Mathf.Ceil((float)totalCount / rows);
+        float spacing = spawnSpread;
 
-        Vector3 randomizedPosition = basePosition + new Vector3(randomX, 0f, randomZ);
+        for (int row = 0; row < rows; row++)
+        {
+            for (int col = 0; col < columns; col++)
+            {
+                int index = row * columns + col;
 
-        return randomizedPosition;
+                // If the index is beyond the total count, break the loop
+                if (index >= totalCount)
+                    break;
+
+                float xPos = col * spacing;
+                float zPos = row * spacing;
+
+                Vector3 offset = new Vector3(xPos, 0f, zPos);
+                Vector3 desiredSpawnPosition = spawnData.spawnLocation.transform.position + offset;
+
+                // Adjust the position to ensure it maintains a minimum separation distance
+                Vector3 finalSpawnPosition = GetValidSpawnPosition(desiredSpawnPosition);
+
+                GameObject enemy = Instantiate(spawnData.prefab, finalSpawnPosition, spawnData.spawnLocation.transform.rotation);
+                enemy.layer = LayerMask.NameToLayer("Enemy");
+            }
+        }
     }
-
-    private bool IsPositionTooCloseToExisting(Vector3 position)
+    Vector3 GetValidSpawnPosition(Vector3 desiredPosition)
     {
+        // Check if the desired position is too close to any existing enemy
         GameObject[] existingEnemies = GameObject.FindGameObjectsWithTag("Enemy");
 
-        foreach (GameObject enemy in existingEnemies)
+        foreach (var existingEnemy in existingEnemies)
         {
-            float distance = Vector3.Distance(position, enemy.transform.position);
+            float distance = Vector3.Distance(desiredPosition, existingEnemy.transform.position);
+
+            // If too close, adjust the position
             if (distance < minimumSeparationDistance)
             {
-                return true; // Too close to an existing enemy
+                // Move the desired position away from the existing enemy
+                Vector3 directionToExisting = (desiredPosition - existingEnemy.transform.position).normalized;
+                desiredPosition += directionToExisting * (minimumSeparationDistance - distance);
             }
         }
 
-        return false; // Acceptable separation
+        return desiredPosition;
     }
 
-    private void InstantiateEnemy(GameObject prefab, Vector3 position)
+    public void SpawnEnemiesNow(SpawnData spawnData)
     {
-        GameObject enemy = Instantiate(prefab, position, Quaternion.identity);
-        enemy.layer = LayerMask.NameToLayer("Enemy");
-    }
-
-    public void AddEnemies(SpawnData spawnData)
-    {
-        SpawnOrder.Add(spawnData);
+        SpawnOrder.Insert(0, spawnData);
     }
 }
