@@ -27,6 +27,12 @@ public class PlayerStateMachine : StateMachine
     public Ragdoll Ragdoll { get; private set; }
 
     [field: SerializeField]
+    public MemoryGauge MemoryGauge { get; private set; }
+
+    [field: SerializeField]
+    public ShieldController ShieldController { get; private set; }
+
+    [field: SerializeField]
     public float DefaultMovementSpeed { get; private set; }
 
     [field: SerializeField]
@@ -35,25 +41,9 @@ public class PlayerStateMachine : StateMachine
     [field: SerializeField]
     public AttackData[] Attacks { get; private set; }
 
-    [field: SerializeField]
-    public MemoryGauge MemoryGauge { get; private set; }
 
     public Transform MainCameraTransform { get; private set; }
 
-    public float shieldActivationTime;
-    public bool isShieldActive;
-
-    public float GetShieldActiveDuration()
-    {
-        if ( isShieldActive )
-        {
-            return Time.time - shieldActivationTime;
-        }
-        else
-        {
-            return 0f;
-        }
-    }
 
     private void Start()
     {
