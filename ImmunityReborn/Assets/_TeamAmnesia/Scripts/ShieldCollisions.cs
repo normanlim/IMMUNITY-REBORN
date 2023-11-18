@@ -21,37 +21,18 @@ public class ShieldCollisions : MonoBehaviour
         playerStateMachine = GetComponentInParent<PlayerStateMachine>();
     }
 
-    //private void OnCollisionEnter( Collision collision )
-    //{
-    //    Debug.Log( "X" );
-    //    if ( collision.gameObject.CompareTag( "EnemyAttack" ) && playerStateMachine.ShieldController.isShieldActive )
-    //    {
-    //        float shieldDuration = playerStateMachine.ShieldController.GetShieldActiveDuration();
-
-    //        if ( shieldDuration < PerfectParryWindowDuration )
-    //        {
-    //            // Award extra gauge for last-second block
-    //        }
-    //        else
-    //        {
-    //            // Award regular gauge for regular block timing
-    //        }
-
-    //    }
-    //}
 
     private void OnTriggerEnter( Collider other )
     {
-        // Notes for future implementation: 
-
-        if ( other.gameObject.TryGetComponent( out WeaponDamager weaponDamager ) ) // If we actually get a Trigger from something that can do damage, not an enemy model
+        // If we actually get a Trigger from something that can do damage, not an enemy model moving into Shield
+        if ( other.gameObject.TryGetComponent( out WeaponDamager weaponDamager ) ) 
         {
-            //Debug.Log( "We Got hit boiz" );
+            // Get the attacker data for counterattack calculations
+            GameObject attacker = weaponDamager.CharacterCollider.gameObject;
 
             // Melee Damage + Melee Shields = Reward Player For Melee Mechanic Handling
             if ( weaponDamager.DamageType == DamageType.Melee && shieldTypeCollided == "MeleeType" )
             {
-                GameObject attacker = weaponDamager.CharacterCollider.gameObject;
 
                 if ( attacker.TryGetComponent( out Health health ) )
                 {
@@ -63,7 +44,7 @@ public class ShieldCollisions : MonoBehaviour
                     Vector3 direction = (other.transform.position - transform.position).normalized;
                     forceReceiver.AddForce( direction * ShieldKnockback );
                 }
-
+                OnMeleeBlock?.Invoke( attacker );
                 HandleMeleeBlockingReward();
             }
 
@@ -72,6 +53,7 @@ public class ShieldCollisions : MonoBehaviour
             if ( weaponDamager.DamageType == DamageType.Ranged && shieldTypeCollided == "RangedType" )
             {
                 Destroy( other.gameObject );
+                OnRangedBlock?.Invoke( attacker );
                 HandleRangedBlockingReward();
             }
 
@@ -79,6 +61,7 @@ public class ShieldCollisions : MonoBehaviour
             // Magic Damage + Magic Shields = Reward Player For Magic Mechanic Handling
             if ( weaponDamager.DamageType == DamageType.Magic && shieldTypeCollided == "MagicType" )
             {
+                OnMagicBlock?.Invoke( attacker );
                 HandleMagicBlockingReward();
             }
         }
