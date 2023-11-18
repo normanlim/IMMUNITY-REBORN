@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.InputSystem.HID;
 
 public class DragonStateMachine : StateMachine
 {
@@ -96,7 +95,7 @@ public class DragonStateMachine : StateMachine
         bomberWalkableArea = 1 << NavMesh.GetAreaFromName("Bomber Walkable");
 
         // TODO: Remove Debug
-        OnStateChange += (state) => { Debug.Log(state); };
+        OnStateChange += (state, stateMachine) => { Debug.Log(state); };
     }
 
     private void Start()

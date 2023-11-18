@@ -1,9 +1,14 @@
+using System;
 using UnityEngine;
 
 public class ShieldCollisions : MonoBehaviour
 {
     public string typeTag; // Will let us know what shield got triggered
     public PlayerStateMachine playerStateMachine;
+
+    public static event Action<GameObject> OnMeleeBlock;
+    public static event Action<GameObject> OnRangedBlock;
+    public static event Action<GameObject> OnMagicBlock;
 
     [field: SerializeField]
     public float ShieldKnockback { get; private set; }
@@ -55,9 +60,8 @@ public class ShieldCollisions : MonoBehaviour
             Destroy( other.gameObject );
             playerStateMachine.MemoryGauge.EarnMemoryGauge( 10 );
         }
-        
-        if ( typeTag == "MeleeType" && 
-             other.gameObject.TryGetComponent( out WeaponDamager weaponDamager ) && 
+
+        if ( typeTag == "MeleeType" && other.gameObject.TryGetComponent( out WeaponDamager weaponDamager ) && 
              weaponDamager.DamageType == DamageType.Melee )
         {
             GameObject attacker = weaponDamager.CharacterCollider.gameObject;
@@ -74,6 +78,20 @@ public class ShieldCollisions : MonoBehaviour
             }
 
             playerStateMachine.MemoryGauge.EarnMemoryGauge( 11 );
+
+            OnMeleeBlock?.Invoke(attacker);
+        }
+        else if (typeTag == "RangedType" && other.gameObject.TryGetComponent(out weaponDamager) &&
+            weaponDamager.DamageType == DamageType.Ranged)
+        {
+            GameObject attacker = weaponDamager.CharacterCollider.gameObject;
+            OnRangedBlock?.Invoke(attacker);
+        }
+        else if (typeTag == "MagicType" && other.gameObject.TryGetComponent(out weaponDamager) &&
+            weaponDamager.DamageType == DamageType.Magic)
+        {
+            GameObject attacker = weaponDamager.CharacterCollider.gameObject;
+            OnMagicBlock?.Invoke(attacker);
         }
     }
 }
