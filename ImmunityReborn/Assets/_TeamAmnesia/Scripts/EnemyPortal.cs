@@ -6,16 +6,19 @@ public class EnemyPortal : MonoBehaviour
     public Health Health { get; private set; }
 
     [field: SerializeField]
+    public GameObject PortalPrefab { get; private set; }
+
+    [field: SerializeField]
     public GameObject DeathEffect { get; private set; }
 
     [field: SerializeField]
     public GameObject TakeDamageEffect { get; private set; }
 
     [field: SerializeField]
-    public EnemySpawnManager EnemySpawnManager { get; private set; }
+    public SpawnManager EnemySpawnManager { get; private set; }
 
     [field: SerializeField]
-    public EnemySpawnManager.SpawnData Summons { get; private set; }
+    public SpawnManager.SpawnData Summons { get; private set; }
 
     public float SummonInterval = 8f;
 
@@ -23,7 +26,10 @@ public class EnemyPortal : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        EnemySpawnManager = FindFirstObjectByType<EnemySpawnManager>();
+        GameObject portalObject = Instantiate(PortalPrefab, transform.position, transform.rotation);
+        portalObject.transform.SetParent(transform);
+        portalObject.transform.localScale = Vector3.one;
+        EnemySpawnManager = FindFirstObjectByType<SpawnManager>();
         InvokeRepeating("SummonEnemy", SummonInterval / 2, SummonInterval);
     }
 
