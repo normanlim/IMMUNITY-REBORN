@@ -1,8 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem.LowLevel;
+using Random = UnityEngine.Random;
 
 public class AIDirector : MonoBehaviour
 {
@@ -24,52 +23,51 @@ public class AIDirector : MonoBehaviour
     {
         if (attackingMeleeEnemy == null)
         {
-            attackingMeleeEnemy = RandomMeleeEnemy();
-
-            if (attackingMeleeEnemy != null)
+            if (RandomMeleeEnemy(out attackingMeleeEnemy))
             {
                 attackingMeleeEnemy.SwitchState(new MeleeAdvancingState(attackingMeleeEnemy));
-                attackingMeleeEnemy.OnStateChange += HandleMeleeEnemyStateChange;
             }
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        MeleeStateMachine stateMachine = other.GetComponent<MeleeStateMachine>();        
-        meleeEnemies.Add(stateMachine);
-
-        if (stateMachine.IsCurrentStateInterruptible)
+        if (other.TryGetComponent(out MeleeStateMachine meleeStateMachine) && meleeStateMachine.CurrentState is not MeleeDeadState)
         {
-            stateMachine.SwitchState(new MeleeCirculatingState(stateMachine), RandomDelay()); // delay to vary how deep enemies run into the melee zone
+            AddMeleeEnemy(meleeStateMachine);
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        MeleeStateMachine stateMachine = other.GetComponent<MeleeStateMachine>();
-        meleeEnemies.Remove(stateMachine);
-        if (attackingMeleeEnemy == stateMachine)
+        if (other.TryGetComponent(out MeleeStateMachine meleeStateMachine))
         {
-            DisposeAttackingEnemy();
-        }
-
-        if (stateMachine.IsCurrentStateInterruptible)
-        {
-            stateMachine.SwitchState(new MeleeChasingState(stateMachine));
+            RemoveMeleeEnemy(meleeStateMachine);
         }
     }
 
-    private void HandleMeleeEnemyStateChange(State state)
+    private void HandleEnemyStateChange(State state, StateMachine stateMachine)
     {
-        if (state is MeleeRetreatingState || state is MeleeImpactState) // enemy is no longer attacking
+        if (stateMachine is MeleeStateMachine meleeStateMachine)
         {
-            DisposeAttackingEnemy();
+            if (meleeStateMachine == attackingMeleeEnemy)
+            {
+                if (state is not MeleeAdvancingState && state is not MeleeAttackingState) // if enemy isn't in these states, it means they aren't attacking
+                {
+                    attackingMeleeEnemy = null;
+                }
+            }
+
+            if (state is MeleeDeadState)
+            {
+                RemoveMeleeEnemy(meleeStateMachine);
+            }
         }
     }
 
-    private MeleeStateMachine RandomMeleeEnemy()
+    private bool RandomMeleeEnemy(out MeleeStateMachine enemy)
     {
+        enemy = null;
         List<MeleeStateMachine> availableEnemies = new();
 
         foreach (MeleeStateMachine meleeEnemy in meleeEnemies)
@@ -80,11 +78,12 @@ public class AIDirector : MonoBehaviour
             }
         }
 
-        if (availableEnemies.Count == 0) { return null; }
+        if (availableEnemies.Count == 0) { return false; }
 
         int randomIndex = Random.Range(0, availableEnemies.Count);
 
-        return availableEnemies[randomIndex];
+        enemy = availableEnemies[randomIndex];
+        return true;
     }
 
     private float RandomDelay()
@@ -92,9 +91,25 @@ public class AIDirector : MonoBehaviour
         return Random.Range(0.0f, MaxSwitchStateDelay);
     }
 
-    private void DisposeAttackingEnemy()
+    private void AddMeleeEnemy(MeleeStateMachine meleeStateMachine)
     {
-        attackingMeleeEnemy.OnStateChange -= HandleMeleeEnemyStateChange;
-        attackingMeleeEnemy = null;
+        meleeStateMachine.OnStateChange += HandleEnemyStateChange;
+        meleeEnemies.Add(meleeStateMachine);
+
+        if (meleeStateMachine.IsCurrentStateInterruptible) // check if allowed to force state change
+        {
+            meleeStateMachine.SwitchState(new MeleeCirculatingState(meleeStateMachine), RandomDelay()); // delay to vary how deep enemies run into the melee zone
+        }
+    }
+
+    private void RemoveMeleeEnemy(MeleeStateMachine meleeStateMachine)
+    {
+        meleeStateMachine.OnStateChange -= HandleEnemyStateChange;
+        meleeEnemies.Remove(meleeStateMachine);
+
+        if (meleeStateMachine.IsCurrentStateInterruptible)
+        {
+            meleeStateMachine.SwitchState(new MeleeIdleState(meleeStateMachine));
+        }
     }
 }
