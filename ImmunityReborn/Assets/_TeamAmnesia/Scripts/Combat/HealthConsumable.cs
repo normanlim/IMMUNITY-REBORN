@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,7 +20,10 @@ public class HealthConsumable : MonoBehaviour
     public int CurrentItemCount { get; private set; }
 
     [field: SerializeField]
-    public Image ItemCountUI { get; private set; }
+    public Image ItemCountBall { get; private set; }
+
+    [field: SerializeField]
+    public TMP_Text ItemCountText { get; private set; }
 
     [field: SerializeField]
     public ParticleSystem UseVFX { get; private set; }
@@ -27,7 +31,8 @@ public class HealthConsumable : MonoBehaviour
     private void Start()
     {
         CurrentItemCount = MaxItemCount;
-        ItemCountUI.fillAmount = (float)CurrentItemCount / MaxItemCount;
+        ItemCountBall.fillAmount = (float)CurrentItemCount / MaxItemCount;
+        ItemCountText.text = CurrentItemCount.ToString();
     }
 
     public void Use()
@@ -38,13 +43,15 @@ public class HealthConsumable : MonoBehaviour
             UseVFX.Play();
 
             CurrentItemCount--;
-            ItemCountUI.fillAmount = (float)CurrentItemCount / MaxItemCount;
+            ItemCountBall.fillAmount = (float)CurrentItemCount / MaxItemCount;
+            ItemCountText.text = CurrentItemCount.ToString();
         }
     }
 
     public void AddItemCount(int count)
     {
         CurrentItemCount = CurrentItemCount + count > MaxItemCount ? MaxItemCount : CurrentItemCount + count;
-        ItemCountUI.fillAmount = (float)CurrentItemCount / MaxItemCount;
+        ItemCountBall.fillAmount = (float)CurrentItemCount / MaxItemCount;
+        ItemCountText.text = CurrentItemCount.ToString();
     }
 }

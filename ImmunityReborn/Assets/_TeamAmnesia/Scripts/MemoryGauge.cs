@@ -1,4 +1,5 @@
 
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,7 @@ public class MemoryGauge : MonoBehaviour
     public Slider memoryGaugeSlider; // extra
 
     public Image memoryBall;
+    public TMP_Text memoryUsesLeftText;
 
     private const int MemoryGaugeMinValue = 0;
     private const int MemoryGaugeMaxValue = 100;
@@ -27,6 +29,7 @@ public class MemoryGauge : MonoBehaviour
     void Start()
     {
         memoryBall.fillAmount = 0.0f;
+        memoryUsesLeftText.text = (0).ToString();
 
         CurrentMemoryMeterValue = 0;
     }
@@ -72,6 +75,7 @@ public class MemoryGauge : MonoBehaviour
     private void UpdateMemoryGaugeSlider()
     {
         memoryBall.fillAmount = (float)CurrentMemoryMeterValue / MemoryGaugeMaxValue;
+        memoryUsesLeftText.text = (CurrentMemoryMeterValue / MemoryAttack.memAtkCost).ToString(); // rounds down by truncating
 
         memoryGaugeSlider.value = CurrentMemoryMeterValue;
     }
