@@ -27,6 +27,12 @@ public class PlayerStateMachine : StateMachine
     public Ragdoll Ragdoll { get; private set; }
 
     [field: SerializeField]
+    public MemoryGauge MemoryGauge { get; private set; }
+
+    [field: SerializeField]
+    public ShieldController ShieldController { get; private set; }
+
+    [field: SerializeField]
     public float DefaultMovementSpeed { get; private set; }
 
     [field: SerializeField]
@@ -35,10 +41,9 @@ public class PlayerStateMachine : StateMachine
     [field: SerializeField]
     public AttackData[] Attacks { get; private set; }
 
-    [field: SerializeField]
-    public MemoryGauge MemoryGauge { get; private set; }
 
     public Transform MainCameraTransform { get; private set; }
+
 
     private void Start()
     {

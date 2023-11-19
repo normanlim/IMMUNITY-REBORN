@@ -7,20 +7,16 @@ public class DOTDamager : MonoBehaviour
     [field: SerializeField]
     public DamageType DamageType { get; private set; }
 
-    [field: SerializeField]
-    public Collider CharacterCollider;
-
     [SerializeField] 
     private float PuddleLifetime;
 
-    private GameObject player;
+    [SerializeField]
+    private float puddleDamagePerSecond;
 
-    private float damagePerSecond = 1.0f;
     private float accumulatedDamage = 0.0f;
 
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag( "Player" );
         Destroy( gameObject, PuddleLifetime );
     }
 
@@ -29,7 +25,7 @@ public class DOTDamager : MonoBehaviour
         if ( other.CompareTag( "Player" ) ) // Check if the collider is tagged as "Player"
         {
             // Calculate the damage for this frame and accumulate it
-            accumulatedDamage += damagePerSecond * Time.deltaTime;
+            accumulatedDamage += puddleDamagePerSecond * Time.deltaTime;
 
             if ( accumulatedDamage > 1f && other.TryGetComponent( out Health health ) )
             {
