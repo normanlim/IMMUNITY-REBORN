@@ -11,6 +11,7 @@ public class Health : MonoBehaviour
     private int currentHealth;
 
     public event Action OnTakeDamage;
+    public event Action OnHeal;
     public event Action OnDie;
 
     public bool IsMeleeImmune { get; set; }
@@ -49,5 +50,11 @@ public class Health : MonoBehaviour
         {
             OnDie?.Invoke();
         }
+    }
+
+    public void Heal(int amount)
+    {
+        currentHealth = currentHealth + amount > maxHealth ? maxHealth : currentHealth + amount;
+        OnHeal?.Invoke();
     }
 }

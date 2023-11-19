@@ -28,7 +28,25 @@ public class MagicAttackingState : MagicBaseState
         if ( GetPlayingAnimationTimeNormalized( stateMachine.Animator, 0 ) >= 1.0f ) // animation is done playing
         {
 
-            stateMachine.Health.DealDamage( stateMachine.Health.MaxHealth ); // self destruct all health
+            stateMachine.Health.DealDamage( 100 ); // self destruct, normal bombers should auto die
+
+            if ( stateMachine.Health.CurrentHealth > 0 )
+            {
+                if ( IsInChaseRange() )
+                {
+                    stateMachine.SwitchState( new MagicChasingState( stateMachine ) );
+                    return;
+                }
+                else
+                {
+                    stateMachine.SwitchState( new MagicIdleState( stateMachine ) );
+                    return;
+                }
+            }
+            else
+            {
+                stateMachine.SwitchState( new MagicDeadState( stateMachine ) );
+            }
         }
 
     }

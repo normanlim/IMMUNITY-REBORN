@@ -1,9 +1,10 @@
 using System;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class ShieldCollisions : MonoBehaviour
 {
-    public string typeTag; // Will let us know what shield got triggered
+    public string shieldTypeCollided; // Will let us know what shield got triggered
     public PlayerStateMachine playerStateMachine;
 
     public static event Action<GameObject> OnMeleeBlock;
@@ -13,49 +14,114 @@ public class ShieldCollisions : MonoBehaviour
     [field: SerializeField]
     public float ShieldKnockback { get; private set; }
 
+    [SerializeField]
+    private float PerfectParryWindowDuration;
+
+    private void Start()
+    {
+        playerStateMachine = GetComponentInParent<PlayerStateMachine>();
+    }
+
+
     private void OnTriggerEnter( Collider other )
     {
-        // Notes for future implementation: 
-        // Debug shows that this trigger gets called once on click (hits the player I guess)
-        // Then 3 more times as 3 bullets touch the shield (to see which projectile should get deleted)
-
-        if ( other.gameObject.tag == typeTag ) // Ranged projectile block code here
+        // If we actually get a Trigger from something that can do damage, not an enemy model moving into Shield
+        if ( other.gameObject.TryGetComponent( out WeaponDamager weaponDamager ) ) 
         {
-            Destroy( other.gameObject );
+            // Get the attacker data for counterattack calculations
+            GameObject attacker = weaponDamager.CharacterCollider.gameObject;
+
+            // Melee Damage + Melee Shields = Reward Player For Melee Mechanic Handling
+            if ( weaponDamager.DamageType == DamageType.Melee && shieldTypeCollided == "MeleeType" )
+            {
+
+                if ( attacker.TryGetComponent( out Health health ) )
+                {
+                    health.DealDamage( 0 ); // Hits the shield so it does 0 dmg 
+                }
+
+                if ( attacker.TryGetComponent( out ForceReceiver forceReceiver ) )
+                {
+                    Vector3 direction = (other.transform.position - transform.position).normalized;
+                    forceReceiver.AddForce( direction * ShieldKnockback );
+                }
+
+                HandleMeleeBlockingReward( attacker );
+            }
+
+
+            // Ranged Damage + Ranged Shields = Reward Player For Ranged Mechanic Handling
+            if ( weaponDamager.DamageType == DamageType.Ranged && shieldTypeCollided == "RangedType" )
+            {
+                Destroy( other.gameObject );
+                HandleRangedBlockingReward( attacker );
+            }
+
+
+            // Magic Damage + Magic Shields = Reward Player For Magic Mechanic Handling
+            if ( weaponDamager.DamageType == DamageType.Magic && shieldTypeCollided == "MagicType" )
+            {
+
+                HandleMagicBlockingReward( attacker );
+            }
+        }
+
+    }
+
+    private void HandleRangedBlockingReward( GameObject attacker )
+    {
+        float rangedShieldActiveDur = playerStateMachine.ShieldController.GetRangedShieldActiveDuration();
+
+        if ( rangedShieldActiveDur <= PerfectParryWindowDuration )
+        {
+            // Award extra gauge for last-second block
+            playerStateMachine.MemoryGauge.EarnMemoryGauge( 10 );
+            OnRangedBlock?.Invoke( attacker );
+
+            Debug.Log( "PERFECT PARRY (BONUS) - Shield active: " + rangedShieldActiveDur + " / " + PerfectParryWindowDuration );
+        }
+        else
+        {
+            // Award regular gauge for regular block timing
+            playerStateMachine.MemoryGauge.EarnMemoryGauge( 2 );
+        }
+    }
+
+    private void HandleMeleeBlockingReward( GameObject attacker )
+    {
+        float meleeShieldActiveDur = playerStateMachine.ShieldController.GetMeleeShieldActiveDuration();
+
+        if ( meleeShieldActiveDur <= PerfectParryWindowDuration )
+        {
+            // Award extra gauge for last-second block
+            playerStateMachine.MemoryGauge.EarnMemoryGauge( 20 );
+            OnMeleeBlock?.Invoke( attacker );
+
+            Debug.Log( "PERFECT PARRY (BONUS) - Shield active: " + meleeShieldActiveDur + " / " + PerfectParryWindowDuration );
+        }
+        else
+        {
+            // Award regular gauge for regular block timing
             playerStateMachine.MemoryGauge.EarnMemoryGauge( 10 );
         }
+    }
 
-        if ( typeTag == "MeleeType" && other.gameObject.TryGetComponent( out WeaponDamager weaponDamager ) && 
-             weaponDamager.DamageType == DamageType.Melee )
+    private void HandleMagicBlockingReward( GameObject attacker )
+    {
+        float magicShieldActiveDur = playerStateMachine.ShieldController.GetMagicShieldActiveDuration();
+
+        if ( magicShieldActiveDur <= PerfectParryWindowDuration )
         {
-            GameObject attacker = weaponDamager.CharacterCollider.gameObject;
+            // Award extra gauge for last-second block
+            playerStateMachine.MemoryGauge.EarnMemoryGauge( 50 );
+            OnMagicBlock?.Invoke( attacker );
 
-            if (attacker.TryGetComponent(out Health health))
-            {
-                health.DealDamage(0); // Hits the shield so it does 0 dmg 
-            }
-
-            if (attacker.TryGetComponent(out ForceReceiver forceReceiver))
-            {
-                Vector3 direction = (other.transform.position - transform.position).normalized;
-                forceReceiver.AddForce(direction * ShieldKnockback);
-            }
-
-            playerStateMachine.MemoryGauge.EarnMemoryGauge( 11 );
-
-            OnMeleeBlock?.Invoke(attacker);
+            Debug.Log( "PERFECT PARRY (BONUS) - Shield active: " + magicShieldActiveDur + " / " + PerfectParryWindowDuration );
         }
-        else if (typeTag == "RangedType" && other.gameObject.TryGetComponent(out weaponDamager) &&
-            weaponDamager.DamageType == DamageType.Ranged)
+        else
         {
-            GameObject attacker = weaponDamager.CharacterCollider.gameObject;
-            OnRangedBlock?.Invoke(attacker);
-        }
-        else if (typeTag == "MagicType" && other.gameObject.TryGetComponent(out weaponDamager) &&
-            weaponDamager.DamageType == DamageType.Magic)
-        {
-            GameObject attacker = weaponDamager.CharacterCollider.gameObject;
-            OnMagicBlock?.Invoke(attacker);
+            // Award regular gauge for regular block timing
+            playerStateMachine.MemoryGauge.EarnMemoryGauge( 10 );
         }
     }
 }

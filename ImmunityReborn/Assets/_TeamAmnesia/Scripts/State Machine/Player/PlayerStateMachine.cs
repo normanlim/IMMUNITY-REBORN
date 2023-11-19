@@ -24,7 +24,16 @@ public class PlayerStateMachine : StateMachine
     public Health Health { get; private set; }
 
     [field: SerializeField]
+    public HealthConsumable HealthConsumable { get; private set; }
+
+    [field: SerializeField]
     public Ragdoll Ragdoll { get; private set; }
+
+    [field: SerializeField]
+    public MemoryGauge MemoryGauge { get; private set; }
+
+    [field: SerializeField]
+    public ShieldController ShieldController { get; private set; }
 
     [field: SerializeField]
     public float DefaultMovementSpeed { get; private set; }
@@ -35,10 +44,9 @@ public class PlayerStateMachine : StateMachine
     [field: SerializeField]
     public AttackData[] Attacks { get; private set; }
 
-    [field: SerializeField]
-    public MemoryGauge MemoryGauge { get; private set; }
 
     public Transform MainCameraTransform { get; private set; }
+
 
     private void Start()
     {
@@ -54,12 +62,14 @@ public class PlayerStateMachine : StateMachine
     {
         Health.OnTakeDamage += HandleTakeDamage;
         Health.OnDie += HandleDie;
+        InputReader.UseHealEvent += HandleUseHeal;
     }
 
     private void OnDisable()
     {
         Health.OnTakeDamage -= HandleTakeDamage;
         Health.OnDie -= HandleDie;
+        InputReader.UseHealEvent -= HandleUseHeal;
     }
 
     private void HandleTakeDamage()
@@ -71,6 +81,11 @@ public class PlayerStateMachine : StateMachine
     {
         SwitchState(new PlayerDeadState(this));
         Invoke( "ResetCurrentScene", 5.0f );
+    }
+
+    private void HandleUseHeal()
+    {
+        SwitchState(new PlayerUsingHealState(this));
     }
 
     private void ResetCurrentScene()
