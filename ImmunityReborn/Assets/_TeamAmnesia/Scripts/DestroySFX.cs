@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class ArrowDestroySFX : MonoBehaviour
+public class DestroySFX : MonoBehaviour
 {
     public GameObject prefabSound;
     private void OnDestroy()

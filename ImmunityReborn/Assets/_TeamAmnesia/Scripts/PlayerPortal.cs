@@ -12,7 +12,6 @@ public class PlayerPortal : MonoBehaviour
     private CinemachineFreeLook freeLookCamera;
     private LevelManager levelManager;
 
-
     private void Start()
     {
         levelManager = FindFirstObjectByType<LevelManager>();

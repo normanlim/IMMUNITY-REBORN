@@ -48,6 +48,11 @@ public class MagicStateMachine : StateMachine
 
     public Health PlayerHealth { get; private set; }
 
+    [field: SerializeField]
+    public GameObject ExplosionSFX;
+
+    public bool HasPlayedExplosionSFX;
+
     private void Awake()
     {
         Player = GameObject.FindGameObjectWithTag("Player");

@@ -41,9 +41,15 @@ public class RangedStateMachine : StateMachine
     [field: SerializeField]
     public float AttackKnockback { get; private set; }
 
+    [field: SerializeField]
     public GameObject Player { get; private set; }
 
+    [field: SerializeField]
     public Health PlayerHealth { get; private set; }
+
+    [field: SerializeField]
+    public GameObject DeathSFX;
+
 
     private void Awake()
     {
@@ -82,6 +88,7 @@ public class RangedStateMachine : StateMachine
 
     private void HandleDie()
     {
+        PlaySFX.PlayThenDestroy(DeathSFX, gameObject.transform);
         ProjectileShooter.ShooterDied();
         SwitchState(new RangedDeadState(this));
     }

@@ -79,8 +79,8 @@ public class PlayerStateMachine : StateMachine
 
     private void HandleDie()
     {
-        SwitchState(new PlayerDeadState(this));
         Invoke( "ResetCurrentScene", 5.0f );
+        SwitchState(new PlayerDeadState(this));
     }
 
     private void HandleUseHeal()

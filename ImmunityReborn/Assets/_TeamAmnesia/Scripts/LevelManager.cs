@@ -27,6 +27,7 @@ public class LevelManager : MonoBehaviour
         if (index >= 0 && index < LevelList.Count)
         {
             CurrentBGMSource.clip = LevelList[index].LevelBGM;
+            CurrentBGMSource.volume = 0.5f;
             CurrentBGMSource.Play();
         }
         else
