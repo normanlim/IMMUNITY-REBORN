@@ -41,6 +41,9 @@ public class MeleeStateMachine : StateMachine
     [field: SerializeField]
     public float AttackKnockback { get; private set; }
 
+    [field: SerializeField]
+    List<GameObject> DeathSFXs;
+
     public GameObject Player { get; private set; }
 
     public Health PlayerHealth { get; private set; }
@@ -83,6 +86,8 @@ public class MeleeStateMachine : StateMachine
 
     private void HandleDie()
     {
+        GameObject RandomDeathSFX = DeathSFXs[Random.Range(0, DeathSFXs.Count)];
+        PlaySFX.PlayThenDestroy(RandomDeathSFX, gameObject.transform);
         SwitchState(new MeleeDeadState(this));
     }
 

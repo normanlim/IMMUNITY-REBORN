@@ -10,9 +10,11 @@ public class PlayerPortal : MonoBehaviour
     private bool faceForwards = true;
 
     private CinemachineFreeLook freeLookCamera;
+    private LevelManager levelManager;
 
     private void Start()
     {
+        levelManager = FindFirstObjectByType<LevelManager>();
         freeLookCamera = Camera.main.GetComponent<CinemachineBrain>()
             .ActiveVirtualCamera
             .VirtualCameraGameObject
@@ -29,6 +31,8 @@ public class PlayerPortal : MonoBehaviour
             {
                 freeLookCamera.m_XAxis.Value = teleportTo.transform.eulerAngles.y;
             }
+            levelManager.StartNextLevel();
+            Destroy(gameObject);
         }
     }
 }

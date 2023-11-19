@@ -9,7 +9,6 @@ public class MagicAttackingState : MagicBaseState
 
     private readonly int AttackStateAnimation = Animator.StringToHash( "attack01" );
     private const float CrossFadeDuration = 0.1f;
-
     public MagicAttackingState(MagicStateMachine stateMachine) : base(stateMachine)
     {
     }
@@ -23,11 +22,15 @@ public class MagicAttackingState : MagicBaseState
 
     public override void Tick(float deltaTime)
     {
+        if (GetPlayingAnimationTimeNormalized(stateMachine.Animator, 0) >= 0.5f && !stateMachine.HasPlayedExplosionSFX)
+        {
+            stateMachine.HasPlayedExplosionSFX = true;
+            PlaySFX.PlayThenDestroy(stateMachine.ExplosionSFX, stateMachine.gameObject.transform);
+        }
         // The end part of the animation is very empty without much particles,
         // but still does damage since collider is still there. Might be a problem for player
         if ( GetPlayingAnimationTimeNormalized( stateMachine.Animator, 0 ) >= 1.0f ) // animation is done playing
         {
-
             stateMachine.Health.DealDamage( 100 ); // self destruct, normal bombers should auto die
 
             if ( stateMachine.Health.CurrentHealth > 0 )
