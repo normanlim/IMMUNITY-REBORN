@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HealthConsumable : MonoBehaviour
 {
@@ -18,11 +19,15 @@ public class HealthConsumable : MonoBehaviour
     public int CurrentItemCount { get; private set; }
 
     [field: SerializeField]
+    public Image ItemCountUI { get; private set; }
+
+    [field: SerializeField]
     public ParticleSystem UseVFX { get; private set; }
 
     private void Start()
     {
         CurrentItemCount = MaxItemCount;
+        ItemCountUI.fillAmount = (float)CurrentItemCount / MaxItemCount;
     }
 
     public void Use()
@@ -31,12 +36,15 @@ public class HealthConsumable : MonoBehaviour
         {
             TargetHealth.Heal(HealAmount);
             UseVFX.Play();
+
             CurrentItemCount--;
+            ItemCountUI.fillAmount = (float)CurrentItemCount / MaxItemCount;
         }
     }
 
     public void AddItemCount(int count)
     {
         CurrentItemCount = CurrentItemCount + count > MaxItemCount ? MaxItemCount : CurrentItemCount + count;
+        ItemCountUI.fillAmount = (float)CurrentItemCount / MaxItemCount;
     }
 }
