@@ -89,6 +89,7 @@ public class MeleeStateMachine : StateMachine
         GameObject RandomDeathSFX = DeathSFXs[Random.Range(0, DeathSFXs.Count)];
         PlaySFX.PlayThenDestroy(RandomDeathSFX, gameObject.transform);
         SwitchState(new MeleeDeadState(this));
+        Destroy( gameObject , 10f );
     }
 
     private void HandlePlayerDie()

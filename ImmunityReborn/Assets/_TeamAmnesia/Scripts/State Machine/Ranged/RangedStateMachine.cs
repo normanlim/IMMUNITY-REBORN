@@ -91,6 +91,7 @@ public class RangedStateMachine : StateMachine
         PlaySFX.PlayThenDestroy(DeathSFX, gameObject.transform);
         ProjectileShooter.ShooterDied();
         SwitchState(new RangedDeadState(this));
+        Destroy( gameObject, 10f );
     }
 
     private void HandlePlayerDie()
