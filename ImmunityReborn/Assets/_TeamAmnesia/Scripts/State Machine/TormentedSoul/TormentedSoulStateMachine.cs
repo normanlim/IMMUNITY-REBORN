@@ -40,6 +40,12 @@ public class TormentedSoulStateMachine : StateMachine
     [field: SerializeField]
     public float AttackKnockback { get; private set; }
 
+    [field: SerializeField]
+    public GameObject DeathSFX;
+
+    [field: SerializeField]
+    public GameObject TakeDamageEffect;
+
     [SerializeField] GameObject ArrowRainPortalPrefab;
     [SerializeField] int numPortalsToSpawn = 20;
     [SerializeField] float minDistance = 5f;
@@ -87,6 +93,7 @@ public class TormentedSoulStateMachine : StateMachine
 
     private void HandleTakeDamage()
     {
+        Instantiate(TakeDamageEffect, transform.position + new Vector3(0f, 1.8f, 0f), Quaternion.identity);
         if (Health.CurrentHealth < (Health.MaxHealth / 2))
         {
             transform.Find("EnragedGlow").gameObject.SetActive(true);
@@ -97,6 +104,7 @@ public class TormentedSoulStateMachine : StateMachine
 
     private void HandleDie()
     {
+        PlaySFX.PlayThenDestroy(DeathSFX, gameObject.transform);
         ProjectileShooter.ShooterDied();
         transform.Find("EnragedGlow").gameObject.SetActive(false);
         SwitchState(new TormentedSoulDeadState(this));
