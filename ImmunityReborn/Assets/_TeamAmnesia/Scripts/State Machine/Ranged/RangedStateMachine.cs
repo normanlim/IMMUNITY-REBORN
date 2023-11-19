@@ -84,6 +84,7 @@ public class RangedStateMachine : StateMachine
     {
         ProjectileShooter.ShooterDied();
         SwitchState(new RangedDeadState(this));
+        Destroy( gameObject, 10f );
     }
 
     private void HandlePlayerDie()

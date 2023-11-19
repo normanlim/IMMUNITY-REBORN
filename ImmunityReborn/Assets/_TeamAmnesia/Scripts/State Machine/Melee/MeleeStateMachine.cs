@@ -84,6 +84,7 @@ public class MeleeStateMachine : StateMachine
     private void HandleDie()
     {
         SwitchState(new MeleeDeadState(this));
+        Destroy( gameObject , 10f );
     }
 
     private void HandlePlayerDie()
