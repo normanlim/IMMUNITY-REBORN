@@ -36,6 +36,9 @@ public class RangedStateMachine : StateMachine
     public float AttackRange { get; private set; }
 
     [field: SerializeField]
+    public float MinAttackRange { get; private set; }
+
+    [field: SerializeField]
     public int AttackDamage { get; private set; }
 
     [field: SerializeField]
@@ -50,6 +53,8 @@ public class RangedStateMachine : StateMachine
     [field: SerializeField]
     public GameObject DeathSFX;
 
+    [field: SerializeField]
+    public GameObject TakeDamageEffect;
 
     private void Awake()
     {
@@ -83,6 +88,7 @@ public class RangedStateMachine : StateMachine
 
     private void HandleTakeDamage()
     {
+        Instantiate(TakeDamageEffect, transform.position + new Vector3(0f, 1f, 0f), Quaternion.identity);
         SwitchState(new RangedImpactState(this));
     }
 

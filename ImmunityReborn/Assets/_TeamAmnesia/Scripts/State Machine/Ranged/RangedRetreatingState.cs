@@ -29,7 +29,7 @@ public class RangedRetreatingState : RangedBaseState
     {
         FacePlayer(deltaTime);
 
-        if (stateMachine.NavMeshAgent.isOnNavMesh)
+        if (stateMachine.NavMeshAgent.isOnNavMesh && IsInMinAttackRange())
         {
             Vector3 direction = -stateMachine.transform.forward;
 

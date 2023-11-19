@@ -44,6 +44,9 @@ public class MeleeStateMachine : StateMachine
     [field: SerializeField]
     List<GameObject> DeathSFXs;
 
+    [field: SerializeField]
+    public GameObject TakeDamageEffect;
+
     public GameObject Player { get; private set; }
 
     public Health PlayerHealth { get; private set; }
@@ -81,6 +84,7 @@ public class MeleeStateMachine : StateMachine
 
     private void HandleTakeDamage()
     {
+        Instantiate(TakeDamageEffect, transform.position + new Vector3(0f, 0.6f, 0f), Quaternion.identity);
         SwitchState(new MeleeImpactState(this));
     }
 

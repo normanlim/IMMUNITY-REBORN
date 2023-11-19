@@ -115,7 +115,8 @@ public class SpawnManager : MonoBehaviour
 
                 if (spawnGroup != null)
                 {
-                    Instantiate(spawnGroup.prefab, finalSpawnPosition, spawnData.spawnLocation.transform.rotation);
+                    GameObject entity = Instantiate(spawnGroup.prefab, finalSpawnPosition, spawnData.spawnLocation.transform.rotation);
+                    entity.transform.parent = spawnData.spawnLocation.transform;
                 }
             }
         }

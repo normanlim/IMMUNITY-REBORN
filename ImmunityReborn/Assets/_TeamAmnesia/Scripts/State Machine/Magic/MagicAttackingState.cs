@@ -9,12 +9,14 @@ public class MagicAttackingState : MagicBaseState
 
     private readonly int AttackStateAnimation = Animator.StringToHash( "attack01" );
     private const float CrossFadeDuration = 0.1f;
+    private bool ExplodedInState;
     public MagicAttackingState(MagicStateMachine stateMachine) : base(stateMachine)
     {
     }
 
     public override void Enter()
     {
+        ExplodedInState = false;
         stateMachine.WeaponDamager.SetDamage( stateMachine.AttackDamage, stateMachine.AttackKnockback );
         stateMachine.Animator.CrossFadeInFixedTime( AttackStateAnimation, CrossFadeDuration );
         stateMachine.DOTPuddle.SpawnPuddleOnFloor();
@@ -22,9 +24,9 @@ public class MagicAttackingState : MagicBaseState
 
     public override void Tick(float deltaTime)
     {
-        if (GetPlayingAnimationTimeNormalized(stateMachine.Animator, 0) >= 0.5f && !stateMachine.HasPlayedExplosionSFX)
+        if (GetPlayingAnimationTimeNormalized(stateMachine.Animator, 0) >= 0.5f && !ExplodedInState)
         {
-            stateMachine.HasPlayedExplosionSFX = true;
+            ExplodedInState = true;
             PlaySFX.PlayThenDestroy(stateMachine.ExplosionSFX, stateMachine.gameObject.transform);
         }
         // The end part of the animation is very empty without much particles,
@@ -48,6 +50,7 @@ public class MagicAttackingState : MagicBaseState
             }
             else
             {
+                stateMachine.HasDiedExploding = true;
                 stateMachine.SwitchState( new MagicDeadState( stateMachine ) );
             }
         }

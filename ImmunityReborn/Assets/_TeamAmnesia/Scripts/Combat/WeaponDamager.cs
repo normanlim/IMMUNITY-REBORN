@@ -14,6 +14,9 @@ public class WeaponDamager : MonoBehaviour
     [field: SerializeField]
     public Collider CharacterCollider;
 
+    [field: SerializeField]
+    public GameObject HitSFX;
+
     private void OnEnable()
     {
         collidedWith.Clear();
@@ -32,6 +35,8 @@ public class WeaponDamager : MonoBehaviour
 
         if (other.TryGetComponent(out Health health))
         {
+            if (HitSFX != null)
+                Instantiate(HitSFX, gameObject.transform);
             health.DealDamage(damage, DamageType);
         }
 
