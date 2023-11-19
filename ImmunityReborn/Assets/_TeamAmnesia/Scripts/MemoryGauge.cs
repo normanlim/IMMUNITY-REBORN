@@ -8,7 +8,9 @@ public class MemoryGauge : MonoBehaviour
     public GameObject meleeShield;
     public GameObject rangedShield;
     public GameObject magicShield;
-    public Slider memoryGaugeSlider;
+    public Slider memoryGaugeSlider; // extra
+
+    public Image memoryBall;
 
     private const int MemoryGaugeMinValue = 0;
     private const int MemoryGaugeMaxValue = 100;
@@ -24,6 +26,8 @@ public class MemoryGauge : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        memoryBall.fillAmount = 0.0f;
+
         CurrentMemoryMeterValue = 0;
     }
 
@@ -67,6 +71,8 @@ public class MemoryGauge : MonoBehaviour
 
     private void UpdateMemoryGaugeSlider()
     {
+        memoryBall.fillAmount = (float)CurrentMemoryMeterValue / MemoryGaugeMaxValue;
+
         memoryGaugeSlider.value = CurrentMemoryMeterValue;
     }
 

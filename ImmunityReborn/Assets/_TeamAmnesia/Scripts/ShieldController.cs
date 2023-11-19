@@ -5,8 +5,10 @@ using UnityEngine.UI;
 
 public class ShieldController : MonoBehaviour
 {
+    [SerializeField] Image energyBall;
+
     [SerializeField] TMP_Text energyMeterText;
-    [SerializeField] Image energyMeter;
+    [SerializeField] Image energyMeter; // extra
     [SerializeField] float regenSpeed;
     [SerializeField] float depleteSpeed;
 
@@ -45,6 +47,8 @@ public class ShieldController : MonoBehaviour
         energyRegenDelay = 3;
 
         playerStateMachine = GetComponent<PlayerStateMachine>();
+
+        energyBall.fillAmount = currentEnergyValue / 100;
     }
 
     private void RegenShield()
@@ -55,6 +59,8 @@ public class ShieldController : MonoBehaviour
             energyMeterText.color = Color.cyan;
             energyMeterText.text = ( (int)currentEnergyValue).ToString() + "%";
             energyMeter.fillAmount = currentEnergyValue / 100;
+
+            energyBall.fillAmount = currentEnergyValue / 100;
         }
         else
         {
@@ -77,6 +83,8 @@ public class ShieldController : MonoBehaviour
                 energyMeterText.color = Color.magenta;
                 energyMeterText.text = ( (int)currentEnergyValue).ToString() + "%";
                 energyMeter.fillAmount = currentEnergyValue / 100;
+
+                energyBall.fillAmount= currentEnergyValue / 100;
             }
             else
             {
