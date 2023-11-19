@@ -1,4 +1,5 @@
 using System;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class ShieldCollisions : MonoBehaviour
@@ -44,8 +45,8 @@ public class ShieldCollisions : MonoBehaviour
                     Vector3 direction = (other.transform.position - transform.position).normalized;
                     forceReceiver.AddForce( direction * ShieldKnockback );
                 }
-                OnMeleeBlock?.Invoke( attacker );
-                HandleMeleeBlockingReward();
+
+                HandleMeleeBlockingReward( attacker );
             }
 
 
@@ -53,22 +54,21 @@ public class ShieldCollisions : MonoBehaviour
             if ( weaponDamager.DamageType == DamageType.Ranged && shieldTypeCollided == "RangedType" )
             {
                 Destroy( other.gameObject );
-                OnRangedBlock?.Invoke( attacker );
-                HandleRangedBlockingReward();
+                HandleRangedBlockingReward( attacker );
             }
 
 
             // Magic Damage + Magic Shields = Reward Player For Magic Mechanic Handling
             if ( weaponDamager.DamageType == DamageType.Magic && shieldTypeCollided == "MagicType" )
             {
-                OnMagicBlock?.Invoke( attacker );
-                HandleMagicBlockingReward();
+
+                HandleMagicBlockingReward( attacker );
             }
         }
 
     }
 
-    private void HandleRangedBlockingReward()
+    private void HandleRangedBlockingReward( GameObject attacker )
     {
         float rangedShieldActiveDur = playerStateMachine.ShieldController.GetRangedShieldActiveDuration();
 
@@ -76,19 +76,18 @@ public class ShieldCollisions : MonoBehaviour
         {
             // Award extra gauge for last-second block
             playerStateMachine.MemoryGauge.EarnMemoryGauge( 10 );
+            OnRangedBlock?.Invoke( attacker );
 
-            //Debug.Log( "Perfect Parry (BONUS) - Shield active for: " + shieldDuration + " < PerfectWindowDuration: " + PerfectParryWindowDuration );
+            Debug.Log( "PERFECT PARRY (BONUS) - Shield active: " + rangedShieldActiveDur + " / " + PerfectParryWindowDuration );
         }
         else
         {
             // Award regular gauge for regular block timing
             playerStateMachine.MemoryGauge.EarnMemoryGauge( 2 );
-
-            //Debug.Log( "LATE Parry - Shield active for: " + shieldDuration + " > PerfectWindowDuration: " + PerfectParryWindowDuration );
         }
     }
 
-    private void HandleMeleeBlockingReward()
+    private void HandleMeleeBlockingReward( GameObject attacker )
     {
         float meleeShieldActiveDur = playerStateMachine.ShieldController.GetMeleeShieldActiveDuration();
 
@@ -96,6 +95,9 @@ public class ShieldCollisions : MonoBehaviour
         {
             // Award extra gauge for last-second block
             playerStateMachine.MemoryGauge.EarnMemoryGauge( 20 );
+            OnMeleeBlock?.Invoke( attacker );
+
+            Debug.Log( "PERFECT PARRY (BONUS) - Shield active: " + meleeShieldActiveDur + " / " + PerfectParryWindowDuration );
         }
         else
         {
@@ -104,7 +106,7 @@ public class ShieldCollisions : MonoBehaviour
         }
     }
 
-    private void HandleMagicBlockingReward()
+    private void HandleMagicBlockingReward( GameObject attacker )
     {
         float magicShieldActiveDur = playerStateMachine.ShieldController.GetMagicShieldActiveDuration();
 
@@ -112,6 +114,9 @@ public class ShieldCollisions : MonoBehaviour
         {
             // Award extra gauge for last-second block
             playerStateMachine.MemoryGauge.EarnMemoryGauge( 50 );
+            OnMagicBlock?.Invoke( attacker );
+
+            Debug.Log( "PERFECT PARRY (BONUS) - Shield active: " + magicShieldActiveDur + " / " + PerfectParryWindowDuration );
         }
         else
         {
@@ -120,4 +125,3 @@ public class ShieldCollisions : MonoBehaviour
         }
     }
 }
-
