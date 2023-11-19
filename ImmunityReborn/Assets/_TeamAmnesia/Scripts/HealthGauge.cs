@@ -20,16 +20,18 @@ public class HealthGauge : MonoBehaviour
     private void OnEnable()
     {
         stateMachine.Health.OnTakeDamage += UpdateHealthGaugeSlider;
+        stateMachine.Health.OnHeal += UpdateHealthGaugeSlider;
     }
 
     private void OnDisable()
     {
         stateMachine.Health.OnTakeDamage -= UpdateHealthGaugeSlider;
+        stateMachine.Health.OnHeal -= UpdateHealthGaugeSlider;
     }
 
     private void UpdateHealthGaugeSlider()
     {
-        healthGaugeSlider.value = (float)stateMachine.Health.CurrentHealth;
+        healthGaugeSlider.value = stateMachine.Health.CurrentHealth;
     }
 
 }

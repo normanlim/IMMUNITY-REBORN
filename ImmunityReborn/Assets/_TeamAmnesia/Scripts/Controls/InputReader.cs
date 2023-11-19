@@ -11,6 +11,7 @@ public class InputReader : MonoBehaviour, Controls.IPlayerActions
 
     public event Action JumpEvent;
     public event Action DodgeEvent;
+    public event Action UseHealEvent;
 
     private Controls controls;
 
@@ -62,5 +63,12 @@ public class InputReader : MonoBehaviour, Controls.IPlayerActions
         //{
         //    IsAttacking = false;
         //}
+    }
+
+    public void OnUseHeal(InputAction.CallbackContext context)
+    {
+        if (!context.performed) { return; } // return if key is not pressed
+
+        UseHealEvent?.Invoke();
     }
 }
