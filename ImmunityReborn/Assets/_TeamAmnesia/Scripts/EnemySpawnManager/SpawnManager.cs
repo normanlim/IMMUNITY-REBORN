@@ -40,15 +40,43 @@ public class SpawnManager : MonoBehaviour
     private void SpawnNext()
     {
         SpawnData nextSpawnData = SpawnOrder.FirstOrDefault();
+        // Check the active state of the entire hierarchy leading to spawnLocation
+        bool isHierarchyActive = IsHierarchyActive(nextSpawnData.spawnLocation);
+        // Add debug log to check spawn location activity
+        Debug.Log($"isHierarchyActive: {isHierarchyActive}");
 
         // Spawn without checking enemies alive if requireAllDead is false, else do the check
-        if (nextSpawnData != null && (!nextSpawnData.requireAllDead || enemiesAliveCount <= 0))
+        if (nextSpawnData != null && isHierarchyActive && (!nextSpawnData.requireAllDead || enemiesAliveCount <= 0))
         {
             SpawnDataset(nextSpawnData);
 
             // Remove the spawn data, all enemies spawned
             SpawnOrder.Remove(nextSpawnData);
         }
+    }
+
+    // Manual method to check the active state of the entire hierarchy
+    private bool IsHierarchyActive(GameObject gameObject)
+    {
+        if (gameObject == null)
+        {
+            return false;
+        }
+
+        // Check the active state of each parent in the hierarchy
+        Transform parentTransform = gameObject.transform;
+        while (parentTransform != null)
+        {
+            if (!parentTransform.gameObject.activeSelf)
+            {
+                return false;
+            }
+
+            parentTransform = parentTransform.parent;
+        }
+
+        // If no disabled parent found, return true
+        return true;
     }
 
     void SpawnDataset(SpawnData spawnData)
