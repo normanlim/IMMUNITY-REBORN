@@ -64,6 +64,7 @@ public class ShieldCollisions : MonoBehaviour
         {
             // Award extra gauge for last-second block
             playerStateMachine.MemoryGauge.EarnMemoryGauge( 10 );
+            playerStateMachine.ShieldController.EarnShieldGauge( 10 );
             OnRangedBlock?.Invoke( attacker );
 
             Debug.Log( "PERFECT PARRY (BONUS) - Shield active: " + rangedShieldActiveDur + " / " + PerfectParryWindowDuration );
@@ -83,6 +84,7 @@ public class ShieldCollisions : MonoBehaviour
         {
             // Award extra gauge for last-second block
             playerStateMachine.MemoryGauge.EarnMemoryGauge( 20 );
+            playerStateMachine.ShieldController.EarnShieldGauge( 10 );
             OnMeleeBlock?.Invoke( attacker );
 
             Debug.Log( "PERFECT PARRY (BONUS) - Shield active: " + meleeShieldActiveDur + " / " + PerfectParryWindowDuration );
@@ -102,6 +104,7 @@ public class ShieldCollisions : MonoBehaviour
         {
             // Award extra gauge for last-second block
             playerStateMachine.MemoryGauge.EarnMemoryGauge( 50 );
+            playerStateMachine.ShieldController.EarnShieldGauge( 10 );
             OnMagicBlock?.Invoke( attacker );
 
             Debug.Log( "PERFECT PARRY (BONUS) - Shield active: " + magicShieldActiveDur + " / " + PerfectParryWindowDuration );

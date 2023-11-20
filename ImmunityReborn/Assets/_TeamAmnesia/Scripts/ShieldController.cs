@@ -37,6 +37,11 @@ public class ShieldController : MonoBehaviour
         return magicShieldActiveTime;
     }
 
+    public void EarnShieldGauge( int amtEarned )
+    {
+        currentEnergyValue += amtEarned;
+    }
+
     private void Start()
     {
         currentEnergyValue = 100;
