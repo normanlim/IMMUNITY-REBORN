@@ -5,16 +5,13 @@ using UnityEngine.UI;
 
 public class HealthGauge : MonoBehaviour
 {
-
-    public int current;
-    public int maximum;
-    public Slider healthGaugeSlider;
+    public Image healthBall;
+    public Slider healthGaugeSlider; // extra
     public PlayerStateMachine stateMachine;
 
     private void Start()
     {
-        maximum = stateMachine.Health.MaxHealth;
-        current = stateMachine.Health.MaxHealth;
+        healthBall.fillAmount = stateMachine.Health.CurrentHealth / stateMachine.Health.MaxHealth;
     }
 
     private void OnEnable()
@@ -31,6 +28,7 @@ public class HealthGauge : MonoBehaviour
 
     private void UpdateHealthGaugeSlider()
     {
+        healthBall.fillAmount = (float)stateMachine.Health.CurrentHealth / stateMachine.Health.MaxHealth;
         healthGaugeSlider.value = stateMachine.Health.CurrentHealth;
     }
 
