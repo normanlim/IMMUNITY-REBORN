@@ -18,9 +18,6 @@ public class PlayerStateMachine : StateMachine
     public ForceReceiver ForceReceiver { get; private set; }
 
     [field: SerializeField]
-    public WeaponDamager WeaponDamager { get; private set; }
-
-    [field: SerializeField]
     public Health Health { get; private set; }
 
     [field: SerializeField]

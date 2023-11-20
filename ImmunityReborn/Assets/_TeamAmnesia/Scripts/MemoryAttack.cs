@@ -27,6 +27,7 @@ public class MemoryAttack : MonoBehaviour
     // Memory attack stuff
     bool shooting, readyToShoot, allowButtonHold;
     public float memAtkCooldown;
+    public static int memAtkCost = 50;
 
     public bool allowInvoke = true;
 
@@ -65,7 +66,7 @@ public class MemoryAttack : MonoBehaviour
 
     void LaunchMemoryAttack()
     {
-        StateMachine.MemoryGauge.SpendMemoryGauge(50);
+        StateMachine.MemoryGauge.SpendMemoryGauge(memAtkCost);
         readyToShoot = false;
 
         // set up the ray to start shooting from the camera 
