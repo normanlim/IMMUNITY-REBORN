@@ -48,12 +48,12 @@ public class MemoryAttack : MonoBehaviour
         if ( allowButtonHold )
         {
             // GetKey means the record the whole time the input being held down
-            shooting = Input.GetKey( KeyCode.Q );
+            shooting = Input.GetKey( KeyCode.E );
         }
         else 
         {
             // GetKeyDown means it only records the input once, even if key is being held down.
-            shooting = Input.GetKeyDown( KeyCode.Q );
+            shooting = Input.GetKeyDown( KeyCode.E );
         }
 
         if ( readyToShoot && shooting && StateMachine.MemoryGauge.CurrentMemoryMeterValue >= 50 )

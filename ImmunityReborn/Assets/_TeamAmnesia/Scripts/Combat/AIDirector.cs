@@ -21,6 +21,8 @@ public class AIDirector : MonoBehaviour
 
     void Update()
     {
+        meleeEnemies.RemoveAll(x => x == null);
+
         if (attackingMeleeEnemy == null)
         {
             if (RandomMeleeEnemy(out attackingMeleeEnemy))

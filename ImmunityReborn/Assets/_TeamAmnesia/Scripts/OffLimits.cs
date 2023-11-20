@@ -10,6 +10,8 @@ public class OffLimits : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
+        if (!other.CompareTag("OffLimitsTrigger")) { return; }
+
         Health health = other.GetComponentInParent<Health>();
 
         if (health != null)
