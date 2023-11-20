@@ -43,7 +43,7 @@ public class SpawnManager : MonoBehaviour
         // Check the active state of the entire hierarchy leading to spawnLocation
         bool isHierarchyActive = IsHierarchyActive(nextSpawnData.spawnLocation);
         // Add debug log to check spawn location activity
-        Debug.Log($"isHierarchyActive: {isHierarchyActive}");
+        //Debug.Log($"isHierarchyActive: {isHierarchyActive}");
 
         // Spawn without checking enemies alive if requireAllDead is false, else do the check
         if (nextSpawnData != null && isHierarchyActive && (!nextSpawnData.requireAllDead || enemiesAliveCount <= 0))

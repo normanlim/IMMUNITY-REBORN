@@ -8,7 +8,7 @@ public class Menu : MonoBehaviour
     public void PlayGame()
     {
         Debug.Log("StartGame button clicked");
-        SceneManager.LoadScene("Alphac");
+        SceneManager.LoadScene("Betac");
     }
 
     public void ExitGame()

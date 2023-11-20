@@ -11,7 +11,6 @@ public class PlayerDeadState : PlayerBaseState
     public override void Enter()
     {
         stateMachine.Ragdoll.ToggleRagdoll(true);
-        stateMachine.WeaponDamager.gameObject.SetActive(false);
     }
 
     public override void Tick(float deltaTime)
