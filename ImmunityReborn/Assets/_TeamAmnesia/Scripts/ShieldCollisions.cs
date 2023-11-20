@@ -34,18 +34,6 @@ public class ShieldCollisions : MonoBehaviour
             // Melee Damage + Melee Shields = Reward Player For Melee Mechanic Handling
             if ( weaponDamager.DamageType == DamageType.Melee && shieldTypeCollided == "MeleeType" )
             {
-
-                if ( attacker.TryGetComponent( out Health health ) )
-                {
-                    health.DealDamage( 0 ); // Hits the shield so it does 0 dmg 
-                }
-
-                if ( attacker.TryGetComponent( out ForceReceiver forceReceiver ) )
-                {
-                    Vector3 direction = (other.transform.position - transform.position).normalized;
-                    forceReceiver.AddForce( direction * ShieldKnockback );
-                }
-
                 HandleMeleeBlockingReward( attacker );
             }
 
