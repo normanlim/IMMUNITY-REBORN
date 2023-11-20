@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class HealthConsumable : MonoBehaviour
 {
@@ -41,7 +40,6 @@ public class HealthConsumable : MonoBehaviour
         {
             TargetHealth.Heal(HealAmount);
             UseVFX.Play();
-
             CurrentItemCount--;
             ItemCountBall.fillAmount = (float)CurrentItemCount / MaxItemCount;
             ItemCountText.text = CurrentItemCount.ToString();

@@ -49,9 +49,16 @@ public class MagicStateMachine : StateMachine
     public Health PlayerHealth { get; private set; }
 
     [field: SerializeField]
+    public GameObject TakeDamageEffect;
+
+    [field: SerializeField]
+    public GameObject DeathEffect;
+
+    [field: SerializeField]
     public GameObject ExplosionSFX;
 
-    public bool HasPlayedExplosionSFX;
+    public bool HasDiedExploding
+        ;
 
     private void Awake()
     {
@@ -85,14 +92,15 @@ public class MagicStateMachine : StateMachine
 
     private void HandleTakeDamage()
     {
+        Instantiate(TakeDamageEffect, transform.position + new Vector3(0f, 0.3f, 0f), Quaternion.identity);
         SwitchState(new MagicImpactState(this));
     }
 
     private void HandleDie()
     {
-        Destroy( gameObject ); // Since bombers explode, we can just get rid of their body without dealing with ragdoll
-
+        Instantiate(DeathEffect, transform);
         SwitchState(new MagicDeadState(this));
+        Destroy( gameObject, 0.9f); // Since bombers explode, we can just get rid of their body without dealing with ragdoll
     }
 
     private void HandlePlayerDie()

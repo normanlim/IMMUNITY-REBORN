@@ -10,8 +10,10 @@ public class MagicDeadState : MagicBaseState
 
     public override void Enter()
     {
-        if (!stateMachine.HasPlayedExplosionSFX)
+        if (!stateMachine.HasDiedExploding)
+        {
             PlaySFX.PlayThenDestroy(stateMachine.ExplosionSFX, stateMachine.gameObject.transform);
+        }
     }
 
     public override void Tick(float deltaTime)

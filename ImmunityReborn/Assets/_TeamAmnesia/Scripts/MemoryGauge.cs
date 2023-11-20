@@ -9,7 +9,7 @@ public class MemoryGauge : MonoBehaviour
     public GameObject meleeShield;
     public GameObject rangedShield;
     public GameObject magicShield;
-    public Slider memoryGaugeSlider; // extra
+    public Slider memoryGaugeSlider;
 
     public Image memoryBall;
     public TMP_Text memoryUsesLeftText;

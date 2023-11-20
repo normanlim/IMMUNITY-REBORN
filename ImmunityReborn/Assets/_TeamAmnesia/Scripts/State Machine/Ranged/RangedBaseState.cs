@@ -71,6 +71,16 @@ public abstract class RangedBaseState : State
         return distanceToPlayerSqr <= stateMachine.AttackRange * stateMachine.AttackRange;
     }
 
+    protected bool IsInMinAttackRange()
+    {
+        if (stateMachine.PlayerHealth.CurrentHealth == 0) { return false; }
+
+        float distanceToPlayerSqr = (stateMachine.Player.transform.position -
+            stateMachine.transform.position).sqrMagnitude;
+
+        return distanceToPlayerSqr <= stateMachine.MinAttackRange * stateMachine.MinAttackRange;
+    }
+
     protected void UpdateLocomotionAnimator(float deltaTime)
     {
         if (stateMachine.NavMeshAgent.velocity != Vector3.zero)
