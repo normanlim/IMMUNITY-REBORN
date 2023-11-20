@@ -67,7 +67,7 @@ public class ShieldCollisions : MonoBehaviour
             playerStateMachine.ShieldController.EarnShieldGauge( 10 );
             OnRangedBlock?.Invoke( attacker );
 
-            Debug.Log( "PERFECT PARRY (BONUS) - Shield active: " + rangedShieldActiveDur + " / " + PerfectParryWindowDuration );
+            //Debug.Log( "PERFECT PARRY (BONUS) - Shield active: " + rangedShieldActiveDur + " / " + PerfectParryWindowDuration );
         }
         else
         {
@@ -87,7 +87,7 @@ public class ShieldCollisions : MonoBehaviour
             playerStateMachine.ShieldController.EarnShieldGauge( 10 );
             OnMeleeBlock?.Invoke( attacker );
 
-            Debug.Log( "PERFECT PARRY (BONUS) - Shield active: " + meleeShieldActiveDur + " / " + PerfectParryWindowDuration );
+            //Debug.Log( "PERFECT PARRY (BONUS) - Shield active: " + meleeShieldActiveDur + " / " + PerfectParryWindowDuration );
         }
         else
         {
@@ -107,7 +107,7 @@ public class ShieldCollisions : MonoBehaviour
             playerStateMachine.ShieldController.EarnShieldGauge( 10 );
             OnMagicBlock?.Invoke( attacker );
 
-            Debug.Log( "PERFECT PARRY (BONUS) - Shield active: " + magicShieldActiveDur + " / " + PerfectParryWindowDuration );
+            //Debug.Log( "PERFECT PARRY (BONUS) - Shield active: " + magicShieldActiveDur + " / " + PerfectParryWindowDuration );
         }
         else
         {
