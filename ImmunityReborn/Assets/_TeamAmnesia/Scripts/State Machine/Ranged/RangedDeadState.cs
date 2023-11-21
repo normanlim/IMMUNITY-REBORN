@@ -13,6 +13,8 @@ public class RangedDeadState : RangedBaseState
     public override void Enter()
     {
         stateMachine.Animator.CrossFadeInFixedTime(DeathStateName, CrossFadeDuration, 0);
+
+        stateMachine.CharacterController.enabled = false;
     }
 
     public override void Tick(float deltaTime)
