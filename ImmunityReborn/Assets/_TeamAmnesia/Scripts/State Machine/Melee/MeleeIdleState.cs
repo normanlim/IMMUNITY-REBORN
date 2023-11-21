@@ -27,6 +27,8 @@ public class MeleeIdleState : MeleeBaseState
 
         FacePlayer(deltaTime);
 
+        Move(deltaTime);
+
         UpdateLocomotionAnimator(deltaTime);
     }
 

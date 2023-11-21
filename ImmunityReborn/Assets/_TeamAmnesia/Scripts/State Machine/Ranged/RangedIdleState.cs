@@ -27,6 +27,8 @@ public class RangedIdleState : RangedBaseState
 
         FacePlayer(deltaTime);
 
+        Move(deltaTime);
+
         UpdateLocomotionAnimator(deltaTime);
     }
 

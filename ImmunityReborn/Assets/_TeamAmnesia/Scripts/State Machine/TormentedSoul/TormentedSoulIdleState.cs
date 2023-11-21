@@ -25,6 +25,8 @@ public class TormentedSoulIdleState : TormentedSoulBaseState
 
         FacePlayer(deltaTime);
 
+        Move(deltaTime);
+
         UpdateLocomotionAnimator(deltaTime);
     }
 
