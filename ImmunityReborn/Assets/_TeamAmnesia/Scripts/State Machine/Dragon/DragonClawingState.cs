@@ -38,6 +38,7 @@ public class DragonClawingState : DragonBaseState
         {
             isClawing = true;
             stateMachine.Animator.CrossFadeInFixedTime(ClawAttackStateName, TransitionDuration, 0);
+            PlaySFX.PlayThenDestroy(stateMachine.SFXClawing, stateMachine.transform);
         }
 
         if (GetPlayingAnimationTimeNormalized(stateMachine.Animator, 0) >= 1.0f)

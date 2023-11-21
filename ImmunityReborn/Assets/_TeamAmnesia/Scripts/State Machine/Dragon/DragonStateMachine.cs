@@ -83,6 +83,19 @@ public class DragonStateMachine : StateMachine
 
     public DragonFlyingAction NextAttackType { get; set; }
 
+    public GameObject SFXAwake;
+    public GameObject SFXCombatStart;
+    public GameObject SFXTakingDamage;
+    public GameObject SFXTakingOff;
+    public GameObject SFXLanding;
+    public GameObject SFXFlying;
+    public GameObject SFXFireball;
+    public GameObject SFXClawing;
+    public GameObject SFXSummoning;
+    public GameObject SFXDeath;
+    public GameObject TakeDamageEffect;
+    [SerializeField] GameObject TakeDamageBodyPart;
+
     private LayerMask environmentLayer;
     private int bomberWalkableArea;
 
@@ -138,6 +151,8 @@ public class DragonStateMachine : StateMachine
 
     private void HandleTakeDamage()
     {
+        Instantiate(TakeDamageEffect, TakeDamageBodyPart.transform.position, Quaternion.identity);
+        PlaySFX.PlayThenDestroy(SFXTakingDamage, transform);
         //SwitchState(new DragonImpactState(this));
     }
 

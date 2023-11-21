@@ -25,6 +25,8 @@ public class DragonSummoningState : DragonBaseState
         }
 
         stateMachine.MeshRenderer.material = stateMachine.Materials[2];
+
+        PlaySFX.PlayThenDestroy(stateMachine.SFXSummoning, stateMachine.transform);
     }
 
     public override void Tick(float deltaTime)
