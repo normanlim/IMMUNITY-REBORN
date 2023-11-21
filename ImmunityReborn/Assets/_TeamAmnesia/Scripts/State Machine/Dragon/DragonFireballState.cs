@@ -19,6 +19,7 @@ public class DragonFireballState : DragonBaseState
         if (stateMachine.FlyingForceReceiver.IsFlying)
         {
             stateMachine.Animator.CrossFadeInFixedTime(FlyingFireballStateName, TransitionDuration, 0);
+            PlaySFX.PlayThenDestroy(stateMachine.SFXFireball, stateMachine.transform);
         }
         else
         {
@@ -32,8 +33,9 @@ public class DragonFireballState : DragonBaseState
             }
 
             stateMachine.Animator.CrossFadeInFixedTime(GroundedFireballStateName, TransitionDuration, 0);
+            PlaySFX.PlayThenDestroy(stateMachine.SFXFireball, stateMachine.transform);
         }
-
+        
         stateMachine.MeshRenderer.material = stateMachine.Materials[1];
     }
 

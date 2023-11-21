@@ -23,7 +23,7 @@ public class DragonDeadState : DragonBaseState
         {
             stateMachine.Animator.CrossFadeInFixedTime(GroundedDeathStateName, TransitionDuration, 0);
         }
-
+        PlaySFX.PlayThenDestroy(stateMachine.SFXDeath, stateMachine.transform);
         stateMachine.FlyingForceReceiver.IsFlying = false;
 
         stateMachine.LandingWeaponDamager.gameObject.SetActive(false);

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DragonFlyingState : DragonBaseState
@@ -8,6 +6,8 @@ public class DragonFlyingState : DragonBaseState
 
     private const float CrossFadeDuration = 0.5f;
 
+    private GameObject FlyingSoundObject;
+
     public DragonFlyingState(DragonStateMachine stateMachine) : base(stateMachine)
     {
     }
@@ -15,6 +15,7 @@ public class DragonFlyingState : DragonBaseState
     public override void Enter()
     {
         stateMachine.Animator.CrossFadeInFixedTime(FlyStateName, CrossFadeDuration);
+        FlyingSoundObject = PlaySFX.PlayWithLoop(stateMachine.SFXFlying, stateMachine.transform);
     }
 
     public override void Tick(float deltaTime)
@@ -28,6 +29,7 @@ public class DragonFlyingState : DragonBaseState
 
     public override void Exit()
     {
+        PlaySFX.StopLoopedAudio(FlyingSoundObject);
         stateMachine.NavMeshAgent.ResetPath();
         stateMachine.NavMeshAgent.velocity = Vector3.zero;
     }

@@ -19,6 +19,8 @@ public class DragonTakingOffState : DragonBaseState
         stateMachine.FlyingForceReceiver.IsFlying = true;
 
         stateMachine.Animator.CrossFadeInFixedTime(TakeOffStateName, CrossFadeDuration, 0);
+
+        PlaySFX.PlayThenDestroy(stateMachine.SFXTakingOff, stateMachine.transform);
     }
 
     public override void Tick(float deltaTime)
