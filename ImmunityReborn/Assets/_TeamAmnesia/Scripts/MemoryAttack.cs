@@ -14,8 +14,6 @@ public class MemoryAttack : MonoBehaviour
     public Transform attackPoint;
     public PlayerStateMachine StateMachine;
     public GameObject muzzleFlash;
-    [SerializeField]
-    private string animationName = "Sword And Shield Casting";
 
     // Projectile + Projectile force
     public GameObject memoryAtk;
@@ -59,8 +57,10 @@ public class MemoryAttack : MonoBehaviour
 
         if ( readyToShoot && shooting && StateMachine.MemoryGauge.CurrentMemoryMeterValue >= 50 )
         {
-            //LaunchMemoryAttack();
-            StateMachine.Animator.Play( animationName ); // LaunchMemoryAttack() called via animation event
+            if (StateMachine.CurrentState is not PlayerAttackingState)
+            {
+                StateMachine.SwitchState(new PlayerAttackingState(StateMachine));
+            }
         }
     }
 
