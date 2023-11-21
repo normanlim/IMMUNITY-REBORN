@@ -116,7 +116,7 @@ public class SpawnManager : MonoBehaviour
                 if (spawnGroup != null)
                 {
                     GameObject entity = Instantiate(spawnGroup.prefab, finalSpawnPosition, spawnData.spawnLocation.transform.rotation);
-                    entity.transform.parent = spawnData.spawnLocation.transform;
+                    //entity.transform.parent = spawnData.spawnLocation.transform; // enemies get destroyed along with portal
                 }
             }
         }
