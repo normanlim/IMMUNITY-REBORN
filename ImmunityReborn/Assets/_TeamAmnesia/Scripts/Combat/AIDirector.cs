@@ -28,6 +28,7 @@ public class AIDirector : MonoBehaviour
             if (RandomMeleeEnemy(out attackingMeleeEnemy))
             {
                 attackingMeleeEnemy.SwitchState(new MeleeAdvancingState(attackingMeleeEnemy));
+                attackingMeleeEnemy.AggroIndicator.SetActive(true);
             }
         }
     }
@@ -56,6 +57,7 @@ public class AIDirector : MonoBehaviour
             {
                 if (state is not MeleeAdvancingState && state is not MeleeAttackingState) // if enemy isn't in these states, it means they aren't attacking
                 {
+                    attackingMeleeEnemy.AggroIndicator.SetActive(false);
                     attackingMeleeEnemy = null;
                 }
             }
@@ -74,7 +76,7 @@ public class AIDirector : MonoBehaviour
 
         foreach (MeleeStateMachine meleeEnemy in meleeEnemies)
         {
-            if (meleeEnemy.IsCurrentStateInterruptible)
+            if (meleeEnemy.IsCurrentStateInterruptible && meleeEnemy.CurrentState is not MeleeRetreatingState)
             {
                 availableEnemies.Add(meleeEnemy);
             }

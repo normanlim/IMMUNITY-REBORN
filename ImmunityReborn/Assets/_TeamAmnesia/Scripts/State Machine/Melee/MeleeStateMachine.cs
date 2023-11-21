@@ -42,6 +42,9 @@ public class MeleeStateMachine : StateMachine
     public float AttackKnockback { get; private set; }
 
     [field: SerializeField]
+    public GameObject AggroIndicator { get; private set; }
+
+    [field: SerializeField]
     List<GameObject> DeathSFXs;
 
     [field: SerializeField]
@@ -56,6 +59,7 @@ public class MeleeStateMachine : StateMachine
     {
         Player = GameObject.FindGameObjectWithTag("Player");
         PlayerHealth = Player.GetComponent<Health>();
+        AggroIndicator.SetActive(false);
     }
 
     private void Start()
