@@ -36,7 +36,7 @@ public class PlayerImpactState : PlayerBaseState
 
         if (stateMachine.InputReader.IsAttacking)
         {
-            stateMachine.SwitchState(new PlayerAttackingState(stateMachine, 0));
+            stateMachine.SwitchState(new PlayerAttackingState(stateMachine));
             return;
         }
 

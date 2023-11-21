@@ -4,26 +4,33 @@ using UnityEngine;
 
 public class PlayerAttackingState : PlayerBaseState
 {
-    private AttackData attackData;
+    private readonly int MemoryAttackStateName = Animator.StringToHash("Sword And Shield Casting");
 
-    public PlayerAttackingState(PlayerStateMachine stateMachine, int attackIndex) : base(stateMachine)
+    private const float CrossFadeDuration = 0.1f;
+
+    public PlayerAttackingState(PlayerStateMachine stateMachine) : base(stateMachine)
     {
-        attackData = stateMachine.Attacks[attackIndex];
     }
 
     public override void Enter()
     {
-        stateMachine.Animator.CrossFadeInFixedTime(attackData.AnimationName, attackData.TransitionDuration);
+        stateMachine.Animator.CrossFadeInFixedTime(MemoryAttackStateName, CrossFadeDuration);
     }
 
     public override void Tick(float deltaTime)
     {
+        if (GetPlayingAnimationTimeNormalized(stateMachine.Animator, 1) >= 0.7f) // make comparing with less than (1.0f - Transition Duration) in Animator Transition Settings
+        {
+            stateMachine.SwitchState(new PlayerDefaultState(stateMachine));
+            return;
+        }
+
         FaceCameraDirection(deltaTime);
 
         Vector3 movement = CalculateMovement();
         Move(movement * stateMachine.DefaultMovementSpeed, deltaTime);
 
-        stateMachine.SwitchState(new PlayerDefaultState(stateMachine));
+        UpdateAnimator(deltaTime);
     }
 
     public override void Exit()

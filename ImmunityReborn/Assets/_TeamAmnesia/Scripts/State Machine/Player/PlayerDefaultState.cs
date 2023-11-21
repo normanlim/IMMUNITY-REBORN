@@ -23,7 +23,7 @@ public class PlayerDefaultState : PlayerBaseState
 
         if (stateMachine.InputReader.IsAttacking) // player pressed attack
         {
-            stateMachine.SwitchState(new PlayerAttackingState(stateMachine, 0));
+            stateMachine.SwitchState(new PlayerAttackingState(stateMachine));
             return;
         }
 

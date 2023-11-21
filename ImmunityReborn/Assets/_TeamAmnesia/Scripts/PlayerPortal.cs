@@ -11,6 +11,7 @@ public class PlayerPortal : MonoBehaviour
 
     private CinemachineFreeLook freeLookCamera;
     private LevelManager levelManager;
+    private Cloth playerCape;
 
     private void Start()
     {
@@ -19,18 +20,21 @@ public class PlayerPortal : MonoBehaviour
             .ActiveVirtualCamera
             .VirtualCameraGameObject
             .GetComponent<CinemachineFreeLook>();
+        playerCape = FindFirstObjectByType<Cloth>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
+            playerCape.enabled = false;
             other.gameObject.transform.position = teleportTo.transform.position;
 
             if (faceForwards)
             {
                 freeLookCamera.m_XAxis.Value = teleportTo.transform.eulerAngles.y;
             }
+            playerCape.enabled = true;
             levelManager.StartNextLevel();
             Destroy(gameObject);
         }
