@@ -10,6 +10,7 @@ public class DragonImpactState : DragonBaseState
 
     public override void Enter()
     {
+        // PlaySFX.PlayThenDestroy(stateMachine.SFXTakingDamage, stateMachine.transform);
     }
 
     public override void Tick(float deltaTime)

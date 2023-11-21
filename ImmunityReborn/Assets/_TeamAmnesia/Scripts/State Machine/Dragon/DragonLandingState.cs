@@ -23,6 +23,8 @@ public class DragonLandingState : DragonBaseState
         stateMachine.LandingWeaponDamager.SetDamage(stateMachine.LandingDamage, stateMachine.LandingKnockback);
 
         stateMachine.Animator.CrossFadeInFixedTime(LandingStateName, TransitionDuration, 0);
+
+        PlaySFX.PlayThenDestroy(stateMachine.SFXLanding, stateMachine.transform);
     }
 
     public override void Tick(float deltaTime)

@@ -128,8 +128,9 @@ public class TormentedSoulStateMachine : StateMachine
             // Calculate a semi-random position behind the current object
             Vector3 spawnPosition = CalculateSpawnPosition();
 
-            // Create a new portal at the calculated position
+            // Create a new portal at the calculated position and set as child
             GameObject portal = Instantiate(ArrowRainPortalPrefab, spawnPosition, Quaternion.identity);
+            portal.transform.parent = transform;
 
             // Optionally, you can set the portal's rotation based on the current object's rotation
             portal.transform.rotation = transform.rotation;

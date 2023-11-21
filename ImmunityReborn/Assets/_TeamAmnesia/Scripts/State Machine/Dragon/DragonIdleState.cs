@@ -14,6 +14,7 @@ public class DragonIdleState : DragonBaseState
 
     public override void Enter()
     {
+        PlaySFX.PlayThenDestroy(stateMachine.SFXAwake, stateMachine.transform);
         stateMachine.Animator.CrossFadeInFixedTime(GroundedStateName, CrossFadeDuration);
     }
 
@@ -30,5 +31,6 @@ public class DragonIdleState : DragonBaseState
 
     public override void Exit()
     {
+        PlaySFX.PlayThenDestroy(stateMachine.SFXCombatStart, stateMachine.transform);
     }
 }
