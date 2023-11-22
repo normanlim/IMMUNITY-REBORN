@@ -88,7 +88,7 @@ public class MeleeStateMachine : StateMachine
 
     private void HandleTakeDamage()
     {
-        Instantiate(TakeDamageEffect, transform.position + new Vector3(0f, 0.6f, 0f), Quaternion.identity);
+        PlaySFX.PlayThenDestroy(TakeDamageEffect, gameObject.transform);
         SwitchState(new MeleeImpactState(this));
     }
 

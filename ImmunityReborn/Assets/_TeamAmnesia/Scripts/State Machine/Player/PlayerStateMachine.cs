@@ -47,12 +47,10 @@ public class PlayerStateMachine : StateMachine
     [SerializeField] public GameObject VFXHealing;
     [SerializeField] public GameObject SFXTakeDamage;
     [SerializeField] public GameObject SFXDeath;
-    [SerializeField] GameObject SFXShieldActivate;
-    [SerializeField] GameObject SFXShieldActive;
-    [SerializeField] GameObject SFXShieldCollision;
-    [SerializeField] GameObject SFXMemoryAttackActivate;
-    [SerializeField] GameObject SFXMemoryAttackActive;
-    [SerializeField] GameObject SFXMemoryAttackCollision;
+    [SerializeField] public GameObject SFXMemoryAttackActivate;
+
+    private bool canPlaySFX = true;
+    private const float SFXCooldown = 0.6f;
 
     private void Start()
     {
@@ -106,9 +104,6 @@ public class PlayerStateMachine : StateMachine
         // Load the current scene again to reset it
         SceneManager.LoadScene( currentSceneName );
     }
-
-    private bool canPlaySFX = true;
-    private const float SFXCooldown = 0.6f; // Adjust the cooldown duration as needed
 
     public void PlaySFXThenDestroy(GameObject soundPrefab, Transform transform)
     {

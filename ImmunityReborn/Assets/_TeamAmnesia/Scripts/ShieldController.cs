@@ -114,6 +114,10 @@ public class ShieldController : MonoBehaviour
             // Begin Delayed Shield Regen (only thing they can do) 
             Invoke( "RegenShield", energyRegenDelay );
             energyMeterText.text = "";
+
+            // Cancel looping shield sound
+            if (ShieldingSoundObject)
+                PlaySFX.StopLoopedAudio(ShieldingSoundObject, this);
         }
 
     }
