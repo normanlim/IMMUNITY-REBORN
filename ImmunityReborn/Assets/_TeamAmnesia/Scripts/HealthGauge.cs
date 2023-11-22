@@ -11,7 +11,7 @@ public class HealthGauge : MonoBehaviour
 
     private void Start()
     {
-        healthBall.fillAmount = (float)stateMachine.Health.CurrentHealth / stateMachine.Health.MaxHealth;
+        healthBall.fillAmount = 1.0f;
     }
 
     private void OnEnable()
