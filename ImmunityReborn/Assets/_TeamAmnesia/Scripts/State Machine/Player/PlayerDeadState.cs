@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class PlayerDeadState : PlayerBaseState
 {
     public PlayerDeadState(PlayerStateMachine stateMachine) : base(stateMachine)
@@ -11,6 +7,7 @@ public class PlayerDeadState : PlayerBaseState
     public override void Enter()
     {
         stateMachine.Ragdoll.ToggleRagdoll(true);
+        PlaySFX.PlayThenDestroy(stateMachine.SFXDeath, stateMachine.transform);
     }
 
     public override void Tick(float deltaTime)

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -44,6 +42,15 @@ public class PlayerStateMachine : StateMachine
 
     public Transform MainCameraTransform { get; private set; }
 
+    [SerializeField] public GameObject VFXHealing;
+    [SerializeField] public GameObject SFXTakeDamage;
+    [SerializeField] public GameObject SFXDeath;
+    [SerializeField] GameObject SFXShieldActivate;
+    [SerializeField] GameObject SFXShieldActive;
+    [SerializeField] GameObject SFXShieldCollision;
+    [SerializeField] GameObject SFXMemoryAttackActivate;
+    [SerializeField] GameObject SFXMemoryAttackActive;
+    [SerializeField] GameObject SFXMemoryAttackCollision;
 
     private void Start()
     {

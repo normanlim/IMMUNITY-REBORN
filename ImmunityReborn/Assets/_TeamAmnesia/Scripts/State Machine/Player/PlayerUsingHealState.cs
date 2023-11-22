@@ -7,13 +7,15 @@ public class PlayerUsingHealState : PlayerBaseState
     private readonly int UseHealStateName = Animator.StringToHash("Sword And Shield Power Up");
 
     private const float CrossFadeDuration = 0.1f;
-
+    private bool usedHeal;
     public PlayerUsingHealState(PlayerStateMachine stateMachine) : base(stateMachine)
     {
     }
 
     public override void Enter()
     {
+        stateMachine.VFXHealing.SetActive(true); 
+        usedHeal = false;
         if (stateMachine.HealthConsumable.CurrentItemCount == 0)
         {
             stateMachine.SwitchState(new PlayerDefaultState(stateMachine));
@@ -25,10 +27,11 @@ public class PlayerUsingHealState : PlayerBaseState
 
     public override void Tick(float deltaTime)
     {
-        if (GetPlayingAnimationTimeNormalized(stateMachine.Animator, 1) >= 0.7f) // make comparing with less than (1.0f - Transition Duration) in Animator Transition Settings
+        if (GetPlayingAnimationTimeNormalized(stateMachine.Animator, 1) >= 0.7f && !usedHeal) // make comparing with less than (1.0f - Transition Duration) in Animator Transition Settings
         {
             stateMachine.HealthConsumable.Use();
-
+            usedHeal = true;
+            stateMachine.VFXHealing.SetActive(false);
             stateMachine.SwitchState(new PlayerDefaultState(stateMachine));
             return;
         }
@@ -43,5 +46,6 @@ public class PlayerUsingHealState : PlayerBaseState
 
     public override void Exit()
     {
+        stateMachine.VFXHealing.SetActive(false);
     }
 }

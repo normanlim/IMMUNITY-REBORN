@@ -26,7 +26,7 @@ public class HealthConsumable : MonoBehaviour
     public TMP_Text ItemCountText { get; private set; }
 
     [field: SerializeField]
-    public ParticleSystem UseVFX { get; private set; }
+    public GameObject HealEffect { get; private set; }
 
     private void Start()
     {
@@ -40,7 +40,7 @@ public class HealthConsumable : MonoBehaviour
         if (CurrentItemCount > 0)
         {
             TargetHealth.Heal(HealAmount);
-            UseVFX.Play();
+            Instantiate(HealEffect, transform);
             CurrentItemCount--;
             ItemCountBall.fillAmount = (float)CurrentItemCount / MaxItemCount;
             ItemCountText.text = CurrentItemCount.ToString();
