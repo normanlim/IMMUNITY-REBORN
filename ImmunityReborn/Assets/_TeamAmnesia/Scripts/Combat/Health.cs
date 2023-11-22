@@ -34,6 +34,12 @@ public class Health : MonoBehaviour
         currentHealth = maxHealth;
     }
 
+    public void SetGodModeHealth()
+    {
+        currentHealth = 1000000;
+        maxHealth = 1000000;
+    }
+
     public void DealDamage( int damage, DamageType damageType = DamageType.None )
     {
         if ( currentHealth == 0 ) { return; } // avoid further calculations if already dead
