@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -104,5 +105,24 @@ public class PlayerStateMachine : StateMachine
 
         // Load the current scene again to reset it
         SceneManager.LoadScene( currentSceneName );
+    }
+
+    private bool canPlaySFX = true;
+    private const float SFXCooldown = 0.6f; // Adjust the cooldown duration as needed
+
+    public void PlaySFXThenDestroy(GameObject soundPrefab, Transform transform)
+    {
+        if (canPlaySFX)
+        {
+            PlaySFX.PlayThenDestroy(soundPrefab, transform);
+            canPlaySFX = false;
+            StartCoroutine(SFXCooldownCoroutine());
+        }
+    }
+
+    private IEnumerator SFXCooldownCoroutine()
+    {
+        yield return new WaitForSeconds(SFXCooldown);
+        canPlaySFX = true; // Reset the cooldown
     }
 }
