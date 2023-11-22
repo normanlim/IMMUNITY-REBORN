@@ -11,6 +11,7 @@ public class ShieldController : MonoBehaviour
     [SerializeField] float energyRegenDelay = 2;
     [SerializeField] float regenSpeed = 10;
     [SerializeField] float depleteSpeed = 5;
+    [SerializeField] GameObject SFXShielding;
 
     private float currentEnergyValue;
     private PlayerStateMachine playerStateMachine;
@@ -22,6 +23,8 @@ public class ShieldController : MonoBehaviour
     private float meleeShieldActiveTime = 0f;
     private float rangedShieldActiveTime = 0f;
     private float magicShieldActiveTime = 0f;
+
+    private GameObject ShieldingSoundObject;
 
     public float GetMeleeShieldActiveDuration()
     {
@@ -86,10 +89,17 @@ public class ShieldController : MonoBehaviour
                 energyMeter.fillAmount = currentEnergyValue / 100;
 
                 energyBall.fillAmount = currentEnergyValue / 100;
+
+                // Play shielding sound on loop
+                if (!ShieldingSoundObject)
+                    ShieldingSoundObject = PlaySFX.PlayWithLoop(SFXShielding, transform);
             }
             else
             {
                 Invoke( "RegenShield", energyRegenDelay );
+                // Cancel looping shield sound
+                if (ShieldingSoundObject)
+                    PlaySFX.StopLoopedAudio(ShieldingSoundObject, this);
             }
 
             CheckShieldInputs();

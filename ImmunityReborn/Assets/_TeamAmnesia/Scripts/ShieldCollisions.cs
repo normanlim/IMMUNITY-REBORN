@@ -18,7 +18,13 @@ public class ShieldCollisions : MonoBehaviour
     [SerializeField]
     private int PerfectParryShieldReward = 10;
     [SerializeField]
-    private int PerfectParryMemoryReward = 25;
+    private int PerfectParryMemoryReward = 10;
+    [SerializeField]
+    private GameObject SFXPerfectParry;
+    [SerializeField]
+    private int RegularParryMemoryReward = 1;
+    [SerializeField]
+    private GameObject SFXRegularParry;
 
     private void Start()
     {
@@ -66,16 +72,17 @@ public class ShieldCollisions : MonoBehaviour
         if ( rangedShieldActiveDur <= PerfectParryWindowDuration )
         {
             // Award extra gauge for last-second block
-            playerStateMachine.MemoryGauge.EarnMemoryGauge( 10 );
-            playerStateMachine.ShieldController.EarnShieldGauge( 10 );
+            playerStateMachine.MemoryGauge.EarnMemoryGauge(PerfectParryMemoryReward);
+            playerStateMachine.ShieldController.EarnShieldGauge(PerfectParryShieldReward);
             OnRangedBlock?.Invoke( attacker );
-
+            PlaySFX.PlayThenDestroy(SFXPerfectParry, transform);
             //Debug.Log( "PERFECT PARRY (BONUS) - Shield active: " + rangedShieldActiveDur + " / " + PerfectParryWindowDuration );
         }
         else
         {
             // Award regular gauge for regular block timing
-            playerStateMachine.MemoryGauge.EarnMemoryGauge( 2 );
+            playerStateMachine.MemoryGauge.EarnMemoryGauge(RegularParryMemoryReward);
+            PlaySFX.PlayThenDestroy(SFXRegularParry, transform);
         }
     }
 
@@ -86,16 +93,17 @@ public class ShieldCollisions : MonoBehaviour
         if ( meleeShieldActiveDur <= PerfectParryWindowDuration )
         {
             // Award extra gauge for last-second block
-            playerStateMachine.MemoryGauge.EarnMemoryGauge( 20 );
-            playerStateMachine.ShieldController.EarnShieldGauge( 10 );
+            playerStateMachine.MemoryGauge.EarnMemoryGauge(PerfectParryMemoryReward);
+            playerStateMachine.ShieldController.EarnShieldGauge(PerfectParryShieldReward);
             OnMeleeBlock?.Invoke( attacker );
-
+            PlaySFX.PlayThenDestroy(SFXPerfectParry, transform);
             //Debug.Log( "PERFECT PARRY (BONUS) - Shield active: " + meleeShieldActiveDur + " / " + PerfectParryWindowDuration );
         }
         else
         {
             // Award regular gauge for regular block timing
-            playerStateMachine.MemoryGauge.EarnMemoryGauge( 10 );
+            playerStateMachine.MemoryGauge.EarnMemoryGauge(RegularParryMemoryReward);
+            PlaySFX.PlayThenDestroy(SFXRegularParry, transform);
         }
     }
 
@@ -109,13 +117,14 @@ public class ShieldCollisions : MonoBehaviour
             playerStateMachine.MemoryGauge.EarnMemoryGauge( PerfectParryMemoryReward );
             playerStateMachine.ShieldController.EarnShieldGauge( PerfectParryShieldReward );
             OnMagicBlock?.Invoke( attacker );
-
+            PlaySFX.PlayThenDestroy(SFXPerfectParry, transform);
             //Debug.Log( "PERFECT PARRY (BONUS) - Shield active: " + magicShieldActiveDur + " / " + PerfectParryWindowDuration );
         }
         else
         {
             // Award regular gauge for regular block timing
-            playerStateMachine.MemoryGauge.EarnMemoryGauge( 10 );
+            playerStateMachine.MemoryGauge.EarnMemoryGauge(RegularParryMemoryReward);
+            PlaySFX.PlayThenDestroy(SFXRegularParry, transform);
         }
     }
 }

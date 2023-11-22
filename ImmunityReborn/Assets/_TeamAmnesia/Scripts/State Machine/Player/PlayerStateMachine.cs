@@ -55,7 +55,8 @@ public class PlayerStateMachine : StateMachine
 
     private void Start()
     {
-        IsGodModeActive = PlayerPrefs.GetInt( "GodMode", 0 ) == 1;
+        IsGodModeActive = true;
+        //IsGodModeActive = PlayerPrefs.GetInt( "GodMode", 0 ) == 1;
         if ( IsGodModeActive ) { Health.SetGodModeHealth(); }
 
         Cursor.lockState = CursorLockMode.Locked;

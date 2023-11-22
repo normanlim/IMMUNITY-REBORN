@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlaySFX : MonoBehaviour
@@ -32,6 +33,36 @@ public class PlaySFX : MonoBehaviour
         {
             audioSource.loop = false; // Disable loop
             Destroy(audioSource.gameObject, audioSource.clip.length / audioSource.pitch); // Destroy after the clip finishes
+        }
+    }
+
+    public static void StopLoopedAudio(GameObject soundObject, MonoBehaviour monoBehaviour, float fadeOutDuration = 0.3f)
+    {
+        AudioSource audioSource = soundObject.GetComponent<AudioSource>();
+        if (audioSource != null)
+        {
+            monoBehaviour.StartCoroutine(FadeOutAndStop(audioSource, soundObject, fadeOutDuration));
+        }
+    }
+
+    private static IEnumerator FadeOutAndStop(AudioSource audioSource, GameObject soundObject, float duration)
+    {
+        float startVolume = audioSource.volume;
+
+        while (audioSource != null && audioSource.volume > 0)
+        {
+            audioSource.volume -= startVolume * Time.deltaTime / duration;
+            yield return null;
+        }
+
+        if (audioSource != null)
+        {
+            audioSource.Stop();
+        }
+
+        if (soundObject != null)
+        {
+            Destroy(soundObject);
         }
     }
 }

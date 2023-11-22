@@ -35,9 +35,9 @@ public class WeaponDamager : MonoBehaviour
 
         if (other.TryGetComponent(out Health health))
         {
-            if (HitSFX != null)
+            int damageDealt = health.DealDamage(damage, DamageType);
+            if (HitSFX != null && damageDealt > 0)
                 Instantiate(HitSFX, gameObject.transform);
-            health.DealDamage(damage, DamageType);
         }
 
         if (other.TryGetComponent(out ForceReceiver forceReceiver))
