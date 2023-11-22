@@ -27,6 +27,8 @@ public class MagicIdleState : MagicBaseState
 
         FacePlayer( deltaTime );
 
+        Move( deltaTime );
+
         UpdateLocomotionAnimator( deltaTime );
     }
 

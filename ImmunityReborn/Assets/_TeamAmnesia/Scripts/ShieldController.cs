@@ -8,11 +8,11 @@ public class ShieldController : MonoBehaviour
     [SerializeField] Image energyBall;
     [SerializeField] TMP_Text energyMeterText;
     [SerializeField] Image energyMeter; // extra
-    [SerializeField] float regenSpeed;
-    [SerializeField] float depleteSpeed;
+    [SerializeField] float energyRegenDelay = 2;
+    [SerializeField] float regenSpeed = 10;
+    [SerializeField] float depleteSpeed = 5;
 
     private float currentEnergyValue;
-    private float energyRegenDelay;
     private PlayerStateMachine playerStateMachine;
 
     public GameObject meleeShield;
@@ -46,9 +46,6 @@ public class ShieldController : MonoBehaviour
     private void Start()
     {
         currentEnergyValue = 100;
-        depleteSpeed = 5;
-        regenSpeed = 10;
-        energyRegenDelay = 3;
 
         playerStateMachine = GetComponent<PlayerStateMachine>();
 

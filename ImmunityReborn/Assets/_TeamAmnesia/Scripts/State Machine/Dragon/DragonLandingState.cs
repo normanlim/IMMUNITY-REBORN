@@ -62,7 +62,7 @@ public class DragonLandingState : DragonBaseState
         {
             Vector3 playerXZPos = new(stateMachine.Player.transform.position.x, 0.0f, stateMachine.Player.transform.position.z);
             Vector3 dragonXZPos = new(stateMachine.transform.position.x, 0.0f, stateMachine.transform.position.z);
-            Vector3 offsetXZ = (playerXZPos - dragonXZPos).normalized * (GroundedDistanceToPlayer / 2);
+            Vector3 offsetXZ = (playerXZPos - dragonXZPos).normalized * (GroundedDistanceToPlayer / 4);
             Vector3 targetPosition = playerXZPos - offsetXZ;
 
             stateMachine.NavMeshAgent.destination = targetPosition;

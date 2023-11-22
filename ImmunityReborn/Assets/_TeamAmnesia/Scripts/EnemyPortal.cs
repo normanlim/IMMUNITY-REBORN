@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 public class EnemyPortal : MonoBehaviour
@@ -20,8 +21,10 @@ public class EnemyPortal : MonoBehaviour
     [field: SerializeField]
     public SpawnManager.SpawnData Summons { get; private set; }
 
-    public float SummonInterval = 8f;
+    [field: SerializeField, Tooltip("How much to damage self by for every enemy spawned")]
+    public int CostPerEnemy { get; private set; }
 
+    public float SummonInterval = 8f;
 
     // Start is called before the first frame update
     void Start()
@@ -59,5 +62,8 @@ public class EnemyPortal : MonoBehaviour
     private void SummonEnemy()
     {
         EnemySpawnManager.SpawnEnemiesNow(Summons);
+
+        int totalCount = Summons.spawnGroups.Sum(group => group.count);
+        Health.DealDamage(totalCount * CostPerEnemy);
     }
 }

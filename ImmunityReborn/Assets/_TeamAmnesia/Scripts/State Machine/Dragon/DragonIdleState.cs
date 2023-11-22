@@ -27,6 +27,8 @@ public class DragonIdleState : DragonBaseState
         }
 
         FacePlayer(deltaTime);
+
+        Move(deltaTime);
     }
 
     public override void Exit()

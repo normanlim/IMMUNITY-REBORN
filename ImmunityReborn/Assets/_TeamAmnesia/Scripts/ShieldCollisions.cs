@@ -1,5 +1,4 @@
 using System;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class ShieldCollisions : MonoBehaviour
@@ -16,6 +15,10 @@ public class ShieldCollisions : MonoBehaviour
 
     [SerializeField]
     private float PerfectParryWindowDuration;
+    [SerializeField]
+    private int PerfectParryShieldReward = 10;
+    [SerializeField]
+    private int PerfectParryMemoryReward = 25;
 
     private void Start()
     {
@@ -103,8 +106,8 @@ public class ShieldCollisions : MonoBehaviour
         if ( magicShieldActiveDur <= PerfectParryWindowDuration )
         {
             // Award extra gauge for last-second block
-            playerStateMachine.MemoryGauge.EarnMemoryGauge( 50 );
-            playerStateMachine.ShieldController.EarnShieldGauge( 10 );
+            playerStateMachine.MemoryGauge.EarnMemoryGauge( PerfectParryMemoryReward );
+            playerStateMachine.ShieldController.EarnShieldGauge( PerfectParryShieldReward );
             OnMagicBlock?.Invoke( attacker );
 
             //Debug.Log( "PERFECT PARRY (BONUS) - Shield active: " + magicShieldActiveDur + " / " + PerfectParryWindowDuration );
