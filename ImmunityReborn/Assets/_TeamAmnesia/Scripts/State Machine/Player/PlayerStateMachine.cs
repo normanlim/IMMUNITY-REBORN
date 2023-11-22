@@ -41,15 +41,15 @@ public class PlayerStateMachine : StateMachine
     [field: SerializeField]
     public AttackData[] Attacks { get; private set; }
 
-    private bool isGodModeActive;
-
     public Transform MainCameraTransform { get; private set; }
+
+    public bool IsGodModeActive { get; private set; }
 
 
     private void Start()
     {
-        isGodModeActive = PlayerPrefs.GetInt( "GodMode", 0 ) == 1;
-        if ( isGodModeActive ) { Health.SetGodModeHealth(); }
+        IsGodModeActive = PlayerPrefs.GetInt( "GodMode", 0 ) == 1;
+        if ( IsGodModeActive ) { Health.SetGodModeHealth(); }
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
