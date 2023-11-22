@@ -11,6 +11,8 @@ public class MemoryGauge : MonoBehaviour
     public GameObject magicShield;
     public Slider memoryGaugeSlider; // extra
 
+    public PlayerStateMachine stateMachine;
+
     public Image memoryBall;
     public TMP_Text memoryUsesLeftText;
 
@@ -38,10 +40,10 @@ public class MemoryGauge : MonoBehaviour
     void Update()
     {
 
-        //  ****  Admin mode to just add gauge for testing/alpha demo **** //
-        if ( Input.GetKeyDown( KeyCode.Space ) )
+        //  ****  God mode to just add gauge for testing/alpha/beta demo **** //
+        if ( Input.GetKeyDown( KeyCode.Space ) && stateMachine.IsGodModeActive )
         {
-            EarnMemoryGauge( 50 );
+            EarnMemoryGauge( 100 );
         }
         //  *************************************************************** //
 

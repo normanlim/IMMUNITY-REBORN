@@ -16,11 +16,11 @@ public class OffLimits : MonoBehaviour
 
         if (health != null)
         {
-            health.DealDamage(health.MaxHealth);
+            health.DealDamage( health.MaxHealth );
         }
         else if (other.TryGetComponent(out health))
         {
-            health.DealDamage(health.MaxHealth);
+            health.DealDamage( health.MaxHealth );
         }
     }
 }
