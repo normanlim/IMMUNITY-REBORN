@@ -14,6 +14,8 @@ public class Health : MonoBehaviour
     public event Action OnHeal;
     public event Action OnDie;
 
+    public bool IsPlayerDead;
+
     public bool IsMeleeImmune { get; set; }
     public bool IsRangedImmune { get; set; }
     public bool IsMagicImmune { get; set; }
@@ -32,6 +34,13 @@ public class Health : MonoBehaviour
     private void Start()
     {
         currentHealth = maxHealth;
+        IsPlayerDead = false;
+    }
+
+    public void SetGodModeHealth()
+    {
+        currentHealth = 1000000;
+        maxHealth = 1000000;
     }
 
     public void DealDamage( int damage, DamageType damageType = DamageType.None )
@@ -49,6 +58,7 @@ public class Health : MonoBehaviour
         if ( currentHealth == 0 ) // logic after health is updated
         {
             OnDie?.Invoke();
+            IsPlayerDead = true;
         }
     }
 

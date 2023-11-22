@@ -110,7 +110,7 @@ public class ShieldController : MonoBehaviour
 
     private void CheckShieldInputs()
     {
-        if (Input.GetMouseButton(0) && !Input.GetMouseButton(1))
+        if ( Input.GetMouseButton(0) && !Input.GetMouseButton(1) && !playerStateMachine.Health.IsPlayerDead )
         {
             // Check if only the left mouse button is down
             meleeShield.SetActive(true);
@@ -124,7 +124,7 @@ public class ShieldController : MonoBehaviour
             meleeShieldActiveTime = 0f;
         }
 
-        if (!Input.GetMouseButton(0) && Input.GetMouseButton(1))
+        if ( !Input.GetMouseButton(0) && Input.GetMouseButton(1) && !playerStateMachine.Health.IsPlayerDead )
         {
             // Check if only the right mouse button is down
             rangedShield.SetActive(true);
@@ -138,7 +138,7 @@ public class ShieldController : MonoBehaviour
             rangedShieldActiveTime = 0f;
         }
 
-        if (Input.GetMouseButton(0) && Input.GetMouseButton(1))
+        if ( Input.GetMouseButton(0) && Input.GetMouseButton(1) && !playerStateMachine.Health.IsPlayerDead )
         {
             // Check if both mouse buttons are down
             magicShield.SetActive(true);
