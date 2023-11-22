@@ -43,13 +43,14 @@ public class Health : MonoBehaviour
         maxHealth = 1000000;
     }
 
-    public void DealDamage( int damage, DamageType damageType = DamageType.None )
+    // Returns damage dealt
+    public int DealDamage( int damage, DamageType damageType = DamageType.None )
     {
-        if ( currentHealth == 0 ) { return; } // avoid further calculations if already dead
+        if ( currentHealth == 0 ) { return 0; } // avoid further calculations if already dead
 
-        if (damageType == DamageType.Melee && IsMeleeImmune) { return; }
-        if (damageType == DamageType.Ranged && IsRangedImmune) { return; }
-        if (damageType == DamageType.Magic && IsMagicImmune) { return; }
+        if (damageType == DamageType.Melee && IsMeleeImmune) { return 0; }
+        if (damageType == DamageType.Ranged && IsRangedImmune) { return 0; }
+        if (damageType == DamageType.Magic && IsMagicImmune) { return 0; }
 
         currentHealth = Mathf.Max(currentHealth - damage, 0); // makes sure health is never negative
 
@@ -60,6 +61,7 @@ public class Health : MonoBehaviour
             OnDie?.Invoke();
             IsPlayerDead = true;
         }
+        return damage;
     }
 
     public void Heal(int amount)

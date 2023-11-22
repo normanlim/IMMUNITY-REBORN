@@ -14,6 +14,7 @@ public class PlayerAttackingState : PlayerBaseState
 
     public override void Enter()
     {
+        PlaySFX.PlayThenDestroy(stateMachine.SFXMemoryAttackActivate, stateMachine.transform);
         stateMachine.Animator.CrossFadeInFixedTime(MemoryAttackStateName, CrossFadeDuration);
     }
 

@@ -16,6 +16,7 @@ public class PlayerImpactState : PlayerBaseState
 
     public override void Enter()
     {
+        stateMachine.PlaySFXThenDestroy(stateMachine.SFXTakeDamage, stateMachine.transform);
         stateMachine.Animator.CrossFadeInFixedTime(ImpactStateName, CrossFadeDuration);
     }
 
