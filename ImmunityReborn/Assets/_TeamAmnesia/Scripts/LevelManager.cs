@@ -64,5 +64,7 @@ public class LevelManager : MonoBehaviour
             }
         }
         Player.GetComponent<HealthConsumable>().AddItemCount(AdditionalHealCount);
+        Health PlayerHealth = Player.GetComponent<Health>();
+        PlayerHealth.Heal(PlayerHealth.MaxHealth);
     }
 }
