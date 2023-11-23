@@ -14,7 +14,7 @@ public class HealthConsumable : MonoBehaviour
     public int HealAmount { get; private set; } = 20;
 
     [field: SerializeField]
-    public int MaxItemCount { get; private set; } = 5;
+    public int MaxItemCount { get; private set; } = 3;
 
     [field: SerializeField]
     public int CurrentItemCount { get; private set; }

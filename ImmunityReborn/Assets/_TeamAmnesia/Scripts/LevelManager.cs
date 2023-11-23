@@ -5,7 +5,9 @@ public class LevelManager : MonoBehaviour
 {
     [SerializeField] List<Level> LevelList = new List<Level>();
     [SerializeField] int CurrentLevelIndex;
+    [SerializeField] int AdditionalHealCount = 3;
     private AudioSource CurrentBGMSource;
+    private GameObject Player;
 
     [System.Serializable]
     public class Level
@@ -16,6 +18,7 @@ public class LevelManager : MonoBehaviour
     
     void Start()
     {
+        Player = GameObject.FindGameObjectWithTag("Player");
         CurrentLevelIndex = 0;
         CurrentBGMSource = gameObject.AddComponent<AudioSource>();
         CurrentBGMSource.loop = true;
@@ -60,5 +63,8 @@ public class LevelManager : MonoBehaviour
                 LevelList[i].LevelObject.SetActive(false);
             }
         }
+        Player.GetComponent<HealthConsumable>().AddItemCount(AdditionalHealCount);
+        Health PlayerHealth = Player.GetComponent<Health>();
+        PlayerHealth.Heal(PlayerHealth.MaxHealth);
     }
 }
