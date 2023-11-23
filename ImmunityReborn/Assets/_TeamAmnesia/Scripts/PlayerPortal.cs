@@ -36,7 +36,7 @@ public class PlayerPortal : MonoBehaviour
             }
             playerCape.enabled = true;
             levelManager.StartNextLevel();
-            Destroy(gameObject);
+            Destroy(transform.parent.gameObject);// The empty parent is used to set a local y offset, delete the parent
         }
     }
 }
