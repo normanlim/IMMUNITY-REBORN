@@ -64,7 +64,7 @@ public class EnemyPortal : MonoBehaviour
     {
         EnemySpawnManager.SpawnEnemiesNow(Summons);
 
-        int totalCount = Summons.spawnGroups.Sum(group => group.count);
-        Health.DealDamage(totalCount * CostPerEnemy);
+        //int totalCount = Summons.spawnGroups.Sum(group => group.count);
+        //Health.DealDamage(totalCount * CostPerEnemy);
     }
 }
