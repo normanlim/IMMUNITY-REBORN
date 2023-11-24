@@ -72,6 +72,21 @@ public class DragonStateMachine : StateMachine
     public GameObject SummonCharacter { get; private set; }
 
     [field: SerializeField]
+    public Transform FirebreathSpawnPoint { get; private set; }
+
+    [field: SerializeField]
+    public GameObject FirebreathPrefab { get; private set; }
+
+    [field: SerializeField]
+    public int FirebreathDamage { get; private set; }
+
+    [field: SerializeField]
+    public float FirebreathKnockback { get; private set; }
+
+    [field: SerializeField]
+    public float FirebreathDamageCooldown { get; private set; }
+
+    [field: SerializeField]
     public SkinnedMeshRenderer MeshRenderer { get; private set; }
 
     [field: SerializeField]
@@ -149,6 +164,11 @@ public class DragonStateMachine : StateMachine
         return false;
     }
 
+    public void DestroyGameObject(GameObject gameObject)
+    {
+        Destroy(gameObject);
+    }
+
     private void HandleTakeDamage()
     {
         Instantiate(TakeDamageEffect, TakeDamageBodyPart.transform.position, Quaternion.identity);
@@ -178,6 +198,20 @@ public class DragonStateMachine : StateMachine
         if (NavMeshSampler.RandomPointAroundPosition(SampleAroundPoint.position, SummonRadius, out Vector3 result, bomberWalkableArea))
         {
             Instantiate(SummonCharacter, result, Quaternion.LookRotation(Player.transform.position));
+        }
+    }
+
+    private void StartFirebreath()
+    {
+        GameObject fireBreath = Instantiate(FirebreathPrefab, FirebreathSpawnPoint);
+        fireBreath.GetComponent<ParticleDamager>().SetDamage(FirebreathDamage, FirebreathKnockback, FirebreathDamageCooldown);
+    }
+
+    private void StopFirebreath()
+    {
+        if (FirebreathSpawnPoint.childCount > 0 && FirebreathSpawnPoint.GetChild(0) is { } fireBreath)
+        {
+            DestroyGameObject(fireBreath.gameObject);
         }
     }
 
