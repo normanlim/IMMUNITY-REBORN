@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class DragonSummoningState : DragonBaseState
 {
-    private readonly int FlyingSummonStateName = Animator.StringToHash("FlyStationarySpreadFire");
-    private readonly int GroundedSummonStateName = Animator.StringToHash("SpreadFire");
+    private readonly int FlyingSummonStateName = Animator.StringToHash("FlyStationarySummon");
+    private readonly int GroundedSummonStateName = Animator.StringToHash("Summon");
 
     private const float TransitionDuration = 0.1f;
 

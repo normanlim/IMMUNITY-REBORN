@@ -17,7 +17,8 @@ public enum DragonGroundedAction
     TakingOff,
     Clawing,
     Fireball,
-    Summoning
+    Summoning,
+    Firebreath
 }
 
 /// <summary>
@@ -39,22 +40,24 @@ public class DragonActions : MonoBehaviour
         { DragonGroundedAction.TakingOff, typeof(DragonTakingOffState) },
         { DragonGroundedAction.Clawing, typeof(DragonClawingState) },
         { DragonGroundedAction.Fireball, typeof(DragonFireballState) },
-        { DragonGroundedAction.Summoning, typeof(DragonSummoningState) }
+        { DragonGroundedAction.Summoning, typeof(DragonSummoningState) },
+        { DragonGroundedAction.Firebreath, typeof(DragonFirebreathState) }
     };
 
     private static readonly Dictionary<DragonFlyingAction, int> FlyingActionWeights = new()
     {
         { DragonFlyingAction.Landing, 1 },
-        { DragonFlyingAction.Fireball, 4 },
+        { DragonFlyingAction.Fireball, 6 },
         { DragonFlyingAction.Summoning, 2 }
     };
 
     private static readonly Dictionary<DragonGroundedAction, int> GroundedActionWeights = new()
     {
         { DragonGroundedAction.TakingOff, 1 },
-        { DragonGroundedAction.Clawing, 2 },
-        { DragonGroundedAction.Fireball, 2 },
-        { DragonGroundedAction.Summoning, 2 }
+        { DragonGroundedAction.Clawing, 4 },
+        { DragonGroundedAction.Fireball, 1 },
+        { DragonGroundedAction.Summoning, 1 },
+        { DragonGroundedAction.Firebreath, 4 }
     };
 
     [field: SerializeField]
