@@ -89,10 +89,6 @@ public class ShieldController : MonoBehaviour
                 energyMeter.fillAmount = currentEnergyValue / 100;
 
                 energyBall.fillAmount = currentEnergyValue / 100;
-
-                // Play shielding sound on loop
-                if (!ShieldingSoundObject)
-                    ShieldingSoundObject = PlaySFX.PlayWithLoop(SFXShielding, transform);
             }
             else
             {
@@ -130,6 +126,10 @@ public class ShieldController : MonoBehaviour
             meleeShield.SetActive(true);
             playerStateMachine.Health.IsMeleeImmune = true;
             meleeShieldActiveTime += Time.deltaTime;
+
+            // Play shielding sound on loop
+            if ( !ShieldingSoundObject )
+                ShieldingSoundObject = PlaySFX.PlayWithLoop( SFXShielding, transform );
         }
         else
         {
@@ -144,6 +144,10 @@ public class ShieldController : MonoBehaviour
             rangedShield.SetActive(true);
             playerStateMachine.Health.IsRangedImmune = true;
             rangedShieldActiveTime += Time.deltaTime;
+
+            // Play shielding sound on loop
+            if ( !ShieldingSoundObject )
+                ShieldingSoundObject = PlaySFX.PlayWithLoop( SFXShielding, transform );
         }
         else
         {
@@ -158,6 +162,10 @@ public class ShieldController : MonoBehaviour
             magicShield.SetActive(true);
             playerStateMachine.Health.IsMagicImmune = true;
             magicShieldActiveTime += Time.deltaTime;
+
+            // Play shielding sound on loop
+            if ( !ShieldingSoundObject )
+                ShieldingSoundObject = PlaySFX.PlayWithLoop( SFXShielding, transform );
         }
         else
         {
