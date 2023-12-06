@@ -78,7 +78,7 @@ public class ShieldController : MonoBehaviour
         if ( currentEnergyValue > 0 )
         {
             // Energy Meter UI Code
-            if ( Input.GetMouseButton( 0 ) || Input.GetMouseButton( 1 ) ) // if mouseclicks are detected, deplete gauge accordingly
+            if ( ( Input.GetMouseButton( 0 ) || Input.GetMouseButton( 1 ) ) && !playerStateMachine.Health.IsPlayerDead && !PauseController.isPaused )
             {
                 CancelInvoke( "RegenShield" );
                 currentEnergyValue -= depleteSpeed * Time.deltaTime; // How fast to drain energy gauge
@@ -89,10 +89,6 @@ public class ShieldController : MonoBehaviour
                 energyMeter.fillAmount = currentEnergyValue / 100;
 
                 energyBall.fillAmount = currentEnergyValue / 100;
-
-                // Play shielding sound on loop
-                if (!ShieldingSoundObject)
-                    ShieldingSoundObject = PlaySFX.PlayWithLoop(SFXShielding, transform);
             }
             else
             {
@@ -124,12 +120,16 @@ public class ShieldController : MonoBehaviour
 
     private void CheckShieldInputs()
     {
-        if ( Input.GetMouseButton(0) && !Input.GetMouseButton(1) && !playerStateMachine.Health.IsPlayerDead )
+        if ( Input.GetMouseButton(0) && !Input.GetMouseButton(1) && !playerStateMachine.Health.IsPlayerDead && !PauseController.isPaused )
         {
             // Check if only the left mouse button is down
             meleeShield.SetActive(true);
             playerStateMachine.Health.IsMeleeImmune = true;
             meleeShieldActiveTime += Time.deltaTime;
+
+            // Play shielding sound on loop
+            if ( !ShieldingSoundObject )
+                ShieldingSoundObject = PlaySFX.PlayWithLoop( SFXShielding, transform );
         }
         else
         {
@@ -138,12 +138,16 @@ public class ShieldController : MonoBehaviour
             meleeShieldActiveTime = 0f;
         }
 
-        if ( !Input.GetMouseButton(0) && Input.GetMouseButton(1) && !playerStateMachine.Health.IsPlayerDead )
+        if ( !Input.GetMouseButton(0) && Input.GetMouseButton(1) && !playerStateMachine.Health.IsPlayerDead && !PauseController.isPaused )
         {
             // Check if only the right mouse button is down
             rangedShield.SetActive(true);
             playerStateMachine.Health.IsRangedImmune = true;
             rangedShieldActiveTime += Time.deltaTime;
+
+            // Play shielding sound on loop
+            if ( !ShieldingSoundObject )
+                ShieldingSoundObject = PlaySFX.PlayWithLoop( SFXShielding, transform );
         }
         else
         {
@@ -152,12 +156,16 @@ public class ShieldController : MonoBehaviour
             rangedShieldActiveTime = 0f;
         }
 
-        if ( Input.GetMouseButton(0) && Input.GetMouseButton(1) && !playerStateMachine.Health.IsPlayerDead )
+        if ( Input.GetMouseButton(0) && Input.GetMouseButton(1) && !playerStateMachine.Health.IsPlayerDead && !PauseController.isPaused )
         {
             // Check if both mouse buttons are down
             magicShield.SetActive(true);
             playerStateMachine.Health.IsMagicImmune = true;
             magicShieldActiveTime += Time.deltaTime;
+
+            // Play shielding sound on loop
+            if ( !ShieldingSoundObject )
+                ShieldingSoundObject = PlaySFX.PlayWithLoop( SFXShielding, transform );
         }
         else
         {

@@ -32,6 +32,9 @@ public class PlayerStateMachine : StateMachine
     public ShieldController ShieldController { get; private set; }
 
     [field: SerializeField]
+    public GameOverScreen GameOverScreen { get; private set; }
+
+    [field: SerializeField]
     public float DefaultMovementSpeed { get; private set; }
 
     [field: SerializeField]
@@ -52,10 +55,16 @@ public class PlayerStateMachine : StateMachine
     private bool canPlaySFX = true;
     private const float SFXCooldown = 0.6f;
 
+    private float startTime;
+    private float endTime;
+
     private void Start()
     {
         IsGodModeActive = PlayerPrefs.GetInt( "GodMode", 0 ) == 1;
         if ( IsGodModeActive ) { Health.SetGodModeHealth(); }
+
+        // Record the start time to calculate survival time later
+        startTime = Time.time;
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -86,7 +95,7 @@ public class PlayerStateMachine : StateMachine
 
     private void HandleDie()
     {
-        Invoke( "ResetCurrentScene", 5.0f );
+        Invoke( "GameOver", 3.0f );
         SwitchState(new PlayerDeadState(this));
     }
 
@@ -95,13 +104,12 @@ public class PlayerStateMachine : StateMachine
         SwitchState(new PlayerUsingHealState(this));
     }
 
-    private void ResetCurrentScene()
+    private void GameOver()
     {
-        // Get the name of the current scene
-        string currentSceneName = SceneManager.GetActiveScene().name;
+        endTime = Time.time;
+        float durationAlive = endTime - startTime;
 
-        // Load the current scene again to reset it
-        SceneManager.LoadScene( currentSceneName );
+        GameOverScreen.Setup( durationAlive );
     }
 
     public void PlaySFXThenDestroy(GameObject soundPrefab, Transform transform)
