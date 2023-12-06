@@ -15,6 +15,7 @@ public class DragonIdleState : DragonBaseState
     public override void Enter()
     {
         PlaySFX.PlayThenDestroy(stateMachine.SFXAwake, stateMachine.transform);
+        CameraShaker.Instance.Shake(5.0f, 3.0f);
         stateMachine.Animator.CrossFadeInFixedTime(GroundedStateName, CrossFadeDuration);
     }
 
