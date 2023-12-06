@@ -3,14 +3,15 @@ using UnityEngine;
 
 public class DOTPuddle : MonoBehaviour
 {
+    [SerializeField] private float PuddleDPS;
     [SerializeField] private GameObject PuddleDOTPrefab;
     [SerializeField] private float PuddleDelay;
 
     private GameObject puddleInstance;
 
-    // Start is called before the first frame update
-    void Start()
+    public void SetPuddleDPS(float PuddleDPS)
     {
+        this.PuddleDPS = PuddleDPS;
     }
 
     public void SpawnPuddleOnFloor()
@@ -21,6 +22,8 @@ public class DOTPuddle : MonoBehaviour
     private void SpawnPuddle()
     {
         puddleInstance = Instantiate( PuddleDOTPrefab, transform.position, transform.rotation * Quaternion.Euler( -90f, 0, 0 ) );
+        DOTDamager dotDamager = puddleInstance.GetComponent<DOTDamager>();
+        dotDamager.SetDPS(PuddleDPS);
     }
 
 }

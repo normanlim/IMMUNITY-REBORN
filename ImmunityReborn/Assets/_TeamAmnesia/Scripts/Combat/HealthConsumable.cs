@@ -53,4 +53,9 @@ public class HealthConsumable : MonoBehaviour
         ItemCountBall.fillAmount = (float)CurrentItemCount / MaxItemCount;
         ItemCountText.text = CurrentItemCount.ToString();
     }
+
+    public void SetHealAmount(int healAmount)
+    {
+        HealAmount = healAmount;
+    }
 }

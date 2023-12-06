@@ -20,6 +20,11 @@ public class DOTDamager : MonoBehaviour
         Destroy( gameObject, PuddleLifetime );
     }
 
+    public void SetDPS(float dps)
+    {
+        puddleDamagePerSecond = dps;
+    }
+
     void OnTriggerStay( Collider other )
     {
         if ( other.CompareTag( "Player" ) ) // Check if the collider is tagged as "Player"
@@ -27,7 +32,7 @@ public class DOTDamager : MonoBehaviour
             // Calculate the damage for this frame and accumulate it
             accumulatedDamage += puddleDamagePerSecond * Time.deltaTime;
 
-            if ( accumulatedDamage > 1f && other.TryGetComponent( out Health health ) )
+            if ( accumulatedDamage > puddleDamagePerSecond && other.TryGetComponent( out Health health ) )
             {
                 int damageFromDotToApply = Mathf.FloorToInt( accumulatedDamage ); // apply damage in whole integers only
                 health.DealDamage( damageFromDotToApply, DamageType );

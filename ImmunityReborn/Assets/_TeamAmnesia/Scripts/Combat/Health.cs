@@ -37,6 +37,12 @@ public class Health : MonoBehaviour
         IsPlayerDead = false;
     }
 
+    public void SetHealth(int health)
+    {
+        MaxHealth = health;
+        CurrentHealth = health;
+    }
+
     public void SetGodModeHealth()
     {
         currentHealth = 1000000;

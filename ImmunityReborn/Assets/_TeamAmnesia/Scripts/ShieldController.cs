@@ -41,6 +41,13 @@ public class ShieldController : MonoBehaviour
         return magicShieldActiveTime;
     }
 
+    public void SetShieldRates(float delay, float regenSpeed, float depleteSpeed)
+    {
+        energyRegenDelay = delay;
+        this.regenSpeed = regenSpeed;
+        this.depleteSpeed = depleteSpeed;
+    }
+
     public void EarnShieldGauge( int amtEarned )
     {
         currentEnergyValue += amtEarned;

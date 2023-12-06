@@ -3,7 +3,10 @@ guid: 4bb4a24d801215c49a56ca85dc16aee2
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - godModeToggle: {instanceID: 0}
+  - difficultyDropdown: {instanceID: 0}
+  - MenuYesSND: {fileID: 1297775994297274, guid: b7c7bce403a320344887a9609a84f583, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

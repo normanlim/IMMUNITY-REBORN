@@ -5,9 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class Menu : MonoBehaviour
 {
+    [SerializeField] GameObject MenuPlaySND;
     public void PlayGame()
     {
         Debug.Log("StartGame button clicked");
+        PlaySFX.PlayThenDestroy(MenuPlaySND, transform);
         SceneManager.LoadScene("Betac");
     }
 
