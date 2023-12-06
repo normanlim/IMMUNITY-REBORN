@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,11 +10,13 @@ public class PauseController : MonoBehaviour
 
     public static bool isPaused;
 
+    private GameObject freelookCamera;
 
     // Start is called before the first frame update
     void Start()
     {
         pauseMenu.SetActive(false);
+        freelookCamera = GameObject.Find( "Main Camera" );
     }
 
     // Update is called once per frame
@@ -39,6 +42,13 @@ public class PauseController : MonoBehaviour
         isPaused = true;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+
+        // Deal with camera when pause, make sure it does not move out of bounds when paused while catching up to players movement
+        var cinemachineBrain = freelookCamera.GetComponent<CinemachineBrain>();
+        if ( cinemachineBrain != null )
+        {
+            cinemachineBrain.enabled = false;
+        }
     }
 
     public void ResumeGame()
@@ -48,6 +58,13 @@ public class PauseController : MonoBehaviour
         isPaused = false;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        // Deal with camera when pause, make sure it does not move out of bounds when paused while catching up to players movement
+        var cinemachineBrain = freelookCamera.GetComponent<CinemachineBrain>();
+        if ( cinemachineBrain != null )
+        {
+            cinemachineBrain.enabled = true;
+        }
     }
 
     public void ExitGameButton()
