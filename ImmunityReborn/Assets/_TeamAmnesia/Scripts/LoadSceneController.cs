@@ -11,11 +11,9 @@ public class LoadSceneController : MonoBehaviour
     public Slider sliderComp;
 
     public GameObject MainMenuStack;
-    [SerializeField] private GameObject MenuPlaySND;
 
     public void LoadScene( int sceneId )
     {
-        PlaySFX.PlayThenDestroy(MenuPlaySND, transform);
         StartCoroutine( LoadSceneAsync( sceneId ) );
     }
 

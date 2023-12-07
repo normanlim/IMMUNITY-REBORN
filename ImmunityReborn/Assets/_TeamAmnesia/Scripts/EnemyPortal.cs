@@ -23,9 +23,9 @@ public class EnemyPortal : MonoBehaviour
 
     [field: SerializeField, Tooltip("How much to damage self by for every enemy spawned")]
 
-    public static int CostPerEnemy { get; private set; } = 20;
+    private static int CostPerEnemy = 20;
 
-    public static float SummonInterval { get; private set; }  = 10f;
+    private static float SummonInterval = 10f;
 
     private static int HealthPoints = 100;
 
@@ -67,7 +67,7 @@ public class EnemyPortal : MonoBehaviour
         Health.DealDamage(totalCount * CostPerEnemy);
     }
 
-    public static void AdjustEnemyPortals(int health, int enemyCost, float interval)
+    public static void DifficultyAdjustment(int health, int enemyCost, float interval)
     {
         SummonInterval = interval;
         CostPerEnemy = enemyCost;

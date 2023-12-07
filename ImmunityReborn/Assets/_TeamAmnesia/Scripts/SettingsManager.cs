@@ -5,7 +5,6 @@ public class SettingsManager : MonoBehaviour
 {
     public Toggle godModeToggle;
     public Dropdown difficultyDropdown;
-    [SerializeField] GameObject MenuYesSND;
     private int previousDifficultyIndex = -1;
 
     void Start()
@@ -22,7 +21,6 @@ public class SettingsManager : MonoBehaviour
             PlayerPrefs.Save();
 
             ApplyDifficultySetting(difficultyIndex);
-            PlaySFX.PlayThenDestroy(MenuYesSND, transform);
 
             previousDifficultyIndex = difficultyIndex;
         }
@@ -52,6 +50,5 @@ public class SettingsManager : MonoBehaviour
     public void ToggleGodMode( bool isOn )
     {
         PlayerPrefs.SetInt( "GodMode", isOn ? 1 : 0 );
-        PlaySFX.PlayThenDestroy(MenuYesSND, transform);
     }
 }

@@ -54,8 +54,9 @@ public class HealthConsumable : MonoBehaviour
         ItemCountText.text = CurrentItemCount.ToString();
     }
 
-    public void SetHealAmount(int healAmount)
+    public void DifficultyAdjustment(int healAmount, int maxCount)
     {
         HealAmount = healAmount;
+        MaxItemCount = maxCount;
     }
 }
