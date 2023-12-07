@@ -22,25 +22,23 @@ public class EnemyPortal : MonoBehaviour
     public SpawnManager.SpawnData Summons { get; private set; }
 
     [field: SerializeField, Tooltip("How much to damage self by for every enemy spawned")]
-    public int CostPerEnemy { get; private set; }
 
-    public float SummonInterval = 8f;
+    public static int CostPerEnemy { get; private set; } = 20;
+
+    public static float SummonInterval { get; private set; }  = 10f;
+
+    private static int HealthPoints = 100;
 
     // Start is called before the first frame update
     void Start()
     {
+        Health.SetHealth(HealthPoints);
         GameObject portalObject = Instantiate(PortalPrefab, transform.position, transform.rotation);
         portalObject.transform.SetParent(transform);
         portalObject.transform.localScale = Vector3.one;
         // The spawn manager is the parent of the spawn location, which is the parent of spawned enemy portals
         EnemySpawnManager = EnemySpawnManager = GetComponentInParent<Transform>().parent.GetComponentInParent<SpawnManager>();
         InvokeRepeating("SummonEnemy", SummonInterval / 2, SummonInterval);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     private void OnEnable()
@@ -67,5 +65,12 @@ public class EnemyPortal : MonoBehaviour
 
         int totalCount = Summons.spawnGroups.Sum(group => group.count);
         Health.DealDamage(totalCount * CostPerEnemy);
+    }
+
+    public static void AdjustEnemyPortals(int health, int enemyCost, float interval)
+    {
+        SummonInterval = interval;
+        CostPerEnemy = enemyCost;
+        HealthPoints = health;
     }
 }
