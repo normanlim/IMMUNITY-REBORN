@@ -32,7 +32,8 @@ public class EnemyPortal : MonoBehaviour
         GameObject portalObject = Instantiate(PortalPrefab, transform.position, transform.rotation);
         portalObject.transform.SetParent(transform);
         portalObject.transform.localScale = Vector3.one;
-        EnemySpawnManager = FindFirstObjectByType<SpawnManager>();
+        // The spawn manager is the parent of the spawn location, which is the parent of spawned enemy portals
+        EnemySpawnManager = EnemySpawnManager = GetComponentInParent<Transform>().parent.GetComponentInParent<SpawnManager>();
         InvokeRepeating("SummonEnemy", SummonInterval / 2, SummonInterval);
     }
 
@@ -62,9 +63,9 @@ public class EnemyPortal : MonoBehaviour
 
     private void SummonEnemy()
     {
-        EnemySpawnManager.SpawnEnemiesNow(Summons);
+        EnemySpawnManager.SpawnDataset(Summons);
 
-        //int totalCount = Summons.spawnGroups.Sum(group => group.count);
-        //Health.DealDamage(totalCount * CostPerEnemy);
+        int totalCount = Summons.spawnGroups.Sum(group => group.count);
+        Health.DealDamage(totalCount * CostPerEnemy);
     }
 }
