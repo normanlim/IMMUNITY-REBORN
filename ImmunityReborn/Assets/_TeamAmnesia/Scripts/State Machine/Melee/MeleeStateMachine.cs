@@ -45,6 +45,15 @@ public class MeleeStateMachine : StateMachine
     public GameObject AggroIndicator { get; private set; }
 
     [field: SerializeField]
+    public bool CanBerserk { get; private set; }
+
+    [field: SerializeField, Range(0.0f, 1.0f), Tooltip("Berserks when at this health percent")]
+    public float BerserkThreshold { get; private set; }
+
+    [field: SerializeField]
+    public GameObject BerserkVFX { get; private set; }
+
+    [field: SerializeField]
     List<GameObject> DeathSFXs;
 
     [field: SerializeField]
@@ -54,12 +63,14 @@ public class MeleeStateMachine : StateMachine
 
     public Health PlayerHealth { get; private set; }
 
+    private bool IsBerserking;
 
     private void Awake()
     {
         Player = GameObject.FindGameObjectWithTag("Player");
         PlayerHealth = Player.GetComponent<Health>();
         AggroIndicator.SetActive(false);
+        BerserkVFX.SetActive(false);
     }
 
     private void Start()
@@ -89,11 +100,22 @@ public class MeleeStateMachine : StateMachine
     private void HandleTakeDamage()
     {
         PlaySFX.PlayThenDestroy(TakeDamageEffect, gameObject.transform);
-        SwitchState(new MeleeImpactState(this));
+
+        if (!IsBerserking && CanBerserk && Health.CurrentHealth < Health.MaxHealth * BerserkThreshold)
+        {
+            IsBerserking = true;
+            BerserkVFX.SetActive(true);
+        }
+
+        if (!IsBerserking)
+        {
+            SwitchState(new MeleeImpactState(this));
+        }
     }
 
     private void HandleDie()
     {
+        BerserkVFX.SetActive(false);
         GameObject RandomDeathSFX = DeathSFXs[Random.Range(0, DeathSFXs.Count)];
         PlaySFX.PlayThenDestroy(RandomDeathSFX, gameObject.transform);
         SwitchState(new MeleeDeadState(this));
