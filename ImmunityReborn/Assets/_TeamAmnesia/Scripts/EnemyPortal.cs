@@ -36,8 +36,11 @@ public class EnemyPortal : MonoBehaviour
         GameObject portalObject = Instantiate(PortalPrefab, transform.position, transform.rotation);
         portalObject.transform.SetParent(transform);
         portalObject.transform.localScale = Vector3.one;
+        // Set spawn location of portal enemies to the spawn location of the enemy portal
+        GameObject portalSpawnLocation = transform.parent.transform.parent.gameObject;
+        Summons.spawnLocation = portalSpawnLocation;
         // The spawn manager is the parent of the spawn location, which is the parent of spawned enemy portals
-        EnemySpawnManager = EnemySpawnManager = GetComponentInParent<Transform>().parent.GetComponentInParent<SpawnManager>();
+        EnemySpawnManager = EnemySpawnManager = portalSpawnLocation.GetComponentInParent<SpawnManager>();
         InvokeRepeating("SummonEnemy", SummonInterval / 2, SummonInterval);
     }
 
