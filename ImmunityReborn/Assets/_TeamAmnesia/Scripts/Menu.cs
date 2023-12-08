@@ -1,14 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Menu : MonoBehaviour
 {
-    public void PlayGame()
+    [SerializeField] Toggle GodModeToggle;
+    [SerializeField] Dropdown DifficultyDropdown;
+
+    private void Start()
     {
-        Debug.Log("StartGame button clicked");
-        SceneManager.LoadScene("Betac");
+        LoadSettings();
+    }
+
+    void LoadSettings()
+    {
+        // Set God Mode Toggle based on PlayerPrefs
+        bool godModeEnabled = PlayerPrefs.GetInt("GodMode", 0) == 1;
+        GodModeToggle.isOn = godModeEnabled;
+
+        // Set Difficulty Dropdown based on PlayerPrefs
+        int selectedDifficulty = PlayerPrefs.GetInt("SelectedDifficulty", 0);
+        DifficultyDropdown.value = selectedDifficulty;
     }
 
     public void ExitGame()

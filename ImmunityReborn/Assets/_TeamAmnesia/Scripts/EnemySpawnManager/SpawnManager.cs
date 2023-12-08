@@ -4,14 +4,14 @@ using System.Linq;
 
 public class SpawnManager : MonoBehaviour
 {
-    [SerializeField]  public List<SpawnData> SpawnOrder;
-
+    [SerializeField] public List<SpawnData> SpawnQueue;
     [SerializeField] GameObject player;
     private int enemiesAliveCount = 0;
     // How spread apart the enemies can be
     private float spawnSpread = 2f;
     // Minimum distance from all existing entities
     private float minimumSeparationDistance = 1f;
+    [SerializeField] private int queueIndex;
 
     [System.Serializable]
     public class SpawnGroup
@@ -28,58 +28,47 @@ public class SpawnManager : MonoBehaviour
         public bool requireAllDead = true;
     }
 
+    private void OnEnable()
+    {
+        queueIndex = 0;
+    }
+
+    private void OnDisable()
+    {
+        queueIndex = -1;
+    }
+
     void Update()
     {
         enemiesAliveCount = GameObject.FindGameObjectsWithTag("Enemy")
             .Count(enemy => enemy.GetComponent<Health>()?.CurrentHealth > 0);
 
-        if (SpawnOrder.Count > 0)
-            SpawnNext();
+        if (SpawnQueue.Count > 0)
+            TrySpawnNext();
     }
 
-    private void SpawnNext()
+    /* Check the following before spawning the next dataset:
+     * (1) if the spawn manager object is active
+     * (2) if the queue index is in bounds
+     * (3) if requireAllDead is false, else if all enemies are dead
+     */
+    private void TrySpawnNext()
     {
-        SpawnData nextSpawnData = SpawnOrder.FirstOrDefault();
-        // Check the active state of the entire hierarchy leading to spawnLocation
-        bool isHierarchyActive = IsHierarchyActive(nextSpawnData.spawnLocation);
-        // Add debug log to check spawn location activity
-        //Debug.Log($"isHierarchyActive: {isHierarchyActive}");
-
-        // Spawn without checking enemies alive if requireAllDead is false, else do the check
-        if (nextSpawnData != null && isHierarchyActive && (!nextSpawnData.requireAllDead || enemiesAliveCount <= 0))
+        if (gameObject.activeSelf && queueIndex >= 0 && queueIndex < SpawnQueue.Count)
         {
-            SpawnDataset(nextSpawnData);
+            SpawnData nextSpawnData = SpawnQueue[queueIndex];
 
-            // Remove the spawn data, all enemies spawned
-            SpawnOrder.Remove(nextSpawnData);
-        }
-    }
-
-    // Manual method to check the active state of the entire hierarchy
-    private bool IsHierarchyActive(GameObject gameObject)
-    {
-        if (gameObject == null)
-        {
-            return false;
-        }
-
-        // Check the active state of each parent in the hierarchy
-        Transform parentTransform = gameObject.transform;
-        while (parentTransform != null)
-        {
-            if (!parentTransform.gameObject.activeSelf)
+            if (nextSpawnData != null && (!nextSpawnData.requireAllDead || enemiesAliveCount <= 0))
             {
-                return false;
+                SpawnDataset(nextSpawnData);
+                queueIndex++;
             }
-
-            parentTransform = parentTransform.parent;
         }
-
-        // If no disabled parent found, return true
-        return true;
     }
 
-    void SpawnDataset(SpawnData spawnData)
+    /* Given the spawn data, spawn all groups of enemies at the spawn location
+     */
+    public void SpawnDataset(SpawnData spawnData)
     {
         float spacing = spawnSpread;
 
@@ -116,7 +105,8 @@ public class SpawnManager : MonoBehaviour
                 if (spawnGroup != null)
                 {
                     GameObject entity = Instantiate(spawnGroup.prefab, finalSpawnPosition, spawnData.spawnLocation.transform.rotation);
-                    //entity.transform.parent = spawnData.spawnLocation.transform; // enemies get destroyed along with portal
+                    // entity parent is set to the spawn location
+                    entity.transform.parent = spawnData.spawnLocation.transform;
                 }
             }
         }
@@ -161,10 +151,5 @@ public class SpawnManager : MonoBehaviour
         }
 
         return desiredPosition;
-    }
-
-    public void SpawnEnemiesNow(SpawnData spawnData)
-    {
-        SpawnOrder.Insert(0, spawnData);
     }
 }

@@ -1,28 +1,44 @@
+using Cinemachine;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-    [SerializeField] List<Level> LevelList = new List<Level>();
-    [SerializeField] int CurrentLevelIndex;
+    public int CurrentLevelIndex;
+    private int currentLevelIndex = -1; // backing field
     [SerializeField] int AdditionalHealCount = 3;
-    private AudioSource CurrentBGMSource;
-    private GameObject Player;
+    [SerializeField] List<Level> LevelList = new List<Level>();
+
+    [SerializeField] private AudioSource CurrentBGMSource;
+    // References used to move player gracefully
+    [SerializeField] private GameObject Player;
+    [SerializeField] private CinemachineFreeLook freeLookCamera;
+    [SerializeField] private Cloth playerCape;
 
     [System.Serializable]
     public class Level
     {
         public GameObject LevelObject;
+        public GameObject LevelStart;
         public AudioClip LevelBGM;   
     }
     
     void Start()
     {
-        Player = GameObject.FindGameObjectWithTag("Player");
+        CurrentBGMSource.enabled = true;
+        // Start at level 1
         CurrentLevelIndex = 0;
-        CurrentBGMSource = gameObject.AddComponent<AudioSource>();
-        CurrentBGMSource.loop = true;
-        PlayBGM(CurrentLevelIndex);
+        StartLevel();
+    }
+
+    // Useful for internal testing as you can set the level to test in Unity editor
+    private void OnValidate()
+    {
+        if (CurrentLevelIndex != currentLevelIndex && CurrentLevelIndex >= 0 && CurrentLevelIndex < LevelList.Count)
+        {
+            StartLevel();
+            currentLevelIndex = CurrentLevelIndex;
+        }
     }
 
     public void PlayBGM(int index)
@@ -52,13 +68,21 @@ public class LevelManager : MonoBehaviour
             Debug.Log("Invalid Level index");
             return;
         }
+
+        StartLevel();
+    }
+
+    private void StartLevel()
+    {
         for (int i = 0; i < LevelList.Count; i++)
         {
             if (i == CurrentLevelIndex)
             {
                 LevelList[i].LevelObject.SetActive(true);
                 PlayBGM(i);
-            } else
+                MovePlayerToTransform(LevelList[i]);
+            }
+            else
             {
                 LevelList[i].LevelObject.SetActive(false);
             }
@@ -66,5 +90,15 @@ public class LevelManager : MonoBehaviour
         Player.GetComponent<HealthConsumable>().AddItemCount(AdditionalHealCount);
         Health PlayerHealth = Player.GetComponent<Health>();
         PlayerHealth.Heal(PlayerHealth.MaxHealth);
+    }
+
+    private void MovePlayerToTransform(Level level)
+    {
+        playerCape.enabled = false;
+        Player.gameObject.transform.position = level.LevelStart.transform.position;
+
+        freeLookCamera.m_XAxis.Value = level.LevelStart.transform.eulerAngles.y;
+        
+        playerCape.enabled = true;
     }
 }

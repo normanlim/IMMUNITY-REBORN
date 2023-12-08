@@ -44,6 +44,9 @@ public class MagicStateMachine : StateMachine
     [field: SerializeField]
     public float AttackKnockback { get; private set; }
 
+    [field: SerializeField]
+    public float PuddleDPS { get; private set; }
+
     public GameObject Player { get; private set; }
 
     public Health PlayerHealth { get; private set; }
@@ -70,7 +73,7 @@ public class MagicStateMachine : StateMachine
     {
         NavMeshAgent.updatePosition = false; // for manual control
         NavMeshAgent.updateRotation = false;
-
+        DOTPuddle.SetPuddleDPS(PuddleDPS);
         SwitchState(new MagicIdleState(this));
     }
 

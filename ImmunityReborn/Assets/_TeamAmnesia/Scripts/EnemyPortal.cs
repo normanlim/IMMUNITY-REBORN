@@ -22,24 +22,26 @@ public class EnemyPortal : MonoBehaviour
     public SpawnManager.SpawnData Summons { get; private set; }
 
     [field: SerializeField, Tooltip("How much to damage self by for every enemy spawned")]
-    public int CostPerEnemy { get; private set; }
 
-    public float SummonInterval = 8f;
+    private static int CostPerEnemy = 20;
+
+    private static float SummonInterval = 10f;
+
+    private static int HealthPoints = 100;
 
     // Start is called before the first frame update
     void Start()
     {
+        Health.SetHealth(HealthPoints);
         GameObject portalObject = Instantiate(PortalPrefab, transform.position, transform.rotation);
         portalObject.transform.SetParent(transform);
         portalObject.transform.localScale = Vector3.one;
-        EnemySpawnManager = FindFirstObjectByType<SpawnManager>();
+        // Set spawn location of portal enemies to the spawn location of the enemy portal
+        GameObject portalSpawnLocation = transform.parent.transform.parent.gameObject;
+        Summons.spawnLocation = portalSpawnLocation;
+        // The spawn manager is the parent of the spawn location, which is the parent of spawned enemy portals
+        EnemySpawnManager = EnemySpawnManager = portalSpawnLocation.GetComponentInParent<SpawnManager>();
         InvokeRepeating("SummonEnemy", SummonInterval / 2, SummonInterval);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     private void OnEnable()
@@ -62,9 +64,16 @@ public class EnemyPortal : MonoBehaviour
 
     private void SummonEnemy()
     {
-        EnemySpawnManager.SpawnEnemiesNow(Summons);
+        EnemySpawnManager.SpawnDataset(Summons);
 
-        //int totalCount = Summons.spawnGroups.Sum(group => group.count);
-        //Health.DealDamage(totalCount * CostPerEnemy);
+        int totalCount = Summons.spawnGroups.Sum(group => group.count);
+        Health.DealDamage(totalCount * CostPerEnemy);
+    }
+
+    public static void DifficultyAdjustment(int health, int enemyCost, float interval)
+    {
+        SummonInterval = interval;
+        CostPerEnemy = enemyCost;
+        HealthPoints = health;
     }
 }

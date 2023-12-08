@@ -70,12 +70,20 @@ public class PauseController : MonoBehaviour
     public void ExitGameButton()
     {
         Time.timeScale = 1f;
+        isPaused = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
         Application.Quit();
     }
 
     public void MainMenuButton()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene( "MenuScreen" );
+        isPaused = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+        SceneManager.LoadScene("MenuScreen");
     }
 }

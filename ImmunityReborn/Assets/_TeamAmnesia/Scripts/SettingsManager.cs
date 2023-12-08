@@ -5,6 +5,7 @@ public class SettingsManager : MonoBehaviour
 {
     public Toggle godModeToggle;
     public Dropdown difficultyDropdown;
+    private int previousDifficultyIndex = -1;
 
     void Start()
     {
@@ -14,11 +15,15 @@ public class SettingsManager : MonoBehaviour
 
     public void DifficultyChanged( int difficultyIndex )
     {
-        PlayerPrefs.SetInt( "SelectedDifficulty", difficultyIndex );
-        PlayerPrefs.Save();
+        if (difficultyIndex != previousDifficultyIndex)
+        {
+            PlayerPrefs.SetInt("SelectedDifficulty", difficultyIndex);
+            PlayerPrefs.Save();
 
-        ApplyDifficultySetting( difficultyIndex );
+            ApplyDifficultySetting(difficultyIndex);
 
+            previousDifficultyIndex = difficultyIndex;
+        }
     }
 
     // Maybe you can do your difficulty implementation here, or do it in the other scene's code somewhere.
@@ -42,7 +47,7 @@ public class SettingsManager : MonoBehaviour
     }
 
 
-public void ToggleGodMode( bool isOn )
+    public void ToggleGodMode( bool isOn )
     {
         PlayerPrefs.SetInt( "GodMode", isOn ? 1 : 0 );
     }

@@ -12,7 +12,6 @@ public class LoadSceneController : MonoBehaviour
 
     public GameObject MainMenuStack;
 
-
     public void LoadScene( int sceneId )
     {
         StartCoroutine( LoadSceneAsync( sceneId ) );
