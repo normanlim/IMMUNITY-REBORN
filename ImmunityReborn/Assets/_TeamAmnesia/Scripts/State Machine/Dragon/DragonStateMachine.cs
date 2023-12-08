@@ -92,6 +92,9 @@ public class DragonStateMachine : StateMachine
     [field: SerializeField]
     public Material[] Materials { get; private set; }
 
+    [field: SerializeField]
+    public CongratulationsScreen CongratulationsScreen { get; private set; }
+
     public GameObject Player { get; private set; }
 
     public Health PlayerHealth { get; private set; }
@@ -179,12 +182,18 @@ public class DragonStateMachine : StateMachine
     private void HandleDie()
     {
         ProjectileShooter.ShooterDied();
+        Invoke( "GameComplete", 10.0f );
         SwitchState(new DragonDeadState(this));
     }
 
     private void HandlePlayerDie()
     {
         SwitchState(new DragonIdleState(this));
+    }
+
+    private void GameComplete()
+    {
+        CongratulationsScreen.Setup();
     }
 
     private void SpitFireball()
