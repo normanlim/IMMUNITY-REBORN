@@ -4,11 +4,15 @@ using UnityEngine;
 
 public class DragonClawingState : DragonBaseState
 {
-    private readonly int ClawAttackStateName = Animator.StringToHash("ClawsAttackRightForward");
+    private readonly int RightClawAttackStateName = Animator.StringToHash("ClawsAttackRightForward");
+    private readonly int LeftClawAttackStateName = Animator.StringToHash("ClawsAttackLeftForward");
+    private readonly int EmptyDefaultStateName = Animator.StringToHash("Empty Default");
 
     private const float TransitionDuration = 0.1f;
 
     private bool isClawing;
+    private int clawedCount;
+    private int previousClawAttack;
 
     public DragonClawingState(DragonStateMachine stateMachine) : base(stateMachine)
     {
@@ -16,7 +20,8 @@ public class DragonClawingState : DragonBaseState
 
     public override void Enter()
     {
-        stateMachine.ClawWeaponDamager.SetDamage(stateMachine.ClawAttackDamage, stateMachine.ClawAttackKnockback);
+        stateMachine.RightClawWeaponDamager.SetDamage(stateMachine.ClawAttackDamage, stateMachine.ClawAttackKnockback);
+        stateMachine.LeftClawWeaponDamager.SetDamage(stateMachine.ClawAttackDamage, stateMachine.ClawAttackKnockback);
     }
 
     public override void Tick(float deltaTime)
@@ -34,17 +39,21 @@ public class DragonClawingState : DragonBaseState
             UpdateGroundedAnimator(deltaTime, 0.8f);
         }
 
-        if (!isClawing && IsInClawAttackRange())
-        {
-            isClawing = true;
-            stateMachine.Animator.CrossFadeInFixedTime(ClawAttackStateName, TransitionDuration, 0);
-            PlaySFX.PlayThenDestroy(stateMachine.SFXClawing, stateMachine.transform);
-        }
-
-        if (GetPlayingAnimationTimeNormalized(stateMachine.Animator, 0) >= 1.0f)
+        if (GetPlayingAnimationTimeNormalized(stateMachine.Animator, 1) >= 1.0f)
         {
             isClawing = false;
-            stateMachine.SwitchState(new DragonGroundedState(stateMachine));
+            stateMachine.Animator.CrossFade(EmptyDefaultStateName, TransitionDuration, 1);
+
+            if (clawedCount == 2)
+            {
+                stateMachine.SwitchState(new DragonGroundedState(stateMachine));
+                return;
+            }
+        }
+
+        if (!isClawing && IsInClawAttackRange())
+        {
+            Claw();
         }
     }
 
@@ -52,5 +61,42 @@ public class DragonClawingState : DragonBaseState
     {
         stateMachine.NavMeshAgent.ResetPath();
         stateMachine.NavMeshAgent.velocity = Vector3.zero;
+
+        stateMachine.Animator.CrossFade(EmptyDefaultStateName, TransitionDuration, 1);
+    }
+
+    /// <summary>
+    /// Alternate between right and left claw attacks. First attack is random.
+    /// </summary>
+    private void Claw()
+    {
+        isClawing = true;
+        clawedCount++;
+
+        if (previousClawAttack == RightClawAttackStateName)
+        {
+            stateMachine.Animator.CrossFadeInFixedTime(LeftClawAttackStateName, TransitionDuration, 1);
+            previousClawAttack = LeftClawAttackStateName;
+        }
+        else if (previousClawAttack == LeftClawAttackStateName)
+        {
+            stateMachine.Animator.CrossFadeInFixedTime(RightClawAttackStateName, TransitionDuration, 1);
+            previousClawAttack = RightClawAttackStateName;
+        }
+        else
+        {
+            if (RollDie(0, 2) == 0)
+            {
+                stateMachine.Animator.CrossFadeInFixedTime(RightClawAttackStateName, TransitionDuration, 1);
+                previousClawAttack = RightClawAttackStateName;
+            }
+            else
+            {
+                stateMachine.Animator.CrossFadeInFixedTime(LeftClawAttackStateName, TransitionDuration, 1);
+                previousClawAttack = LeftClawAttackStateName;
+            }
+        }
+
+        PlaySFX.PlayThenDestroy(stateMachine.SFXClawing, stateMachine.transform);
     }
 }
