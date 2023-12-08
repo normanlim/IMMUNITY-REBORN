@@ -106,10 +106,15 @@ public class PlayerStateMachine : StateMachine
 
     private void GameOver()
     {
+        GameOverScreen.Setup( GetTimePlayerAlive() );
+    }
+
+    public float GetTimePlayerAlive()
+    {
         endTime = Time.time;
         float durationAlive = endTime - startTime;
 
-        GameOverScreen.Setup( durationAlive );
+        return durationAlive;
     }
 
     public void PlaySFXThenDestroy(GameObject soundPrefab, Transform transform)
