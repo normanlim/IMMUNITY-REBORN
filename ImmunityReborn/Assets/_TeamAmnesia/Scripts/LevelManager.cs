@@ -25,8 +25,15 @@ public class LevelManager : MonoBehaviour
 
     void Start()
     {
-        // Start at level 1
-        CurrentLevelIndex = 0;
+        if (PlayerPrefs.GetInt("Softcore", 0) == 1)
+        {
+            // Start at the level the player died in
+            CurrentLevelIndex = PlayerPrefs.GetInt("SCCurrentLevel", 0);
+        } else
+        {
+            // Start at level 1
+            CurrentLevelIndex = 0;
+        }
         StartLevel();
     }
 

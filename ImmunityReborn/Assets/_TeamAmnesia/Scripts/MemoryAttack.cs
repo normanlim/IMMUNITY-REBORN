@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class MemoryAttack : MonoBehaviour
 {
@@ -55,7 +52,7 @@ public class MemoryAttack : MonoBehaviour
             shooting = Input.GetKeyDown( KeyCode.E );
         }
 
-        if ( readyToShoot && shooting && StateMachine.MemoryGauge.CurrentMemoryMeterValue >= 50 )
+        if ( readyToShoot && shooting && StateMachine.MemoryGauge.CurrentMemoryMeterValue >= memAtkCost)
         {
             if (StateMachine.CurrentState is not PlayerAttackingState)
             {

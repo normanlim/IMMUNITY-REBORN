@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class TormentedSoulRetreatingState : TormentedSoulBaseState
 {
@@ -30,10 +31,13 @@ public class TormentedSoulRetreatingState : TormentedSoulBaseState
         if (stateMachine.NavMeshAgent.isOnNavMesh && IsInAttackRange())
         {
             Vector3 direction = -stateMachine.transform.forward;
+            Vector3 newDestination = stateMachine.transform.position + direction * stateMachine.MovementSpeed;
+            if (NavMesh.SamplePosition(newDestination, out _, 0.1f, NavMesh.AllAreas))
+            {
+                stateMachine.NavMeshAgent.destination = stateMachine.transform.position + direction * stateMachine.MovementSpeed;
 
-            stateMachine.NavMeshAgent.destination = stateMachine.transform.position + direction * stateMachine.MovementSpeed;
-
-            Move(stateMachine.NavMeshAgent.desiredVelocity.normalized * stateMachine.MovementSpeed, deltaTime);
+                Move(stateMachine.NavMeshAgent.desiredVelocity.normalized * stateMachine.MovementSpeed, deltaTime);
+            }
         }
 
         UpdateCirculatingAnimator(deltaTime);

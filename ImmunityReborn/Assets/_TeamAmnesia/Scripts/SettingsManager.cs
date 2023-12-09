@@ -4,13 +4,15 @@ using UnityEngine.UI;
 public class SettingsManager : MonoBehaviour
 {
     public Toggle godModeToggle;
+    public Toggle softcoreToggle;
     public Dropdown difficultyDropdown;
     private int previousDifficultyIndex = -1;
 
     void Start()
     {
-        godModeToggle.onValueChanged.AddListener( delegate { ToggleGodMode( godModeToggle.isOn ); } );
         difficultyDropdown.onValueChanged.AddListener( delegate { DifficultyChanged( difficultyDropdown.value ); } );
+        softcoreToggle.onValueChanged.AddListener(delegate { ToggleSoftcore(softcoreToggle.isOn); });
+        godModeToggle.onValueChanged.AddListener( delegate { ToggleGodMode( godModeToggle.isOn ); } );
     }
 
     public void DifficultyChanged( int difficultyIndex )
@@ -50,5 +52,10 @@ public class SettingsManager : MonoBehaviour
     public void ToggleGodMode( bool isOn )
     {
         PlayerPrefs.SetInt( "GodMode", isOn ? 1 : 0 );
+    }
+
+    public void ToggleSoftcore(bool isOn)
+    {
+        PlayerPrefs.SetInt("Softcore", isOn ? 1 : 0);
     }
 }

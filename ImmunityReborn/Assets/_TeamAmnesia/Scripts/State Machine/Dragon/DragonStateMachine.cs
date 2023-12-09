@@ -99,7 +99,7 @@ public class DragonStateMachine : StateMachine
     public Material[] Materials { get; private set; }
 
     [field: SerializeField]
-    public CongratulationsScreen CongratulationsScreen { get; private set; }
+    public VictoryScreen CongratulationsScreen { get; private set; }
 
     public GameObject Player { get; private set; }
 
