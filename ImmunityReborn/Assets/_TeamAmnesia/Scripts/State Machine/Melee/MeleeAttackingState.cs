@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class MeleeAttackingState : MeleeBaseState
 {
-    private readonly int AnimatorAttackStateName = Animator.StringToHash("Attack2SwordShield");
+    private readonly int AttackStateName = Animator.StringToHash("Attack2SwordShield");
+    private readonly int AttackFollowUpStateName = Animator.StringToHash("Attack3SwordShield");
     private readonly int EmptyDefaultStateName = Animator.StringToHash("Empty Default");
 
     private const float TransitionDuration = 0.1f;
+
+    private bool alreadyDidFollowUpAttack;
 
     public MeleeAttackingState(MeleeStateMachine stateMachine) : base(stateMachine)
     {
@@ -16,21 +19,40 @@ public class MeleeAttackingState : MeleeBaseState
     public override void Enter()
     {
         stateMachine.WeaponDamager.SetDamage(stateMachine.AttackDamage, stateMachine.AttackKnockback);
-        stateMachine.Animator.CrossFadeInFixedTime(AnimatorAttackStateName, TransitionDuration, 1);
+        stateMachine.Animator.CrossFadeInFixedTime(AttackStateName, TransitionDuration, 1);
     }
 
     public override void Tick(float deltaTime)
     {
-        MoveToPlayer(deltaTime);
+        if (GetPlayingAnimationTimeNormalized(stateMachine.Animator, 1) >= 1.0f)
+        {
+            stateMachine.Animator.CrossFade(EmptyDefaultStateName, TransitionDuration, 1);
+
+            if (stateMachine.IsBoss)
+            {
+                if (alreadyDidFollowUpAttack)
+                {
+                    stateMachine.SwitchState(new MeleeRetreatingState(stateMachine));
+                    return;
+                }
+                else
+                {
+                    stateMachine.Animator.CrossFadeInFixedTime(AttackFollowUpStateName, TransitionDuration, 1);
+                    alreadyDidFollowUpAttack = true;
+                }
+            }
+            else
+            {
+                stateMachine.SwitchState(new MeleeRetreatingState(stateMachine));
+                return;
+            }
+        }
+
+        MoveToPlayerOffset(deltaTime, stateMachine.AttackRange);
 
         FacePlayer(deltaTime);
 
-        UpdateLocomotionAnimator(deltaTime);
-
-        if (GetPlayingAnimationTimeNormalized(stateMachine.Animator, 1) >= 1.0f)
-        {
-            stateMachine.SwitchState(new MeleeRetreatingState(stateMachine));
-        }
+        UpdateCirculatingAnimator(deltaTime);
     }
 
     public override void Exit()

@@ -40,6 +40,26 @@ public abstract class MeleeBaseState : State
         stateMachine.NavMeshAgent.nextPosition = stateMachine.CharacterController.transform.position; // fixes bug where enemies float apart when colliding with each other
     }
 
+    protected void MoveToPlayerOffset(float deltaTime, float distanceToPlayer)
+    {
+        if (stateMachine.NavMeshAgent.isOnNavMesh)
+        {
+            float distanceToPlayerSqr = (stateMachine.Player.transform.position - stateMachine.transform.position).sqrMagnitude;
+            Vector3 directionToPlayer = (stateMachine.Player.transform.position - stateMachine.transform.position).normalized;
+            float epsilon = 0.5f;
+
+            if (Mathf.Abs(distanceToPlayerSqr - distanceToPlayer * distanceToPlayer) > epsilon * epsilon)
+            {
+                Vector3 offset = directionToPlayer * distanceToPlayer;
+                stateMachine.NavMeshAgent.destination = stateMachine.Player.transform.position - offset;
+                Move(stateMachine.NavMeshAgent.desiredVelocity.normalized * stateMachine.MovementSpeed, deltaTime);
+            }
+        }
+
+        stateMachine.NavMeshAgent.velocity = stateMachine.CharacterController.velocity; // needed to sync velocities
+        stateMachine.NavMeshAgent.nextPosition = stateMachine.CharacterController.transform.position; // fixes bug where enemies float apart when colliding with each other
+    }
+
     protected void FacePlayer(float deltaTime)
     {
         if (stateMachine.Player == null) { return; }

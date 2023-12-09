@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class WeaponDamager : MonoBehaviour
 {
+    public event Action<int> OnDamageDealt;
+
     private int damage;
     private float knockback;
 
@@ -36,6 +39,7 @@ public class WeaponDamager : MonoBehaviour
         if (other.TryGetComponent(out Health health))
         {
             int damageDealt = health.DealDamage(damage, DamageType);
+            OnDamageDealt?.Invoke(damageDealt);
             if (HitSFX != null && damageDealt > 0)
                 Instantiate(HitSFX, gameObject.transform);
         }
