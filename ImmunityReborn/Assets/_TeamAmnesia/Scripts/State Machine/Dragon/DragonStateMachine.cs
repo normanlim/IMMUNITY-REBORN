@@ -233,6 +233,11 @@ public class DragonStateMachine : StateMachine
         }
     }
 
+    private void PlayClawSound()
+    {
+        PlaySFX.PlayThenDestroy(SFXClawing, transform);
+    }
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;

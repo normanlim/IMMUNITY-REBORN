@@ -96,7 +96,5 @@ public class DragonClawingState : DragonBaseState
                 previousClawAttack = LeftClawAttackStateName;
             }
         }
-
-        PlaySFX.PlayThenDestroy(stateMachine.SFXClawing, stateMachine.transform);
     }
 }
