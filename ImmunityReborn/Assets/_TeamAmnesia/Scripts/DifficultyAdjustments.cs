@@ -39,8 +39,8 @@ public class DifficultyAdjustments : MonoBehaviour
                 MemoryAttack.memAtkCost = 100;
                 ShieldController.SetShieldRates(2, 20, 20);
                 HealthConsumable.DifficultyAdjustment(50, 3);
-                // Summon up to 10 sets every 8 seconds, generally have to hit with memory attack twice to clear early.
-                EnemyPortal.DifficultyAdjustment(150, 15, 8);
+                // Summon up to 8 sets every 8 seconds, generally have to hit with memory attack twice to clear early.
+                EnemyPortal.DifficultyAdjustment(160, 20, 8);
                 break;
         }
     }
