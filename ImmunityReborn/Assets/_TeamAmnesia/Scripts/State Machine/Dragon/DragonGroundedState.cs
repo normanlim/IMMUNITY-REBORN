@@ -7,7 +7,7 @@ public class DragonGroundedState : DragonBaseState
     private readonly int GroundedStateName = Animator.StringToHash("Grounded");
 
     private const float TransitionDuration = 0.1f;
-    private const float PositionQueryDelay = 2.0f;
+    private const float PositionQueryDelay = 4.0f;
     private const float MovementRadius = 10.0f;
 
     private float currentQueryTimer; // query immediately upon entering state

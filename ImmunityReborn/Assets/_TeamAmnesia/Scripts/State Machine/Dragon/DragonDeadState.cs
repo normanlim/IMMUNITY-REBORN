@@ -27,7 +27,7 @@ public class DragonDeadState : DragonBaseState
         stateMachine.FlyingForceReceiver.IsFlying = false;
 
         stateMachine.LandingWeaponDamager.gameObject.SetActive(false);
-        stateMachine.ClawWeaponDamager.gameObject.SetActive(false);
+        stateMachine.RightClawWeaponDamager.gameObject.SetActive(false);
     }
 
     public override void Tick(float deltaTime)

@@ -30,7 +30,10 @@ public class DragonStateMachine : StateMachine
     public WeaponDamager LandingWeaponDamager { get; private set; }
 
     [field: SerializeField]
-    public WeaponDamager ClawWeaponDamager { get; private set; }
+    public WeaponDamager RightClawWeaponDamager { get; private set; }
+
+    [field: SerializeField]
+    public WeaponDamager LeftClawWeaponDamager { get; private set; }
 
     [field: SerializeField]
     public ProjectileShooter ProjectileShooter { get; private set; }
@@ -67,6 +70,9 @@ public class DragonStateMachine : StateMachine
 
     [field: SerializeField]
     public float SummonRadius { get; private set; }
+
+    [field: SerializeField]
+    public float SummonCount { get; private set; }
 
     [field: SerializeField]
     public GameObject SummonCharacter { get; private set; }
@@ -204,9 +210,12 @@ public class DragonStateMachine : StateMachine
 
     private void Summon()
     {
-        if (NavMeshSampler.RandomPointAroundPosition(SampleAroundPoint.position, SummonRadius, out Vector3 result, bomberWalkableArea))
+        for (int i = 0; i < SummonCount; i++)
         {
-            Instantiate(SummonCharacter, result, Quaternion.LookRotation(Player.transform.position));
+            if (NavMeshSampler.RandomPointAroundPosition(SampleAroundPoint.position, SummonRadius, out Vector3 result, bomberWalkableArea))
+            {
+                Instantiate(SummonCharacter, result, Quaternion.LookRotation(Player.transform.position));
+            }
         }
     }
 
@@ -222,6 +231,11 @@ public class DragonStateMachine : StateMachine
         {
             DestroyGameObject(fireBreath.gameObject);
         }
+    }
+
+    private void PlayClawSound()
+    {
+        PlaySFX.PlayThenDestroy(SFXClawing, transform);
     }
 
     private void OnDrawGizmosSelected()
