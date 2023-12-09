@@ -26,7 +26,7 @@ public class LevelManager : MonoBehaviour
     void Start()
     {
         // Start at level 1
-        // CurrentLevelIndex = 0;
+        CurrentLevelIndex = 0;
         StartLevel();
     }
 
