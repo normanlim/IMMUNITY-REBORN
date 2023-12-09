@@ -22,19 +22,18 @@ public class LevelManager : MonoBehaviour
         public GameObject LevelStart;
         public AudioClip LevelBGM;   
     }
-    
+
     void Start()
     {
-        CurrentBGMSource.enabled = true;
         // Start at level 1
-        CurrentLevelIndex = 0;
+        // CurrentLevelIndex = 0;
         StartLevel();
     }
 
     // Useful for internal testing as you can set the level to test in Unity editor
     private void OnValidate()
     {
-        if (CurrentLevelIndex != currentLevelIndex && CurrentLevelIndex >= 0 && CurrentLevelIndex < LevelList.Count)
+        if (Application.isPlaying && CurrentLevelIndex != currentLevelIndex && CurrentLevelIndex >= 0 && CurrentLevelIndex < LevelList.Count)
         {
             StartLevel();
             currentLevelIndex = CurrentLevelIndex;
@@ -96,7 +95,7 @@ public class LevelManager : MonoBehaviour
     {
         playerCape.enabled = false;
         Player.gameObject.transform.position = level.LevelStart.transform.position;
-
+        Player.gameObject.transform.rotation = level.LevelStart.transform.rotation;
         freeLookCamera.m_XAxis.Value = level.LevelStart.transform.eulerAngles.y;
         
         playerCape.enabled = true;

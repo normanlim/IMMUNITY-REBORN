@@ -68,9 +68,8 @@ public class MemoryGauge : MonoBehaviour
         // Check if the player entered the trigger zone
         if ( other.tag == "MemoryFragment" )
         {
-            // Respawn the MemoryFragment at a random position within the respawn plane
-            other.gameObject.GetComponent<MemoryFragment>().RespawnWithinPlaneBounds();
-            EarnMemoryGauge( 10 );
+            EarnMemoryGauge( 100 );
+            Destroy(other.gameObject);
         }
     }
 
