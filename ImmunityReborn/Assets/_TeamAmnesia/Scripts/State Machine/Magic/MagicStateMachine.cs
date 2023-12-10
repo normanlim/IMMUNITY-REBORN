@@ -60,8 +60,12 @@ public class MagicStateMachine : StateMachine
     [field: SerializeField]
     public GameObject ExplosionSFX;
 
-    public bool HasDiedExploding
-        ;
+    public bool HasDiedExploding;
+
+    [field: SerializeField]
+    public bool IsBoss { get; private set; }
+
+    public static int BossHP = 1000;
 
     private void Awake()
     {

@@ -60,10 +60,14 @@ public class TormentedSoulStateMachine : StateMachine
     public int NumberAttacksBetweenMechs = 3;
     public int NormalAttackCount;
 
+    public static int BossHP = 1000;
+
     private void Awake()
     {
         Player = GameObject.FindGameObjectWithTag("Player");
         PlayerHealth = Player.GetComponent<Health>();
+        // Adjusted health based on difficulty
+        Health.SetHealth(BossHP);
     }
 
     private void Start()
@@ -108,6 +112,7 @@ public class TormentedSoulStateMachine : StateMachine
         ProjectileShooter.ShooterDied();
         transform.Find("EnragedGlow").gameObject.SetActive(false);
         SwitchState(new TormentedSoulDeadState(this));
+        Destroy(gameObject, 10f);
     }
 
     private void HandlePlayerDie()

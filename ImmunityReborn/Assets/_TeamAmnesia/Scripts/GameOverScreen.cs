@@ -1,10 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class GameOverScreen : MonoBehaviour
 {
@@ -25,6 +22,8 @@ public class GameOverScreen : MonoBehaviour
 
     public void RestartGameButton()
     {
+        // Save the current level index for softcore
+        PlayerPrefs.SetInt("SCCurrentLevel", FindFirstObjectByType<LevelManager>().CurrentLevelIndex);
         // Get the name of the current scene
         string currentSceneName = SceneManager.GetActiveScene().name;
 

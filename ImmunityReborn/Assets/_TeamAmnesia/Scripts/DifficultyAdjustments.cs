@@ -25,6 +25,11 @@ public class DifficultyAdjustments : MonoBehaviour
                 HealthConsumable.DifficultyAdjustment(400, 5);
                 // Summon up to 4 sets every 12 seconds, can 1-shot with memory attack immediately.
                 EnemyPortal.DifficultyAdjustment(100, 25, 12);
+                // Boss health adjustments
+                MeleeStateMachine.BossHP = 500;
+                TormentedSoulStateMachine.BossHP = 500;
+                MagicStateMachine.BossHP = 500;
+                DragonStateMachine.BossHP = 1000;
                 break;
             case 1:
                 PlayerHealth.SetHealth(200);
@@ -33,6 +38,11 @@ public class DifficultyAdjustments : MonoBehaviour
                 HealthConsumable.DifficultyAdjustment(100, 4);
                 // Summon up to 6 sets every 10 seconds, generally spawns 1 set before 1-shottable with memory attack.
                 EnemyPortal.DifficultyAdjustment(120, 20, 10);
+                // Boss health adjustments
+                MeleeStateMachine.BossHP = 800;
+                TormentedSoulStateMachine.BossHP = 800;
+                MagicStateMachine.BossHP = 800;
+                DragonStateMachine.BossHP = 1600;
                 break;
             case 2:
                 PlayerHealth.SetHealth(100);
@@ -41,6 +51,11 @@ public class DifficultyAdjustments : MonoBehaviour
                 HealthConsumable.DifficultyAdjustment(50, 3);
                 // Summon up to 8 sets every 8 seconds, generally have to hit with memory attack twice to clear early.
                 EnemyPortal.DifficultyAdjustment(160, 20, 8);
+                // Boss health adjustments
+                MeleeStateMachine.BossHP = 1200;
+                TormentedSoulStateMachine.BossHP = 1200;
+                MagicStateMachine.BossHP = 1200;
+                DragonStateMachine.BossHP = 2400;
                 break;
         }
     }

@@ -1,5 +1,6 @@
 using Cinemachine;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class LevelManager : MonoBehaviour
@@ -25,8 +26,15 @@ public class LevelManager : MonoBehaviour
 
     void Start()
     {
-        // Start at level 1
-        CurrentLevelIndex = 0;
+        if (PlayerPrefs.GetInt("Softcore", 0) == 1)
+        {
+            // Start at the level the player died in
+            CurrentLevelIndex = PlayerPrefs.GetInt("SCCurrentLevel", 0);
+        } else
+        {
+            // Start at level 1
+            CurrentLevelIndex = 0;
+        }
         StartLevel();
     }
 
@@ -73,6 +81,9 @@ public class LevelManager : MonoBehaviour
 
     private void StartLevel()
     {
+        // Destroy all enemies to ensure proper cleanup
+        GameObject.FindGameObjectsWithTag("Enemy").ToList().ForEach(Destroy);
+
         for (int i = 0; i < LevelList.Count; i++)
         {
             if (i == CurrentLevelIndex)
