@@ -9,26 +9,29 @@ public class AIDirector : MonoBehaviour
     private SphereCollider meleeZone;
 
     private const float MaxSwitchStateDelay = 1.0f;
+    private const int MaxAttackingMeleeEnemies = 3;
 
     private List<MeleeStateMachine> meleeEnemies;
-    private MeleeStateMachine attackingMeleeEnemy;
+    private List<MeleeStateMachine> attackingMeleeEnemies;
 
     void Start()
     {
         meleeEnemies = new List<MeleeStateMachine>();
-        attackingMeleeEnemy = null;
+        attackingMeleeEnemies = new List<MeleeStateMachine>();
     }
 
     void Update()
     {
         meleeEnemies.RemoveAll(x => x == null);
+        attackingMeleeEnemies.RemoveAll(x => x == null);
 
-        if (attackingMeleeEnemy == null)
+        if (attackingMeleeEnemies.Count < MaxAttackingMeleeEnemies)
         {
-            if (RandomMeleeEnemy(out attackingMeleeEnemy))
+            if (RandomMeleeEnemy(out MeleeStateMachine meleeEnemy))
             {
-                attackingMeleeEnemy.SwitchState(new MeleeAdvancingState(attackingMeleeEnemy));
-                attackingMeleeEnemy.AggroIndicator.SetActive(true);
+                meleeEnemy.SwitchState(new MeleeAdvancingState(meleeEnemy));
+                meleeEnemy.AggroIndicator.SetActive(true);
+                attackingMeleeEnemies.Add(meleeEnemy);
             }
         }
     }
@@ -51,20 +54,20 @@ public class AIDirector : MonoBehaviour
 
     private void HandleEnemyStateChange(State state, StateMachine stateMachine)
     {
-        if (stateMachine is MeleeStateMachine meleeStateMachine)
+        if (stateMachine is MeleeStateMachine meleeEnemy)
         {
-            if (meleeStateMachine == attackingMeleeEnemy)
+            if (attackingMeleeEnemies.Contains(meleeEnemy))
             {
                 if (state is not MeleeAdvancingState && state is not MeleeAttackingState) // if enemy isn't in these states, it means they aren't attacking
                 {
-                    attackingMeleeEnemy.AggroIndicator.SetActive(false);
-                    attackingMeleeEnemy = null;
+                    meleeEnemy.AggroIndicator.SetActive(false);
+                    attackingMeleeEnemies.Remove(meleeEnemy);
                 }
             }
 
             if (state is MeleeDeadState)
             {
-                RemoveMeleeEnemy(meleeStateMachine);
+                RemoveMeleeEnemy(meleeEnemy);
             }
         }
     }
@@ -76,7 +79,9 @@ public class AIDirector : MonoBehaviour
 
         foreach (MeleeStateMachine meleeEnemy in meleeEnemies)
         {
-            if (meleeEnemy.IsCurrentStateInterruptible && meleeEnemy.CurrentState is not MeleeRetreatingState)
+            if (meleeEnemy.IsCurrentStateInterruptible
+                && meleeEnemy.CurrentState is not MeleeRetreatingState
+                && !attackingMeleeEnemies.Contains(meleeEnemy))
             {
                 availableEnemies.Add(meleeEnemy);
             }
