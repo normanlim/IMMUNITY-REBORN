@@ -136,7 +136,7 @@ public class DragonStateMachine : StateMachine
 
         // Adjusted health based on difficulty
         Health.SetHealth(BossHP);
-        CongratulationsScreen = FindFirstObjectByType<VictoryScreen>();
+        CongratulationsScreen = FindFirstObjectByType<VictoryScreen>(FindObjectsInactive.Include);
     }
 
     private void Start()
