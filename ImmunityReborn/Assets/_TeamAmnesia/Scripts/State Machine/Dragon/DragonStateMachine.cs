@@ -107,6 +107,8 @@ public class DragonStateMachine : StateMachine
 
     public DragonFlyingAction NextAttackType { get; set; }
 
+    public static int BossHP = 2000;
+
     public GameObject SFXAwake;
     public GameObject SFXCombatStart;
     public GameObject SFXTakingDamage;
@@ -118,6 +120,7 @@ public class DragonStateMachine : StateMachine
     public GameObject SFXSummoning;
     public GameObject SFXDeath;
     public GameObject TakeDamageEffect;
+    public GameObject FlyingSoundObject;
     [SerializeField] GameObject TakeDamageBodyPart;
 
     private LayerMask environmentLayer;
@@ -131,14 +134,17 @@ public class DragonStateMachine : StateMachine
         environmentLayer = LayerMask.NameToLayer("Environment");
         bomberWalkableArea = 1 << NavMesh.GetAreaFromName("Bomber Walkable");
 
-        // TODO: Remove Debug
-        OnStateChange += (state, stateMachine) => { Debug.Log(state); };
+        // Adjusted health based on difficulty
+        Health.SetHealth(BossHP);
     }
 
     private void Start()
     {
         NavMeshAgent.updatePosition = false; // for manual control
         NavMeshAgent.updateRotation = false;
+
+        if (SampleAroundPoint == null)
+            SampleAroundPoint = transform.parent;
 
         SwitchState(new DragonIdleState(this));
     }
@@ -157,6 +163,8 @@ public class DragonStateMachine : StateMachine
         Health.OnDie -= HandleDie;
 
         PlayerHealth.OnDie -= HandlePlayerDie;
+        if (FlyingSoundObject != null)
+            Destroy(FlyingSoundObject);
     }
 
     public bool RaycastToGround(out RaycastHit hitInfo)

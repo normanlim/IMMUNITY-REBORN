@@ -63,11 +63,16 @@ public class MeleeStateMachine : StateMachine
 
     public Health PlayerHealth { get; private set; }
 
+    public static int BossHP = 500;
+
     private void Awake()
     {
         Player = GameObject.FindGameObjectWithTag("Player");
         PlayerHealth = Player.GetComponent<Health>();
         AggroIndicator.SetActive(false);
+        // Adjusted health based on difficulty
+        if (IsBoss)
+            Health.SetHealth(BossHP);
     }
 
     private void Start()
