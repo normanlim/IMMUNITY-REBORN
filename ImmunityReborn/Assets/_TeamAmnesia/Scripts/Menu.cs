@@ -14,10 +14,6 @@ public class Menu : MonoBehaviour
 
     void LoadSettings()
     {
-        // Mute menu sounds until all settings are loaded from playerprefs 
-        AudioSource menuSounds = FindFirstObjectByType<GUISoundManager>().GetComponent<AudioSource>();
-        menuSounds.mute = true;
-
         // Set God Mode Toggle based on PlayerPrefs
         bool godModeEnabled = PlayerPrefs.GetInt("GodMode", 0) == 1;
         GodModeToggle.isOn = godModeEnabled;
@@ -33,9 +29,6 @@ public class Menu : MonoBehaviour
 
         // Reset last known level in softcore mode
         PlayerPrefs.SetInt("SCCurrentLevel", 0);
-
-        // Unmute menu sounds when done
-        menuSounds.mute = false;
     }
 
     public void ExitGame()
