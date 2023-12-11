@@ -197,6 +197,7 @@ public class DragonStateMachine : StateMachine
     private void HandleDie()
     {
         ProjectileShooter.ShooterDied();
+        PlayerPrefs.SetInt("SCCurrentLevel", 0);
         Invoke( "GameComplete", 10.0f );
         SwitchState(new DragonDeadState(this));
     }

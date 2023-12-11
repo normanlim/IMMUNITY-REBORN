@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +14,10 @@ public class Menu : MonoBehaviour
 
     void LoadSettings()
     {
+        // Mute menu sounds until all settings are loaded from playerprefs 
+        AudioSource menuSounds = FindFirstObjectByType<GUISoundManager>().GetComponent<AudioSource>();
+        menuSounds.mute = true;
+
         // Set God Mode Toggle based on PlayerPrefs
         bool godModeEnabled = PlayerPrefs.GetInt("GodMode", 0) == 1;
         GodModeToggle.isOn = godModeEnabled;
@@ -26,6 +29,12 @@ public class Menu : MonoBehaviour
         // Set Difficulty Dropdown based on PlayerPrefs
         int selectedDifficulty = PlayerPrefs.GetInt("SelectedDifficulty", 0);
         DifficultyDropdown.value = selectedDifficulty;
+
+        // Reset last known level in softcore mode
+        PlayerPrefs.SetInt("SCCurrentLevel", 0);
+
+        // Unmute menu sounds when done
+        menuSounds.mute = false;
     }
 
     public void ExitGame()
