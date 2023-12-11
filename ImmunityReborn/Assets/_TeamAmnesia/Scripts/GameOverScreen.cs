@@ -9,9 +9,6 @@ public class GameOverScreen : MonoBehaviour
 
     public void Setup( float durationAlive )
     {
-        // Update current level player pref for softcore
-        PlayerPrefs.SetInt("SCCurrentLevel", FindFirstObjectByType<LevelManager>().CurrentLevelIndex);
-        Debug.Log(PlayerPrefs.GetInt("SCCurrentLevel"));
         gameObject.SetActive( true );
 
         Cursor.lockState = CursorLockMode.None;
