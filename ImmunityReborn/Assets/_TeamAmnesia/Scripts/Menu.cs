@@ -24,7 +24,6 @@ public class Menu : MonoBehaviour
 
         // Set Difficulty Dropdown based on PlayerPrefs
         int selectedDifficulty = PlayerPrefs.GetInt("SelectedDifficulty", 0);
-        Debug.Log(selectedDifficulty);
         DifficultyDropdown.value = selectedDifficulty;
 
         // Reset last known level in softcore mode
