@@ -63,6 +63,7 @@ public class MemoryAttack : MonoBehaviour
 
     void LaunchMemoryAttack()
     {
+        PlaySFX.PlayThenDestroy(StateMachine.SFXMemoryAttackActivate, StateMachine.transform);
         StateMachine.MemoryGauge.SpendMemoryGauge(memAtkCost);
         readyToShoot = false;
 

@@ -50,7 +50,14 @@ public class ShieldController : MonoBehaviour
 
     public void EarnShieldGauge( int amtEarned )
     {
-        currentEnergyValue += amtEarned;
+        if (currentEnergyValue + amtEarned > 100)
+        {
+            currentEnergyValue = 100;
+        }
+        else
+        {
+            currentEnergyValue += amtEarned;
+        }
     }
 
     private void Start()
