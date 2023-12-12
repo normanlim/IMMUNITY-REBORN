@@ -11,7 +11,9 @@ public class ShieldController : MonoBehaviour
     [SerializeField] float energyRegenDelay = 2;
     [SerializeField] float regenSpeed = 10;
     [SerializeField] float depleteSpeed = 5;
+    [SerializeField] float tapEnergyPenalty = 1;
     [SerializeField] GameObject SFXShielding;
+    [SerializeField] GameObject SFXShieldDown;
 
     private float currentEnergyValue;
     private PlayerStateMachine playerStateMachine;
@@ -20,11 +22,14 @@ public class ShieldController : MonoBehaviour
     public GameObject rangedShield;
     public GameObject magicShield;
 
+    private bool shieldTapped = false;
+    private bool shieldDownSNDPlayed = false;
     private float meleeShieldActiveTime = 0f;
     private float rangedShieldActiveTime = 0f;
     private float magicShieldActiveTime = 0f;
 
     private GameObject ShieldingSoundObject;
+    private GameObject ShieldDownSoundObject;
 
     public float GetMeleeShieldActiveDuration()
     {
@@ -88,12 +93,19 @@ public class ShieldController : MonoBehaviour
 
     void Update()
     {
-        //Debug.Log( shieldActiveTime );
         if ( currentEnergyValue > 0 )
         {
+            // Reset sound down played flag
+            if (shieldDownSNDPlayed)
+                shieldDownSNDPlayed = false;
             // Energy Meter UI Code
             if ( ( Input.GetMouseButton( 0 ) || Input.GetMouseButton( 1 ) ) && !playerStateMachine.Health.IsPlayerDead && !PauseController.isPaused )
             {
+                if (!shieldTapped)
+                {
+                    currentEnergyValue -= tapEnergyPenalty;
+                    shieldTapped = true;
+                }
                 CancelInvoke( "RegenShield" );
                 currentEnergyValue -= depleteSpeed * Time.deltaTime; // How fast to drain energy gauge
 
@@ -106,6 +118,7 @@ public class ShieldController : MonoBehaviour
             }
             else
             {
+                shieldTapped = false;
                 Invoke( "RegenShield", energyRegenDelay );
                 // Cancel looping shield sound
                 if (ShieldingSoundObject)
@@ -128,6 +141,12 @@ public class ShieldController : MonoBehaviour
             // Cancel looping shield sound
             if (ShieldingSoundObject)
                 PlaySFX.StopLoopedAudio(ShieldingSoundObject, this);
+            // Play shield down sound once
+            if (!shieldDownSNDPlayed && ShieldDownSoundObject == null)
+            {
+                ShieldDownSoundObject = PlaySFX.PlayThenDestroy(SFXShieldDown, transform);
+                shieldDownSNDPlayed = true;
+            }
         }
 
     }
