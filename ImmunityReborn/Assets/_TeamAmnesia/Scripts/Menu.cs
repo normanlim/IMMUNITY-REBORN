@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,6 +25,9 @@ public class Menu : MonoBehaviour
         // Set Difficulty Dropdown based on PlayerPrefs
         int selectedDifficulty = PlayerPrefs.GetInt("SelectedDifficulty", 0);
         DifficultyDropdown.value = selectedDifficulty;
+
+        // Reset last known level in softcore mode
+        PlayerPrefs.SetInt("SCCurrentLevel", 0);
     }
 
     public void ExitGame()

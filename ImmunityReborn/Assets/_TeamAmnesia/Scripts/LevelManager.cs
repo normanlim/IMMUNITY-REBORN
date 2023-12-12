@@ -75,7 +75,6 @@ public class LevelManager : MonoBehaviour
             Debug.Log("Invalid Level index");
             return;
         }
-
         StartLevel();
     }
 

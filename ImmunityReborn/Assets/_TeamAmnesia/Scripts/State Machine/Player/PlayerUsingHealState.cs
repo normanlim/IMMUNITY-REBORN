@@ -28,7 +28,6 @@ public class PlayerUsingHealState : PlayerBaseState
         if (GetPlayingAnimationTimeNormalized(stateMachine.Animator, 1) >= 0.7f) // make comparing with less than (1.0f - Transition Duration) in Animator Transition Settings
         {
             stateMachine.HealthConsumable.Use();
-            Debug.Log("used heal!");
             stateMachine.VFXHealing.SetActive(false);
             stateMachine.SwitchState(new PlayerDefaultState(stateMachine));
             return;

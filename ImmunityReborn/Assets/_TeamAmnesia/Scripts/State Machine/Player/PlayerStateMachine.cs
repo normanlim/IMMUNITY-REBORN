@@ -95,6 +95,8 @@ public class PlayerStateMachine : StateMachine
 
     private void HandleDie()
     {
+        // Update current level player pref for softcore
+        PlayerPrefs.SetInt("SCCurrentLevel", FindFirstObjectByType<LevelManager>().CurrentLevelIndex);
         Invoke( "GameOver", 3.0f );
         SwitchState(new PlayerDeadState(this));
     }

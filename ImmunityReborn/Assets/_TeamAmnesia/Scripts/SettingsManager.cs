@@ -7,55 +7,42 @@ public class SettingsManager : MonoBehaviour
     public Toggle softcoreToggle;
     public Dropdown difficultyDropdown;
     private int previousDifficultyIndex = -1;
+    public GUISoundManager soundManager;
 
     void Start()
     {
-        difficultyDropdown.onValueChanged.AddListener( delegate { DifficultyChanged( difficultyDropdown.value ); } );
-        softcoreToggle.onValueChanged.AddListener(delegate { ToggleSoftcore(softcoreToggle.isOn); });
-        godModeToggle.onValueChanged.AddListener( delegate { ToggleGodMode( godModeToggle.isOn ); } );
+
+        difficultyDropdown.onValueChanged.AddListener( delegate { DifficultyChanged(); } );
+        softcoreToggle.onValueChanged.AddListener( delegate { ToggleSoftcore(); });
+        godModeToggle.onValueChanged.AddListener( delegate { ToggleGodMode(); } );
+        soundManager = FindFirstObjectByType<GUISoundManager>();
     }
 
-    public void DifficultyChanged( int difficultyIndex )
+    public void DifficultyChanged()
     {
+        int difficultyIndex = difficultyDropdown.value;
         if (difficultyIndex != previousDifficultyIndex)
         {
             PlayerPrefs.SetInt("SelectedDifficulty", difficultyIndex);
             PlayerPrefs.Save();
 
-            ApplyDifficultySetting(difficultyIndex);
-
             previousDifficultyIndex = difficultyIndex;
         }
+        if (difficultyDropdown.isActiveAndEnabled)
+            soundManager.PlaySelectConfirmation();
     }
 
-    // Maybe you can do your difficulty implementation here, or do it in the other scene's code somewhere.
-    void ApplyDifficultySetting( int difficultyIndex )
+    public void ToggleGodMode()
     {
-        switch ( difficultyIndex )
-        {
-            case 0: // Easy
-                //SetMonsterDamage( EasyDamageValue );
-                Debug.Log( "ez difficulty" );
-                break;
-            case 1: // Hard
-                    //SetMonsterDamage( MediumDamageValue );
-                Debug.Log( "medium difficulty" );
-                break;
-            case 2: // Almost Impossible
-                    //SetMonsterDamage( HardDamageValue );
-                Debug.Log( "hard difficulty" );
-                break;
-        }
+        PlayerPrefs.SetInt( "GodMode", godModeToggle.isOn ? 1 : 0 );
+        if (godModeToggle.isActiveAndEnabled)
+            soundManager.PlaySelectConfirmation();
     }
 
-
-    public void ToggleGodMode( bool isOn )
+    public void ToggleSoftcore()
     {
-        PlayerPrefs.SetInt( "GodMode", isOn ? 1 : 0 );
-    }
-
-    public void ToggleSoftcore(bool isOn)
-    {
-        PlayerPrefs.SetInt("Softcore", isOn ? 1 : 0);
+        PlayerPrefs.SetInt("Softcore", softcoreToggle.isOn ? 1 : 0);
+        if (softcoreToggle.isActiveAndEnabled)
+            soundManager.PlaySelectConfirmation();
     }
 }
