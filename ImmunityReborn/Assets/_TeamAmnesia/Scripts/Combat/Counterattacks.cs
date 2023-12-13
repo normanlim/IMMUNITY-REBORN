@@ -132,7 +132,7 @@ public class Counterattacks : MonoBehaviour
 
         isExploding = true;
         MagicWeaponDamager.gameObject.SetActive(true);
-        Instantiate(explosionFX, transform);
+        Instantiate(explosionFX, transform.position + Vector3.up, Quaternion.identity);
         float counter = 0;
         while (counter < duration)
         {
