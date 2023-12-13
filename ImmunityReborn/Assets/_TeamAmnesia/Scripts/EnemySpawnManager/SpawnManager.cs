@@ -12,6 +12,7 @@ public class SpawnManager : MonoBehaviour
     // Minimum distance from all existing entities
     private float minimumSeparationDistance = 1f;
     [SerializeField] private int queueIndex;
+    [SerializeField] private float outOfBoundsY = -100;
 
     [System.Serializable]
     public class SpawnGroup
@@ -40,8 +41,17 @@ public class SpawnManager : MonoBehaviour
 
     void Update()
     {
-        enemiesAliveCount = GameObject.FindGameObjectsWithTag("Enemy")
-            .Count(enemy => enemy.GetComponent<Health>()?.CurrentHealth > 0);
+        GameObject[] enemiesAlive = GameObject.FindGameObjectsWithTag("Enemy");
+        // Destroy enemies that have fallen through the world
+        foreach (var enemy in enemiesAlive)
+        {
+            if (enemy.transform.position.y <= outOfBoundsY)
+            {
+                // Destroy the enemy
+                Destroy(enemy);
+            }
+        }
+        enemiesAliveCount = enemiesAlive.Count(enemy => enemy?.GetComponent<Health>()?.CurrentHealth > 0);
 
         if (SpawnQueue.Count > 0)
             TrySpawnNext();
