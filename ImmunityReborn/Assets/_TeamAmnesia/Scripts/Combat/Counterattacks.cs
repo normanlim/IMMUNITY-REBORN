@@ -45,12 +45,10 @@ public class Counterattacks : MonoBehaviour
 
     private bool isMeleeObjectRotating = false;
     private bool isExploding = false;
-    private ParticleSystem explosionFX;
+    [SerializeField] private GameObject explosionFX;
 
     private void Start()
     {
-        explosionFX = MagicWeaponDamager.transform.GetComponentInChildren<ParticleSystem>(true);
-
         MeleeWeaponDamager.SetDamage(MeleeDamage, MeleeKnockback);
         MagicWeaponDamager.SetDamage(MagicDamage, MagicKnockback);
 
@@ -134,7 +132,7 @@ public class Counterattacks : MonoBehaviour
 
         isExploding = true;
         MagicWeaponDamager.gameObject.SetActive(true);
-
+        Instantiate(explosionFX, transform);
         float counter = 0;
         while (counter < duration)
         {
