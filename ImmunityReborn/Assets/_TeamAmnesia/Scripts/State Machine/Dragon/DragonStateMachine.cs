@@ -108,6 +108,7 @@ public class DragonStateMachine : StateMachine
     public DragonFlyingAction NextAttackType { get; set; }
 
     public static int BossHP = 2000;
+    public static int BomberCount = 2;
 
     public GameObject SFXAwake;
     public GameObject SFXCombatStart;
@@ -134,8 +135,9 @@ public class DragonStateMachine : StateMachine
         environmentLayer = LayerMask.NameToLayer("Environment");
         bomberWalkableArea = 1 << NavMesh.GetAreaFromName("Bomber Walkable");
 
-        // Adjusted health based on difficulty
+        // Adjusted health and bomber count based on difficulty
         Health.SetHealth(BossHP);
+        SummonCount = BomberCount;
         CongratulationsScreen = FindFirstObjectByType<VictoryScreen>(FindObjectsInactive.Include);
     }
 

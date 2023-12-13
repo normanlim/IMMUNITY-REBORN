@@ -11,7 +11,7 @@ public class ShieldController : MonoBehaviour
     [SerializeField] float energyRegenDelay = 2;
     [SerializeField] float regenSpeed = 10;
     [SerializeField] float depleteSpeed = 5;
-    [SerializeField] float tapEnergyPenalty = 1;
+    [SerializeField] public float tapEnergyPenalty = 1;
     [SerializeField] GameObject SFXShielding;
     [SerializeField] GameObject SFXShieldDown;
 
@@ -46,11 +46,12 @@ public class ShieldController : MonoBehaviour
         return magicShieldActiveTime;
     }
 
-    public void SetShieldRates(float delay, float regenSpeed, float depleteSpeed)
+    public void SetShieldRates(float delay, float regenSpeed, float depleteSpeed, float tapEnergyPenalty)
     {
         energyRegenDelay = delay;
         this.regenSpeed = regenSpeed;
         this.depleteSpeed = depleteSpeed;
+        this.tapEnergyPenalty = tapEnergyPenalty;
     }
 
     public void EarnShieldGauge( int amtEarned )
