@@ -16,13 +16,13 @@ public class ShieldCollisions : MonoBehaviour
     [SerializeField]
     private float PerfectParryWindowDuration;
     [SerializeField]
-    private int PerfectParryShieldReward = 10;
+    private static int PerfectParryShieldReward = 10;
     [SerializeField]
-    private int PerfectParryMemoryReward = 10;
+    private static int PerfectParryMemoryReward = 10;
     [SerializeField]
     private GameObject SFXPerfectParry;
     [SerializeField]
-    private int RegularParryMemoryReward = 1;
+    private static int RegularParryMemoryReward = 1;
     [SerializeField]
     private GameObject SFXRegularParry;
 
@@ -31,6 +31,12 @@ public class ShieldCollisions : MonoBehaviour
         playerStateMachine = GetComponentInParent<PlayerStateMachine>();
     }
 
+    public static void SetParryRates(int PerfectParryShieldReward, int PerfectParryMemoryReward, int RegularParryMemoryReward)
+    {
+        ShieldCollisions.PerfectParryShieldReward = PerfectParryShieldReward;
+        ShieldCollisions.PerfectParryMemoryReward = PerfectParryMemoryReward;
+        ShieldCollisions.RegularParryMemoryReward = RegularParryMemoryReward;
+    }
 
     private void OnTriggerEnter( Collider other )
     {
