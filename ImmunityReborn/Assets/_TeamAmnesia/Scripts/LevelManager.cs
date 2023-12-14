@@ -21,7 +21,8 @@ public class LevelManager : MonoBehaviour
     {
         public GameObject LevelObject;
         public GameObject LevelStart;
-        public AudioClip LevelBGM;   
+        public AudioClip LevelBGM;
+        public AudioClip LevelBGMMaxDifficulty;
     }
 
     void Start()
@@ -52,7 +53,10 @@ public class LevelManager : MonoBehaviour
     {
         if (index >= 0 && index < LevelList.Count)
         {
-            CurrentBGMSource.clip = LevelList[index].LevelBGM;
+            if (PlayerPrefs.GetInt("Softcore", 0) == 0 && PlayerPrefs.GetInt("SelectedDifficulty") == 2)
+                CurrentBGMSource.clip = LevelList[index].LevelBGMMaxDifficulty;
+            else
+                CurrentBGMSource.clip = LevelList[index].LevelBGM;
             CurrentBGMSource.volume = 0.3f;
             CurrentBGMSource.Play();
         }
