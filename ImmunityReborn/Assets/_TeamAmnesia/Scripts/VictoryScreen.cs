@@ -56,7 +56,7 @@ public class VictoryScreen : MonoBehaviour
         timeScoreText.text = $"Elapsed Time: {formattedTimeAlive}";
 
         // Show heroic victory only when it's hardcore mode and impossible difficulty.
-        if (PlayerPrefs.GetInt("Softcore", 0) == 1 && PlayerPrefs.GetInt("SelectedDifficulty") == 2)
+        if (PlayerPrefs.GetInt("Softcore", 0) == 0 && PlayerPrefs.GetInt("SelectedDifficulty") == 2)
         {
             softcoreText.SetActive(false);
             hardcoreText.SetActive(true);
