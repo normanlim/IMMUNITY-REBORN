@@ -7,24 +7,51 @@ using UnityEngine.UI;
 public class VictoryScreen : MonoBehaviour
 {
     public TextMeshProUGUI timeScoreText;
+    public TextMeshProUGUI victoryHeaderText;
     public Image easterEgg;
     public PlayerStateMachine playerState;
     public GameObject softcoreText;
     public GameObject hardcoreText;
+    public Color softcoreColor;
+    public Color hardcoreColor;
 
     private bool isEasterEggVisible = false;
 
     public void Setup()
     {
-        gameObject.SetActive( true );
+        gameObject.SetActive(true);
 
         float durationAlive = playerState.GetTimePlayerAlive();
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
-        TimeSpan timeSpanAlive = TimeSpan.FromSeconds( durationAlive );
-        string formattedTimeAlive = timeSpanAlive.ToString( @"hh\:mm\:ss" );
+        // Set victory header text based on game 
+        // Add prefix based on difficulty (no prefix for normal mode)
+        string difficultyPrefix = "";
+        if (PlayerPrefs.GetInt("SelectedDifficulty") == 1)
+            difficultyPrefix += "HARD ";
+        else if (PlayerPrefs.GetInt("SelectedDifficulty") == 2)
+            difficultyPrefix += "IMPOSSIBLE ";
+
+        // Set text content first
+        victoryHeaderText.text = difficultyPrefix + "VICTORY!";
+
+        // Change text color and add prefix based on softcore or hardcore
+        if (PlayerPrefs.GetInt("Softcore", 0) == 1)
+        {
+            victoryHeaderText.color = softcoreColor;
+        }
+        else
+        {
+            // Add prefix after setting the text content
+            victoryHeaderText.text = "HEROIC " + victoryHeaderText.text;
+            victoryHeaderText.color = hardcoreColor;
+        }
+
+        // Set time score
+        TimeSpan timeSpanAlive = TimeSpan.FromSeconds(durationAlive);
+        string formattedTimeAlive = timeSpanAlive.ToString(@"hh\:mm\:ss");
 
         timeScoreText.text = $"Elapsed Time: {formattedTimeAlive}";
 
@@ -33,7 +60,8 @@ public class VictoryScreen : MonoBehaviour
         {
             softcoreText.SetActive(false);
             hardcoreText.SetActive(true);
-        } else
+        }
+        else
         {
             softcoreText.SetActive(true);
             hardcoreText.SetActive(false);
