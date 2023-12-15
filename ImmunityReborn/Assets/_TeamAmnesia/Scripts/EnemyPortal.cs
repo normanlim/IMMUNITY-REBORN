@@ -60,6 +60,7 @@ public class EnemyPortal : MonoBehaviour
         Instantiate(DeathEffect, transform);
         // The empty parent is used to set a local y offset, delete the parent
         Destroy(transform.parent.gameObject, DeathEffect.GetComponent<ParticleSystem>().main.duration / 4);
+        CancelInvoke("SummonEnemy");
     }
 
     private void SummonEnemy()

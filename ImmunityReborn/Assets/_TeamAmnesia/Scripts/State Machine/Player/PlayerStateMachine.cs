@@ -134,4 +134,9 @@ public class PlayerStateMachine : StateMachine
         yield return new WaitForSeconds(SFXCooldown);
         canPlaySFX = true; // Reset the cooldown
     }
+
+    public void SetMovementSpeed(float speed)
+    {
+        DefaultMovementSpeed = speed;
+    }
 }
