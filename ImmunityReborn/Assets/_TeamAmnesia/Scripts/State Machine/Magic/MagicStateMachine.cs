@@ -77,6 +77,8 @@ public class MagicStateMachine : StateMachine
     {
         NavMeshAgent.updatePosition = false; // for manual control
         NavMeshAgent.updateRotation = false;
+        if (IsBoss)
+            Health.SetHealth(BossHP);
         DOTPuddle.SetPuddleDPS(PuddleDPS);
         SwitchState(new MagicIdleState(this));
     }
